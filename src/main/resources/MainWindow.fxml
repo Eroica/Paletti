@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.*?>
+<?import javafx.stage.*?>
+<?scenebuilder-stylesheet main.css?>
+
+<Stage height="310.0" minHeight="310.0" minWidth="350.0" resizable="false" title="Paletti" width="350.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainController">
+   <scene>
+      <Scene>
+         <AnchorPane>
+            <children>
+                     <WebView fx:id="webView" layoutX="16.0" layoutY="16.0" onDragDropped="#onDragDropped" onDragOver="#onDragOver" prefHeight="310.0" prefWidth="350.0" style="-fx-background-color: #000000;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  </children>
+         </AnchorPane>
+      </Scene>
+   </scene>
+</Stage>
