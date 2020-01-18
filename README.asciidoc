@@ -1,0 +1,6 @@
+= Paletti
+
+I basically took https://alembicforsketch.com/[Alembic] and put it into a JavaFX WebView.
+That is all.
+
+Alembic was originally developed by https://www.awkward.co/[Awkward] and licensed under the MIT license.
