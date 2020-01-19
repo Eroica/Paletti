@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.web.*?>
-<?import javafx.stage.*?>
 <?scenebuilder-stylesheet main.css?>
 
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.Scene?>
+<?import javafx.scene.web.WebView?>
+<?import javafx.stage.Stage?>
 <Stage height="310.0" minHeight="310.0" minWidth="350.0" resizable="false" title="Paletti" width="350.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainController">
    <scene>
       <Scene>

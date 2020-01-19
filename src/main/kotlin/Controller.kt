@@ -20,17 +20,13 @@
 
 */
 
-import javafx.application.Platform
 import javafx.concurrent.Worker
-import javafx.event.ActionEvent
 import javafx.fxml.FXML
-import javafx.scene.Scene
 import javafx.scene.input.Clipboard
 import javafx.scene.input.ClipboardContent
 import javafx.scene.input.DragEvent
 import javafx.scene.input.TransferMode
 import javafx.scene.web.WebView
-import javafx.stage.Stage
 import netscape.javascript.JSObject
 import java.nio.file.Files
 import java.util.*
@@ -58,15 +54,15 @@ class MainController {
         }
     }
 
-    fun onDragDropped(dragEvent: DragEvent) {
-        val img = Base64.getEncoder().encodeToString(Files.readAllBytes(dragEvent.dragboard.files.first().toPath()))
-        webView.engine.executeScript("""update("$img");""")
-    }
-
     fun onDragOver(dragEvent: DragEvent) {
         if (dragEvent.dragboard.hasFiles()) {
             dragEvent.acceptTransferModes(*TransferMode.ANY)
         }
         dragEvent.consume()
+    }
+
+    fun onDragDropped(dragEvent: DragEvent) {
+        val img = Base64.getEncoder().encodeToString(Files.readAllBytes(dragEvent.dragboard.files.first().toPath()))
+        webView.engine.executeScript("""update("$img");""")
     }
 }
