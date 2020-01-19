@@ -4,3 +4,10 @@ I basically took https://alembicforsketch.com/[Alembic] and put it into a JavaFX
 That is all.
 
 Alembic was originally developed by https://www.awkward.co/[Awkward] and licensed under the MIT license.
+
+== Installation
+
+A Windows executable is available on the Releases page.
+Paletti is built with `jlink`, and currently still requires an existing JDK installation on your machine.
+
+As soon as `jpackage` is ready, I'll try to make it available standalone.
