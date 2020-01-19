@@ -21,12 +21,8 @@
 */
 
 import javafx.application.Application
-import javafx.application.Platform
 import javafx.fxml.FXMLLoader
-import javafx.scene.effect.DropShadow
-import javafx.scene.paint.Color
 import javafx.stage.Stage
-import javafx.stage.StageStyle
 
 fun main(args: Array<String>) {
     Application.launch(Paletti::class.java, *args)

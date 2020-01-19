@@ -13,7 +13,7 @@ repositories {
 }
 
 javafx {
-    modules("javafx.controls", "javafx.fxml")
+    modules("javafx.controls", "javafx.fxml", "javafx.web")
 }
 
 dependencies {
@@ -35,6 +35,5 @@ application {
 
 launch4j {
     mainClassName = "MainKt"
-    bundledJrePath = ""
     stayAlive = true
 }
