@@ -1,2 +1,2 @@
-rootProject.name = "Palette"
+rootProject.name = "Paletti"
 
