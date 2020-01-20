@@ -5,9 +5,8 @@ That is all.
 
 Alembic was originally developed by https://www.awkward.co/[Awkward] and licensed under the MIT license.
 
-== Installation
+image::Paletti.gif[]
 
-A Windows executable is available on the Releases page.
-Paletti is built with `jlink`, and currently still requires an existing JDK installation on your machine.
+Click on a tile to put that color into your clipboard.
 
-As soon as `jpackage` is ready, I'll try to make it available standalone.
+I added a small feature that you can scroll up and down to increase/decrease the size of the color palette (between 6 and 12).
