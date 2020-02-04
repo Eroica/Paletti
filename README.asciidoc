@@ -10,3 +10,19 @@ image::Paletti.gif[]
 Click on a tile to put that color into your clipboard.
 
 I added a small feature that you can scroll up and down to increase/decrease the size of the color palette (between 6 and 12).
+
+== Installation
+
+I'm using Launch4j to run Paletti on Windows which requires a prior Java installation.
+When building Paletti with Gradle, you can specify the path to the Java environment here:
+
+.build.gradle.kts
+[source,kotlin]
+launch4j {
+    // ...
+    bundledJrePath = "C:/path/to/jdk"
+}
+
+If you don't want to install Java separately but use IntelliJ (or something similar), you can even reference its `jbr` directory there.
+
+If you don't supply any path, then Launch4j should look for a system-wide Java installation (i.e. by an installer) on startup.
