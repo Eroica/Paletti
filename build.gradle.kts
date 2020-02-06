@@ -2,7 +2,7 @@ plugins {
     kotlin("jvm") version "1.3.61"
     application
     id("org.openjfx.javafxplugin") version "0.0.8"
-    id("edu.sc.seis.launch4j") version "2.4.6"
+    id("org.beryx.runtime") version "1.8.0"
 }
 
 group = "com.moebots"
@@ -33,7 +33,8 @@ application {
     mainClassName = "MainKt"
 }
 
-launch4j {
-    mainClassName = "MainKt"
-    stayAlive = true
+runtime {
+    jpackage {
+        skipInstaller = true
+    }
 }
