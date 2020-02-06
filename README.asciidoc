@@ -13,16 +13,30 @@ I added a small feature that you can scroll up and down to increase/decrease the
 
 == Installation
 
-I'm using Launch4j to run Paletti on Windows which requires a prior Java installation.
-When building Paletti with Gradle, you can specify the path to the Java environment here:
+A Windows executable is available under Releases.
+I used `jpackage` to build it which bundles the necessary JRE, so nothing else is required to run Paletti.
+
+For other systems or compiling from source, see <<Building>>.
+
+== Building
+
+Paletti is built with Gradle and packaged with `jpackage` into an executable.
+
+Note that currently (February 2020),
+
+* the badass-runtime-plugin (supplying `jpackage` tasks) is buggy with JDK 13 and JDK 14, so you need to _build_ with an older version,
+* `jpackage` is only available from JDK 14, so you need to _package_ with that version.
+
+It's probably the easiest to configure this in the Gradle config:
 
 .build.gradle.kts
 [source,kotlin]
-launch4j {
-    // ...
-    bundledJrePath = "C:/path/to/jdk"
+runtime {
+    javaHome.set("C:/path/to/older/jdk")
+    jpackage {
+        jpackageHome = "C:/path/to/jdk-14"
+        // ...
+    }
 }
 
-If you don't want to install Java separately but use IntelliJ (or something similar), you can even reference its `jbr` directory there.
-
-If you don't supply any path, then Launch4j should look for a system-wide Java installation (i.e. by an installer) on startup.
+With this setup, you can re-build Paletti from source, and/or create binaries for other systems.
