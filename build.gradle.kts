@@ -36,5 +36,6 @@ application {
 runtime {
     jpackage {
         skipInstaller = true
+        imageOptions = listOf("--copyright", "2020", "--vendor", "Moebots")
     }
 }
