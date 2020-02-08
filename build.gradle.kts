@@ -36,6 +36,8 @@ application {
 runtime {
     jpackage {
         skipInstaller = true
-        imageOptions = listOf("--copyright", "2020", "--vendor", "Moebots")
+        imageOptions = listOf("--icon", "src/main/resources/Paletti.ico",
+            "--copyright", "2020",
+            "--vendor", "Moebots")
     }
 }
