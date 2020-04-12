@@ -22,6 +22,7 @@
 
 import javafx.application.Application
 import javafx.fxml.FXMLLoader
+import javafx.scene.image.Image
 import javafx.stage.Stage
 
 fun main(args: Array<String>) {
@@ -33,6 +34,7 @@ class Paletti : Application() {
         val stage = FXMLLoader(javaClass.getResource("MainWindow.fxml"), null, null, {
             MainController()
         }).load<Stage>()
+        stage.icons.add(Image(javaClass.getResourceAsStream("icons/16.png")))
         stage.show()
     }
 }
