@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.3.61"
+    kotlin("jvm") version "1.3.71"
     application
     id("org.openjfx.javafxplugin") version "0.0.8"
     id("org.beryx.runtime") version "1.8.0"
@@ -13,6 +13,7 @@ repositories {
 }
 
 javafx {
+    version = "14"
     modules("javafx.controls", "javafx.fxml", "javafx.web", "javafx.swing")
 }
 
