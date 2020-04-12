@@ -13,7 +13,7 @@ repositories {
 }
 
 javafx {
-    modules("javafx.controls", "javafx.fxml", "javafx.web")
+    modules("javafx.controls", "javafx.fxml", "javafx.web", "javafx.swing")
 }
 
 dependencies {
