@@ -21,15 +21,20 @@
 */
 
 import javafx.concurrent.Worker
+import javafx.embed.swing.SwingFXUtils
 import javafx.fxml.FXML
+import javafx.scene.image.Image
 import javafx.scene.input.Clipboard
 import javafx.scene.input.ClipboardContent
 import javafx.scene.input.DragEvent
 import javafx.scene.input.TransferMode
 import javafx.scene.web.WebView
 import netscape.javascript.JSObject
+import java.io.ByteArrayOutputStream
 import java.nio.file.Files
+import java.nio.file.Path
 import java.util.*
+import javax.imageio.ImageIO
 
 object ClipboardManager {
     fun putIntoClipboard(content: String) {
@@ -62,7 +67,19 @@ class MainController {
     }
 
     fun onDragDropped(dragEvent: DragEvent) {
-        val img = Base64.getEncoder().encodeToString(Files.readAllBytes(dragEvent.dragboard.files.first().toPath()))
+        parseFile(dragEvent.dragboard.files.first().toPath())
+    }
+
+    fun onPasteImage(image: Image) {
+        val s = ByteArrayOutputStream()
+        ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", s)
+        s.close()
+        val img = Base64.getEncoder().encodeToString(s.toByteArray())
+        webView.engine.executeScript("""update("$img");""")
+    }
+
+    fun parseFile(filePath: Path) {
+        val img = Base64.getEncoder().encodeToString(Files.readAllBytes(filePath))
         webView.engine.executeScript("""update("$img");""")
     }
 }

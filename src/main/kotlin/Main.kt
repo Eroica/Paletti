@@ -23,6 +23,7 @@
 import javafx.application.Application
 import javafx.fxml.FXMLLoader
 import javafx.scene.image.Image
+import javafx.scene.input.*
 import javafx.stage.Stage
 
 fun main(args: Array<String>) {
@@ -31,10 +32,21 @@ fun main(args: Array<String>) {
 
 class Paletti : Application() {
     override fun start(primaryStage: Stage) {
+        val controller = MainController()
+        val clipboard = Clipboard.getSystemClipboard()
         val stage = FXMLLoader(javaClass.getResource("MainWindow.fxml"), null, null, {
-            MainController()
+            controller
         }).load<Stage>()
         stage.icons.add(Image(javaClass.getResourceAsStream("icons/16.png")))
+        stage.addEventHandler(KeyEvent.KEY_RELEASED) {
+            if (KeyCodeCombination(KeyCode.V, KeyCombination.SHORTCUT_DOWN).match(it)) {
+                if (clipboard.hasImage()) {
+                    controller.onPasteImage(clipboard.image)
+                } else if (clipboard.hasFiles()) {
+                    controller.parseFile(clipboard.files.first().toPath())
+                }
+            }
+        }
         stage.show()
     }
 }
