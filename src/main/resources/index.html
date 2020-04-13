@@ -128,6 +128,15 @@
         }
     });
 
+    document.addEventListener("keydown", function (event) {
+       if (event.keyCode === 38) {
+           colorPalette.addTile();
+       }
+       if (event.keyCode === 40) {
+           colorPalette.removeTile();
+       }
+    });
+
     const COLOR_LIST = document.getElementById("ColorPalette");
     COLOR_LIST.addEventListener("click", function (event) {
         const target = event.target.closest("li");
