@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+	<gresource prefix="/com/moebots/paletti">
+		<file>ui/window.ui</file>
+		<file>ui/color_palette.ui</file>
+		<file>ui/color_tile.ui</file>
+		<file>resources/style.css</file>
+		<file>resources/copy.svg</file>
+	</gresource>
+</gresources>
