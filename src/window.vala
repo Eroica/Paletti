@@ -111,7 +111,7 @@ namespace Paletti {
 		private int min_colors;
 		private int max_colors;
 		private int current_count;
-		private RGB[] colors;
+		private RGB[]? colors;
 
 		public ColorPalette (int min_colors, int max_colors) {
 			this.min_colors = min_colors;
@@ -134,7 +134,7 @@ namespace Paletti {
 		}
 
 		public void increase_palette () {
-			if (current_count >= max_colors) {
+			if (current_count >= max_colors || colors == null) {
 				return;
 			}
 			add (new ColorTile (this, ++current_count, colors[current_count - 1]));
@@ -142,7 +142,7 @@ namespace Paletti {
 		}
 
 		public void decrease_palette () {
-			if (current_count <= min_colors) {
+			if (current_count <= min_colors || colors == null) {
 				return;
 			}
 			get_children ().last ().foreach ((element) => remove (element));
