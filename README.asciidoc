@@ -1,15 +1,19 @@
 = Paletti
 
-I basically took https://alembicforsketch.com/[Alembic] and put it into a JavaFX WebView.
-That is all.
+**Note:** This is the old JavaFX/Kotlin version of Paletti. A newer version (from 2.0) is written in Vala for GTK, and doesn't use a WebView/color-thief.js/JavaScript anymore.
 
+'''
+
+I basically took https://alembicforsketch.com/[Alembic] and put it into a JavaFX WebView.
 Alembic was originally developed by https://www.awkward.co/[Awkward] and licensed under the MIT license.
+
+I added a small feature so that you can scroll up and down to increase/decrease the size of the color palette (between 6 and 12).
+
+'''
 
 image::Paletti.gif[]
 
-Click on a tile to put that color into your clipboard.
-
-I added a small feature that you can scroll up and down to increase/decrease the size of the color palette (between 6 and 12).
+Paletti creates a color palette of an image that you drop into it. Click on a tile to put that color into your clipboard.
 
 == Installation
 
@@ -21,22 +25,4 @@ For other systems or compiling from source, see <<Building>>.
 == Building
 
 Paletti is built with Gradle and packaged with `jpackage` into an executable.
-
-Note that currently (February 2020),
-
-* the badass-runtime-plugin (supplying `jpackage` tasks) is buggy with JDK 13 and JDK 14, so you need to _build_ with an older version,
-* `jpackage` is only available from JDK 14, so you need to _package_ with that version.
-
-It's probably the easiest to configure this in the Gradle config:
-
-.build.gradle.kts
-[source,kotlin]
-runtime {
-    javaHome.set("C:/path/to/older/jdk")
-    jpackage {
-        jpackageHome = "C:/path/to/jdk-14"
-        // ...
-    }
-}
-
-With this setup, you can re-build Paletti from source, and/or create binaries for other systems.
+You should be at least using JDK 14.
