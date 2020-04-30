@@ -9,7 +9,7 @@ namespace Paletti {
 		private PIX pix;
 
 		public PosterizedImage.from_file (string filename) throws FileTypeError {
-			var src = pixRead (filename);
+			var src = new PIX.from_filename (filename);
 			if (src == null) {
 				throw new FileTypeError.UNSUPPORTED("Could not read this image");
 			}

@@ -11,9 +11,13 @@ public struct l_ok : int {
 
 [CCode (cheader_filename = "allheaders.h")]
 namespace Leptonica {
+
+	[CCode (cname = "PIX", free_function = "pixDestroy", free_function_address_of = true, has_type_id = false)]
 	[Compact]
-	[CCode (cname = "PIX", free_function = "", destroy_function = "", has_type_id = false)]
 	public class PIX {
+		[CCode (cname = "pixRead")]
+		public PIX.from_filename (string filename);
+
 		[CCode (cname = "pixGetWidth")]
 		public int get_width ();
 
@@ -23,12 +27,15 @@ namespace Leptonica {
 		[CCode (cname = "pixGetInputFormat")]
 		public int get_input_format ();
 
+		[CCode (cname = "pixWrite", instance_pos = 0.5)]
+		void write (string filename, int format);
+
 		[CCode (cname = "pixWriteStream", instance_pos = 0.5)]
 		public int write_stream (out GLib.FileStream fp, int format);
 	}
 
 	[Compact]
-	[CCode (cname = "PIXCMAP", free_function = "", destroy_function = "", has_type_id = false)]
+	[CCode (cname = "PIXCMAP", free_function = "", has_type_id = false)]
 	public class PixColormap {
 		[CCode (cname = "pixcmapGetCount")]
 		public int get_count ();
@@ -42,12 +49,6 @@ namespace Leptonica {
 		                       [CCode (array_length = false)] out int[] pbmap,
 		                       [CCode (array_length = false)] out int[] pamap);
 	}
-
-	[CCode (cname = "pixRead")]
-	PIX pixRead (string filename);
-
-	[CCode (cname = "pixWrite")]
-	void pixWrite (string filename, PIX pix, int format);
 
 	[CCode (cname = "pixMedianCutQuantGeneral")]
 	PIX pixMedianCutQuantGeneral (PIX pix,
