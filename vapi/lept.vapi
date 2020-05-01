@@ -8,24 +8,25 @@ public struct l_int32 : int {
 public struct l_ok : int {
 }
 
-
 [CCode (cheader_filename = "allheaders.h")]
 namespace Leptonica {
-
 	[CCode (cname = "PIX", free_function = "pixDestroy", free_function_address_of = true, has_type_id = false)]
 	[Compact]
 	public class PIX {
+		public PixColormap? colormap {
+			[CCode (cname = "pixGetColormap")] get;
+		}
+
+		public int width {
+			[CCode (cname = "pixGetWidth")] get;
+		}
+
+		public int input_format {
+			[CCode (cname = "pixGetInputFormat")] get;
+		}
+
 		[CCode (cname = "pixRead")]
 		public PIX.from_filename (string filename);
-
-		[CCode (cname = "pixGetWidth")]
-		public int get_width ();
-
-		[CCode (cname = "pixGetColormap")]
-		public PixColormap get_colormap ();
-
-		[CCode (cname = "pixGetInputFormat")]
-		public int get_input_format ();
 
 		[CCode (cname = "pixWrite", instance_pos = 0.5)]
 		void write (string filename, int format);
@@ -35,19 +36,43 @@ namespace Leptonica {
 	}
 
 	[Compact]
-	[CCode (cname = "PIXCMAP", free_function = "", has_type_id = false)]
+	[CCode (cname = "PIXCMAP", has_type_id = false)]
 	public class PixColormap {
-		[CCode (cname = "pixcmapGetCount")]
-		public int get_count ();
+		public int size {
+			[CCode (cname = "pixcmapGetCount")] get;
+		}
+
+		public Paletti.RGB get (int index) {
+			int r, g, b;
+			var _ = get_color (index, out r, out g, out b);
+			return new Paletti.RGB (r, g, b);
+		}
+
+		public Paletti.RGB[] colors {
+			owned get {
+				var count = size;
+				var r = new int[count];
+				var g = new int[count];
+				var b = new int[count];
+				var a = new int[count];
+				get_arrays (out r, out g, out b, out a);
+
+				Paletti.RGB[] colors = new Paletti.RGB[count];
+				for (int i=0; i < count; i++) {
+					colors[i] = new Paletti.RGB (r[i], g[i], b[i]);
+				}
+				return colors;
+			}
+		}
 
 		[CCode (cname = "pixcmapGetColor")]
-		public int get_color (int index, out int r, out int g, out int b);
+		private int get_color (int index, out int r, out int g, out int b);
 
 		[CCode (cname = "pixcmapToArrays")]
-		public int get_arrays ([CCode (array_length = false)] out int[] prmap,
-		                       [CCode (array_length = false)] out int[] pgmap,
-		                       [CCode (array_length = false)] out int[] pbmap,
-		                       [CCode (array_length = false)] out int[] pamap);
+		private int get_arrays ([CCode (array_length = false)] out int[] prmap,
+		                        [CCode (array_length = false)] out int[] pgmap,
+		                        [CCode (array_length = false)] out int[] pbmap,
+		                        [CCode (array_length = false)] out int[] pamap);
 	}
 
 	[CCode (cname = "pixMedianCutQuantGeneral")]
