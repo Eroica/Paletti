@@ -13,22 +13,6 @@ namespace Paletti {
 	private const int MAX_COLORS = 32;
 	private const int DEFAULT_COLORS = 6;
 
-	public struct RGB {
-		public int r;
-		public int g;
-		public int b;
-
-		public RGB (int r, int g, int b) {
-			this.r = r;
-			this.g = g;
-			this.b = b;
-		}
-
-		public string to_string () {
-			return "#%02x%02x%02x".printf (r, g, b);
-		}
-	}
-
 	[GtkTemplate (ui = "/com/moebots/paletti/ui/window.ui")]
 	public class Window : ApplicationWindow {
 		[GtkChild]
@@ -81,11 +65,14 @@ namespace Paletti {
 		}
 
 		[GtkCallback]
-		private void on_drag_data_received (DragContext drag_context, int x, int y, SelectionData data, uint info, uint time) {
+		private void on_drag_data_received (DragContext drag_context,
+		                                    int x, int y, SelectionData data,
+		                                    uint info, uint time) {
 			try {
 				var filename = Filename.from_uri (data.get_uris ()[0]);
 				var posterized_image = new PosterizedImage.from_file (filename);
-				color_palette.set_colors (posterized_image.get_colors ());
+				color_palette.colors = new Gee.ArrayList<RGB>.wrap (posterized_image.colors);
+
 				var stack_dimensions = Allocation ();
 				stack.get_allocation (out stack_dimensions);
 				image.set_from_pixbuf (new Pixbuf.from_file_at_scale (
@@ -111,7 +98,7 @@ namespace Paletti {
 		private int min_colors;
 		private int max_colors;
 		private int current_count;
-		private RGB[]? colors;
+		public Gee.ArrayList<RGB> colors { get; set; }
 
 		public ColorPalette (int min_colors, int max_colors) {
 			this.min_colors = min_colors;
@@ -124,20 +111,12 @@ namespace Paletti {
 			show_all ();
 		}
 
-		public void set_colors (RGB[] colors) {
-			this.colors = colors;
-			var children = get_children ();
-			for (int i=0; i < children.length (); i++) {
-				var color_tile = children.nth_data(i) as ColorTile;
-				color_tile.set_color (colors[i]);
-			}
-		}
-
 		public void increase_palette () {
 			if (current_count >= max_colors || colors == null) {
 				return;
 			}
-			add (new ColorTile (this, ++current_count, colors[current_count - 1]));
+			add (new ColorTile.with_color (this, current_count, colors[current_count]));
+			current_count++;
 			show_all ();
 		}
 
@@ -152,25 +131,32 @@ namespace Paletti {
 
 	[GtkTemplate (ui = "/com/moebots/paletti/ui/color_tile.ui")]
 	private class ColorTile : EventBox {
-		private RGB? color;
-
-		public ColorTile (Widget parent, int index, RGB? color = null) {
-			set_name (@"Tile$index");
-			if (color != null) {
-				set_color (color);
+		private RGB? _color;
+		public RGB? color {
+			get { return _color; }
+			set {
+				_color = value;
+				try {
+					var css = new CssProvider ();
+					css.load_from_data (@".$(get_name ()) { background-color: rgba($(color.r), $(color.g), $(color.b), 1.0); }");
+					get_style_context ().add_class (get_name ());
+					get_style_context ().add_provider (css, STYLE_PROVIDER_PRIORITY_USER);
+				} catch (Error e) {
+					stderr.printf ("%s\n", e.message);
+				}
 			}
 		}
 
-		public void set_color (RGB color) {
+		public ColorTile (ColorPalette color_palette, int index) {
+			set_name (@"Tile$index");
+			color_palette.notify["colors"].connect ((s, p) => {
+				color = color_palette.colors[index];
+			});
+		}
+
+		public ColorTile.with_color (ColorPalette color_palette, int index, RGB color) {
+			this (color_palette, index);
 			this.color = color;
-			try {
-				var css = new CssProvider ();
-				css.load_from_data (@".$(get_name ()) { background-color: rgba($(color.r), $(color.g), $(color.b), 1.0); }");
-				get_style_context ().add_class (get_name ());
-				get_style_context ().add_provider (css, STYLE_PROVIDER_PRIORITY_USER);
-			} catch (Error e) {
-				stderr.printf ("%s\n", e.message);
-			}
 		}
 
 		[GtkCallback]
