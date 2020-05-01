@@ -71,7 +71,7 @@ namespace Paletti {
 			try {
 				var filename = Filename.from_uri (data.get_uris ()[0]);
 				var posterized_image = new PosterizedImage.from_file (filename);
-				color_palette.colors = new Gee.ArrayList<RGB>.wrap (posterized_image.colors);
+				color_palette.colors = new Colors (posterized_image.colors);
 
 				var stack_dimensions = Allocation ();
 				stack.get_allocation (out stack_dimensions);
@@ -98,7 +98,7 @@ namespace Paletti {
 		private int min_colors;
 		private int max_colors;
 		private int current_count;
-		public Gee.ArrayList<RGB> colors { get; set; }
+		public Colors colors { get; set; }
 
 		public ColorPalette (int min_colors, int max_colors) {
 			this.min_colors = min_colors;
@@ -192,3 +192,4 @@ namespace Paletti {
 		}
 	}
 }
+

@@ -11,7 +11,6 @@ dependencies = [
     dependency('glib-2.0', version: '>=2.38'),
     dependency('gobject-2.0'),
     dependency('gtk+-3.0'),
-    dependency('gee-0.8'),
     dependency('lept')
 ]
 
