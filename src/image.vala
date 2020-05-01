@@ -21,6 +21,21 @@ namespace Paletti {
 		}
 	}
 
+	public class Colors {
+		private RGB[] colors;
+		public int size {
+			get { return colors.length; }
+		}
+
+		public Colors (RGB[] colors) {
+			this.colors = colors;
+		}
+
+		public RGB get (int index) {
+			return colors[index];
+		}
+	}
+
 	class PosterizedImage {
 		private PIX pix;
 
