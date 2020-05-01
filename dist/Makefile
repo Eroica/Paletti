@@ -1,5 +1,5 @@
 APP_ICON_DIR=AppDir/usr/share/icons/hicolor/128x128/apps
-APP_SYMBOLIC_DIR=AppDir/usr/share/icons/hicolor/scalable/apps
+APP_SYMBOLIC_DIR=AppDir/usr/share/icons/hicolor/symbolic/apps
 
 appimage: Paletti-x86_64.AppImage
 
