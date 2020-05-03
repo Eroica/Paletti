@@ -19,6 +19,12 @@ namespace Paletti {
 		private HeaderBar header_bar;
 
 		[GtkChild]
+		private Adjustment colors_range;
+
+		[GtkChild]
+		private Button copy_button;
+
+		[GtkChild]
 		private Image image;
 
 		[GtkChild]
@@ -31,6 +37,8 @@ namespace Paletti {
 		private Revealer revealer;
 
 		private ColorPalette color_palette;
+
+		private IPosterizedImage pix = new PosterizedImage ();
 
 		public Window (Gtk.Application app) {
 			Object (application: app);
@@ -48,6 +56,17 @@ namespace Paletti {
 			});
 		}
 
+		private void load_image (string filename) {
+			var stack_dimensions = Allocation ();
+			stack.get_allocation (out stack_dimensions);
+			image.set_from_pixbuf (new Pixbuf.from_file_at_scale (
+				filename,
+				stack_dimensions.width,
+				stack_dimensions.height,
+				true
+			));
+		}
+
 		[GtkCallback]
 		private bool on_click (EventButton event) {
 			// TODO File browser
@@ -57,11 +76,21 @@ namespace Paletti {
 		[GtkCallback]
 		private bool on_mouse_scroll (EventScroll event) {
 			if (event.direction == ScrollDirection.UP) {
-				color_palette.increase_palette ();
+				colors_range.value++;
 			} else if (event.direction == ScrollDirection.DOWN) {
-				color_palette.decrease_palette ();
+				colors_range.value--;
 			}
 			return true;
+		}
+
+		[GtkCallback]
+		private void on_colors_range_value_changed () {
+			color_palette.adjust_tiles_to ((int) colors_range.value);
+			var colors = pix.posterize ((int) colors_range.value);
+			if (colors != null) {
+				load_image (load_cached_image ());
+				color_palette.set_tile_colors (colors);
+			}
 		}
 
 		[GtkCallback]
@@ -70,26 +99,39 @@ namespace Paletti {
 		                                    uint info, uint time) {
 			try {
 				var filename = Filename.from_uri (data.get_uris ()[0]);
-				var posterized_image = new PosterizedImage.from_file (filename);
-				color_palette.colors = new Colors (posterized_image.colors);
-
-				var stack_dimensions = Allocation ();
-				stack.get_allocation (out stack_dimensions);
-				image.set_from_pixbuf (new Pixbuf.from_file_at_scale (
-					filename,
-					stack_dimensions.width,
-					stack_dimensions.height,
-					true
-				));
+				pix.load_from_file (filename);
+				var colors = pix.posterize ((int) colors_range.value);
+				load_image (load_cached_image ());
+				color_palette.set_tile_colors (colors);
 				stack.set_visible_child_name("PreviewImage");
+				copy_button.sensitive = true;
 				header_bar.subtitle = filename;
-			} catch (FileTypeError e) {
+			} catch (Leptonica.Exception e) {
 				show_notification ();
 			} catch (Error e) {
 				show_notification ();
 			} finally {
 				Gtk.drag_finish (drag_context, true, false, time);
 			}
+		}
+
+		[GtkCallback]
+		private bool on_mono_set (bool state) {
+			pix.is_black_white = state;
+			var colors = pix.posterize ((int) colors_range.value);
+			if (colors != null) {
+				load_image (load_cached_image ());
+				color_palette.set_tile_colors (colors);
+			}
+			return false;
+		}
+
+		[GtkCallback]
+		private void on_copy_click () {
+			Clipboard.get_for_display (
+				get_window ().get_display (),
+				Gdk.SELECTION_CLIPBOARD
+			).set_image (image.pixbuf);
 		}
 	}
 
@@ -98,34 +140,44 @@ namespace Paletti {
 		private int min_colors;
 		private int max_colors;
 		private int current_count;
-		public Colors colors { get; set; }
 
 		public ColorPalette (int min_colors, int max_colors) {
 			this.min_colors = min_colors;
 			this.max_colors = max_colors;
-			this.current_count = int.max(min_colors, DEFAULT_COLORS);
+			this.current_count = int.max (min_colors, DEFAULT_COLORS);
 
 			for (int i=0; i < current_count; i++) {
-				add (new ColorTile (this, i));
+				add (new ColorTile (i));
 			}
+
 			show_all ();
 		}
 
-		public void increase_palette () {
-			if (current_count >= max_colors || colors == null) {
-				return;
+		public void adjust_tiles_to (int size) {
+			var child_count = (int) get_children ().length ();
+			if (child_count > size) {
+				for (int i=child_count; i > size; i--) {
+					remove (get_children ().nth_data (i - 1));
+				}
+			} else if (child_count < size) {
+				for (int i=child_count; i < size; i++) {
+					var tile = new ColorTile (i);
+					add (tile);
+					tile.show ();
+				}
 			}
-			add (new ColorTile.with_color (this, current_count, colors[current_count]));
-			current_count++;
-			show_all ();
 		}
 
-		public void decrease_palette () {
-			if (current_count <= min_colors || colors == null) {
-				return;
+		public void set_tile_colors (Colors colors) {
+			if (colors.size < get_children ().length ()) {
+				adjust_tiles_to (colors.size);
 			}
-			get_children ().last ().foreach ((element) => remove (element));
-			current_count--;
+
+			int i = 0;
+			get_children ().foreach ((it) => {
+				(it as ColorTile).color = colors[i];
+				i++;
+			});
 		}
 	}
 
@@ -147,15 +199,12 @@ namespace Paletti {
 			}
 		}
 
-		public ColorTile (ColorPalette color_palette, int index) {
+		public ColorTile (int index) {
 			set_name (@"Tile$index");
-			color_palette.notify["colors"].connect ((s, p) => {
-				color = color_palette.colors[index];
-			});
 		}
 
-		public ColorTile.with_color (ColorPalette color_palette, int index, RGB color) {
-			this (color_palette, index);
+		public ColorTile.with_color (int index, RGB color) {
+			this (index);
 			this.color = color;
 		}
 

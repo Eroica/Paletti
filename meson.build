@@ -16,7 +16,8 @@ dependencies = [
 
 sources = files('src/main.vala',
                 'src/window.vala',
-                'src/image.vala')
+                'src/image.vala',
+                'src/cache.vala')
 
 sources += import('gnome').compile_resources(
     'paletti-resources',

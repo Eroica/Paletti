@@ -1,9 +1,12 @@
+namespace Leptonica {
+	public errordomain Exception {
+		UNSUPPORTED,
+		FAILURE
+	}
+}
+
 namespace Paletti {
 	using Leptonica;
-
-	errordomain FileTypeError {
-		UNSUPPORTED
-	}
 
 	public class RGB {
 		public int r;
@@ -36,23 +39,44 @@ namespace Paletti {
 		}
 	}
 
-	class PosterizedImage {
-		private PIX pix;
+	public interface IPosterizedImage : Object {
+		public abstract bool is_black_white { get; set; }
+		public abstract Colors? posterize (int color_count);
+		public abstract void load_from_file (string filename) throws Exception;
+	}
 
-		public int count {
-			get { return pix.colormap.size; }
+	public class PosterizedImage : Object, IPosterizedImage {
+		private PIX? src;
+		public bool is_black_white { get; set; }
+
+		public PosterizedImage.from_file (string filename) throws Exception {
+			load_from_file (filename);
 		}
 
-		public RGB[] colors {
-			owned get { return pix.colormap.colors; }
-		}
-
-		public PosterizedImage.from_file (string filename) throws FileTypeError {
-			var src = new PIX.from_filename (filename);
+		public void load_from_file (string filename) throws Exception {
+			this.src = new PIX.from_filename (filename);
 			if (src == null) {
-				throw new FileTypeError.UNSUPPORTED("Could not read this image");
+				throw new Exception.UNSUPPORTED("Could not read this image");
 			}
-			this.pix = pixMedianCutQuantGeneral (src, 0, 8, MAX_COLORS);
+		}
+
+		public Colors? posterize (int color_count) {
+			if (src == null) {
+				return null;
+			}
+			var count = int.min (color_count, MAX_COLORS);
+			if (is_black_white) {
+				var p = pixAddMinimalGrayColormap8 (pixRemoveColormap (
+					pixMedianCutQuantGeneral (src, 0, 8, count)
+				));
+				save_cached_image (p);
+				return new Colors (p.colormap.colors);
+			} else {
+				var pix = pixMedianCutQuantGeneral (src, 0, 8, count);
+				save_cached_image (pix);
+				return new Colors (pix.colormap.colors);
+			}
 		}
 	}
 }
+
