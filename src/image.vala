@@ -65,17 +65,17 @@ namespace Paletti {
 				return null;
 			}
 			var count = int.min (color_count, MAX_COLORS);
+
+			PIX tmp;
 			if (is_black_white) {
-				var p = pixAddMinimalGrayColormap8 (pixRemoveColormap (
+				tmp = pixAddMinimalGrayColormap8 (pixRemoveColormap (
 					pixMedianCutQuantGeneral (src, 0, 8, count)
 				));
-				save_cached_image (p);
-				return new Colors (p.colormap.colors);
 			} else {
-				var pix = pixMedianCutQuantGeneral (src, 0, 8, count);
-				save_cached_image (pix);
-				return new Colors (pix.colormap.colors);
+				tmp = pixMedianCutQuantGeneral (src, 0, 8, count);
 			}
+			save_cached_image (tmp);
+			return new Colors (tmp.colormap.colors);
 		}
 	}
 }

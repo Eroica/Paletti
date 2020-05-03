@@ -65,7 +65,7 @@ namespace Leptonica {
 				var a = new int[count];
 				var ok = get_arrays (out r, out g, out b, out a);
 				if (ok != 0) {
-					throw new Exception.FAILURE("Could not create array of colors");
+					return new Paletti.RGB[0];
 				}
 
 				Paletti.RGB[] colors = new Paletti.RGB[count];
