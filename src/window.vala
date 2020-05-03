@@ -59,12 +59,16 @@ namespace Paletti {
 		private void load_image (string filename) {
 			var stack_dimensions = Allocation ();
 			stack.get_allocation (out stack_dimensions);
-			image.set_from_pixbuf (new Pixbuf.from_file_at_scale (
-				filename,
-				stack_dimensions.width,
-				stack_dimensions.height,
-				true
-			));
+			try {
+				image.set_from_pixbuf (new Pixbuf.from_file_at_scale (
+					filename,
+					stack_dimensions.width,
+					stack_dimensions.height,
+					true
+				));
+			} catch (Error e) {
+				show_notification ();
+			}
 		}
 
 		[GtkCallback]
@@ -175,7 +179,10 @@ namespace Paletti {
 
 			int i = 0;
 			get_children ().foreach ((it) => {
-				(it as ColorTile).color = colors[i];
+				var tile = it as ColorTile;
+				if (tile != null) {
+					tile.color = colors[i];
+				}
 				i++;
 			});
 		}
