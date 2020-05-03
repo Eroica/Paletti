@@ -21,6 +21,10 @@ namespace Leptonica {
 			[CCode (cname = "pixGetWidth")] get;
 		}
 
+		public int depth {
+			[CCode (cname = "pixGetDepth")] get;
+		}
+
 		public int input_format {
 			[CCode (cname = "pixGetInputFormat")] get;
 		}
@@ -28,8 +32,9 @@ namespace Leptonica {
 		[CCode (cname = "pixRead")]
 		public PIX.from_filename (string filename);
 
+		// TODO
 		[CCode (cname = "pixWrite", instance_pos = 0.5)]
-		void write (string filename, int format);
+		public void write (string filename, int format);
 
 		[CCode (cname = "pixWriteStream", instance_pos = 0.5)]
 		public int write_stream (out GLib.FileStream fp, int format);
@@ -42,9 +47,12 @@ namespace Leptonica {
 			[CCode (cname = "pixcmapGetCount")] get;
 		}
 
-		public Paletti.RGB get (int index) {
+		public Paletti.RGB get (int index) throws Exception {
 			int r, g, b;
-			var _ = get_color (index, out r, out g, out b);
+			var ok = get_color (index, out r, out g, out b);
+			if (ok != 0) {
+				throw new Exception.FAILURE("Could not get color");
+			}
 			return new Paletti.RGB (r, g, b);
 		}
 
@@ -55,7 +63,10 @@ namespace Leptonica {
 				var g = new int[count];
 				var b = new int[count];
 				var a = new int[count];
-				get_arrays (out r, out g, out b, out a);
+				var ok = get_arrays (out r, out g, out b, out a);
+				if (ok != 0) {
+					throw new Exception.FAILURE("Could not create array of colors");
+				}
 
 				Paletti.RGB[] colors = new Paletti.RGB[count];
 				for (int i=0; i < count; i++) {
@@ -83,5 +94,27 @@ namespace Leptonica {
 	                              l_int32  sigbits = 0,
 	                              l_int32  maxsub = 0,
 	                              l_int32  checkbw = 0);
+
+	[CCode (cname = "pixWrite")]
+	int pix_write (string filename, PIX pix, int format);
+
+	[CCode (cname = "pixQuantizeIfFewColors")]
+	int pixQuantizeIfFewColors (PIX pix,
+	                            l_int32 maxcolors,
+	                            l_int32 mingraycolors,
+	                            l_int32 octlevel,
+	                            out PIX ppixd);
+
+	[CCode (cname = "pixConvertRGBToLuminance")]
+	PIX pixConvertRGBToLuminance (PIX pix);
+
+	[CCode (cname = "pixAddGrayColormap8")]
+	int pixAddGrayColormap8 (PIX pix);
+
+	[CCode (cname = "pixAddMinimalGrayColormap8")]
+	PIX pixAddMinimalGrayColormap8 (PIX pix);
+
+	[CCode (cname = "pixRemoveColormap")]
+	PIX pixRemoveColormap (PIX pix, int type = 1);
 }
 
