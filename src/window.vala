@@ -195,6 +195,7 @@ namespace Paletti {
 			get { return _color; }
 			set {
 				_color = value;
+				set_tooltip_text (_color.to_string ());
 				try {
 					var css = new CssProvider ();
 					css.load_from_data (@".$(get_name ()) { background-color: rgba($(color.r), $(color.g), $(color.b), 1.0); }");
