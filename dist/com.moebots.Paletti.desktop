@@ -2,7 +2,7 @@
 Version=1.0
 Type=Application
 Name=Paletti
-Icon=paletti
+Icon=com.moebots.Paletti
 Exec=Paletti
 Categories=Graphics;ImageProcessing;
 
