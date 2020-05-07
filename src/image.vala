@@ -111,7 +111,7 @@ namespace Paletti {
 		public void load_from (string filename) {
 			src = new Leptonica.PIX.from_filename (filename);
 			if (src == null) {
-				throw new Leptonica.Exception.UNSUPPORTED("Could not read this image");
+				throw new Leptonica.Exception.UNSUPPORTED ("Could not read this image");
 			}
 		}
 
@@ -124,6 +124,9 @@ namespace Paletti {
 				));
 			} else {
 				tmp = Leptonica.pixMedianCutQuantGeneral (src, 0, 8, count);
+			}
+			if (tmp == null) {
+				throw new Leptonica.Exception.FAILURE ("Could not run quantization on this image.");
 			}
 			save_cached_image (tmp);
 			load_image ();
@@ -144,15 +147,14 @@ namespace Paletti {
 			}
 
 			var tmp = new Pixbuf (Colorspace.RGB, false, 8, dimensions.width, dimensions.height);
-			(new Pixbuf.from_file (get_cached_image ()))
-				.scale (
-					tmp,
-					0, 0,
-					dimensions.width, dimensions.height,
-					-(int) (width - dimensions.width) / 2, -(int) (height - dimensions.height) / 2,
-					width/src.width, height/src.height,
-					InterpType.BILINEAR
-				);
+			(new Pixbuf.from_file (get_cached_image ())).scale (
+				tmp,
+				0, 0,
+				dimensions.width, dimensions.height,
+				-(int) (width - dimensions.width) / 2, -(int) (height - dimensions.height) / 2,
+				width/src.width, height/src.height,
+				InterpType.BILINEAR
+			);
 			set_from_pixbuf (tmp);
 		}
 	}
