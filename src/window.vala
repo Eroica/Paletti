@@ -41,7 +41,7 @@ namespace Paletti {
 		[GtkChild]
 		private Overlay overlay;
 
-		private IPosterizedImage image;
+		private IPosterizedImage image = new NullImage ();
 
 		private ColorPalette color_palette;
 
@@ -54,8 +54,6 @@ namespace Paletti {
 			box.add (color_palette);
 			notification = new Notification ();
 			overlay.add_overlay (notification);
-			image = new NullImage ();
-			stack.add_named (image, "NULLIMAGE");
 			show_all();
 
 			if (is_first_run ()) {
@@ -77,9 +75,17 @@ namespace Paletti {
 					notification.display (e.message);
 				}
 			}
-			var colors = image.posterize ((int) colors_range.value);
-			color_palette.set_tile_colors (colors);
-			header_bar.subtitle = filename;
+			try {
+				var colors = image.posterize ((int) colors_range.value);
+				color_palette.set_tile_colors (colors);
+				header_bar.subtitle = filename;
+			} catch (Leptonica.Exception e) {
+				var is_black_white = image.is_black_white;
+				stack.remove (image);
+				image = new NullImage ();
+				image.is_black_white = is_black_white;
+				notification.display (e.message);
+			}
 		}
 
 		private void show_open_dialog () {
