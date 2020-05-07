@@ -93,14 +93,9 @@ namespace Paletti {
 			dialog.response.connect ((dialog, response_id) => {
 				if (response_id == ResponseType.ACCEPT) {
 					var file_dialog = dialog as FileChooserDialog;
-					var ok = Leptonica.pix_write (
-						Filename.from_uri (file_dialog.get_file ().get_uri ()),
-						src,
-						3 // PNG
-					);
-					if (ok != 0) {
-						throw new Leptonica.Exception.FAILURE ("An error occurred while saving the image.");
-					}
+					var dest = File.new_for_uri (file_dialog.get_file ().get_uri ());
+					File.new_for_path (get_cached_image ())
+						.copy (dest, FileCopyFlags.OVERWRITE);
 				}
 				dialog.destroy ();
 			});
