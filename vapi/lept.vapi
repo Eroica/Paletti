@@ -21,6 +21,10 @@ namespace Leptonica {
 			[CCode (cname = "pixGetWidth")] get;
 		}
 
+		public int height {
+			[CCode (cname = "pixGetHeight")] get;
+		}
+
 		public int depth {
 			[CCode (cname = "pixGetDepth")] get;
 		}

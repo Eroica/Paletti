@@ -138,11 +138,27 @@ namespace Paletti {
 		private void load_image () {
 			var dimensions = Allocation ();
 			(parent as Stack).get_allocation (out dimensions);
-			set_from_pixbuf (new Pixbuf.from_file_at_scale (
-				get_cached_image (),
-				dimensions.width, dimensions.height,
-				true
-			));
+			var ratio = (double) src.width / src.height;
+			var width = (double) dimensions.width;
+			var height = (double) dimensions.height;
+
+			if (ratio >= 1) {
+				width = (double) dimensions.height/src.height * src.width;
+			} else {
+				height = (double) dimensions.width/src.width * src.height;
+			}
+
+			var tmp = new Pixbuf (Colorspace.RGB, false, 8, dimensions.width, dimensions.height);
+			(new Pixbuf.from_file (get_cached_image ()))
+				.scale (
+					tmp,
+					0, 0,
+					dimensions.width, dimensions.height,
+					-(int) (width - dimensions.width) / 2, -(int) (height - dimensions.height) / 2,
+					width/src.width, height/src.height,
+					InterpType.BILINEAR
+				);
+			set_from_pixbuf (tmp);
 		}
 	}
 }
