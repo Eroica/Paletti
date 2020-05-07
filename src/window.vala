@@ -33,9 +33,6 @@ namespace Paletti {
 		private Switch mono_switch;
 
 		[GtkChild]
-		private Image image;
-
-		[GtkChild]
 		private Box box;
 
 		[GtkChild]
@@ -44,11 +41,11 @@ namespace Paletti {
 		[GtkChild]
 		private Overlay overlay;
 
+		private IPosterizedImage image;
+
 		private ColorPalette color_palette;
 
 		private Notification notification;
-
-		private IPosterizedImage pix = new PosterizedImage ();
 
 		public Window (Gtk.Application app) {
 			Object (application: app);
@@ -57,11 +54,32 @@ namespace Paletti {
 			box.add (color_palette);
 			notification = new Notification ();
 			overlay.add_overlay (notification);
+			image = new NullImage ();
+			stack.add_named (image, "NULLIMAGE");
 			show_all();
 
 			if (is_first_run ()) {
-				notification.show ("Press <b>Ctrl+?</b> for a list of keyboard shortcuts.", NotificationType.INFO);
+				notification.display ("Press <b>Ctrl+?</b> for a list of keyboard shortcuts.", NotificationType.INFO);
 			}
+		}
+
+		private void load_file (string filename) {
+			try {
+				image.load_from (filename);
+			} catch (Leptonica.Exception e) {
+				if (e is Leptonica.Exception.UNINITIALIZED) {
+					stack.remove (image);
+					image = new PosterizedImage.from_file (filename, image.is_black_white);
+					image.show ();
+					stack.add_named (image, "PreviewImage");
+					stack.visible_child_name = "PreviewImage";
+				} else {
+					notification.display (e.message);
+				}
+			}
+			var colors = image.posterize ((int) colors_range.value);
+			color_palette.set_tile_colors (colors);
+			header_bar.subtitle = filename;
 		}
 
 		private void show_open_dialog () {
@@ -76,54 +94,20 @@ namespace Paletti {
 			dialog.show ();
 		}
 
-		private void show_save_dialog () {
-			var dialog = new SaveFileDialog ();
-			dialog.response.connect ((dialog, response_id) => {
-				if (response_id == ResponseType.ACCEPT) {
-					var file_dialog = dialog as FileChooserDialog;
-					pix.save_to (Filename.from_uri (file_dialog.get_file ().get_uri ()));
-				}
-				dialog.destroy ();
-			});
-			dialog.show ();
-		}
-
-		private void load_image (string filename) {
-			var stack_dimensions = Allocation ();
-			stack.get_allocation (out stack_dimensions);
-			try {
-				image.set_from_pixbuf (new Pixbuf.from_file_at_scale (
-					filename,
-					stack_dimensions.width,
-					stack_dimensions.height,
-					true
-				));
-			} catch (Error e) {
-				notification.show ("Could not load this file.");
-			}
-		}
-
 		[GtkCallback]
 		private bool on_key_release (EventKey event) {
-			if (event.keyval == Key.o && event.state == ModifierType.CONTROL_MASK) {
-				show_open_dialog ();
-			} else if (event.keyval == Key.s && event.state == ModifierType.CONTROL_MASK) {
-				if (!pix.is_loaded) {
-					notification.show ("First load an image into Paletti.");
-				} else {
-					show_save_dialog ();
+			try {
+				if (event.keyval == Key.o && event.state == ModifierType.CONTROL_MASK) {
+					show_open_dialog ();
+				} else if (event.keyval == Key.s && event.state == ModifierType.CONTROL_MASK) {
+					image.save ();
+				} else if (event.keyval == Key.c && event.state == ModifierType.CONTROL_MASK) {
+					image.copy ();
+				} else if (event.keyval == Key.x) {
+					mono_switch.activate ();
 				}
-			} else if (event.keyval == Key.c && event.state == ModifierType.CONTROL_MASK) {
-				if (!pix.is_loaded) {
-					notification.show ("First load an image into Paletti.");
-				} else {
-					Clipboard.get_for_display (
-						get_window ().get_display (),
-						Gdk.SELECTION_CLIPBOARD
-					).set_image (image.pixbuf);
-				}
-			} else if (event.keyval == Key.x) {
-				mono_switch.activate ();
+			} catch (Leptonica.Exception e) {
+				notification.display (e.message);
 			}
 			return true;
 		}
@@ -147,25 +131,13 @@ namespace Paletti {
 		[GtkCallback]
 		private void on_colors_range_value_changed () {
 			color_palette.adjust_tiles_to ((int) colors_range.value);
-			var colors = pix.posterize ((int) colors_range.value);
-			if (colors != null) {
-				load_image (load_cached_image ());
-				color_palette.set_tile_colors (colors);
-			}
-		}
-
-		private void load_file (string filename) {
 			try {
-				pix.load_from_file (filename);
-				var colors = pix.posterize ((int) colors_range.value);
-				load_image (load_cached_image ());
+				var colors = image.posterize ((int) colors_range.value);
 				color_palette.set_tile_colors (colors);
-				stack.set_visible_child_name("PreviewImage");
-				header_bar.subtitle = filename;
 			} catch (Leptonica.Exception e) {
-				notification.show ("Could not load this file.");
-			} catch (Error e) {
-				notification.show (e.message);
+				if (!(e is Leptonica.Exception.UNINITIALIZED)) {
+					notification.display (e.message);
+				}
 			}
 		}
 
@@ -179,11 +151,14 @@ namespace Paletti {
 
 		[GtkCallback]
 		private bool on_mono_set (bool state) {
-			pix.is_black_white = state;
-			var colors = pix.posterize ((int) colors_range.value);
-			if (colors != null) {
-				load_image (load_cached_image ());
+			image.is_black_white = state;
+			try {
+				var colors = image.posterize ((int) colors_range.value);
 				color_palette.set_tile_colors (colors);
+			} catch (Leptonica.Exception e) {
+				if (!(e is Leptonica.Exception.UNINITIALIZED)) {
+					notification.display (e.message);
+				}
 			}
 			return false;
 		}
@@ -245,11 +220,11 @@ namespace Paletti {
 			get { return _color; }
 			set {
 				_color = value;
-				set_tooltip_text (_color.to_string ());
+				tooltip_text = _color.to_string ();
 				try {
 					var css = new CssProvider ();
-					css.load_from_data (@".$(get_name ()) { background-color: rgba($(color.r), $(color.g), $(color.b), 1.0); }");
-					get_style_context ().add_class (get_name ());
+					css.load_from_data (@".$(name) { background-color: rgba($(color.r), $(color.g), $(color.b), 1.0); }");
+					get_style_context ().add_class (name);
 					get_style_context ().add_provider (css, STYLE_PROVIDER_PRIORITY_USER);
 				} catch (Error e) {
 					stderr.printf ("%s\n", e.message);
@@ -258,7 +233,7 @@ namespace Paletti {
 		}
 
 		public ColorTile (int index) {
-			set_name (@"Tile$index");
+			name = @"Tile$index";
 		}
 
 		public ColorTile.with_color (int index, RGB color) {

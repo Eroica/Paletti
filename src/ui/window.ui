@@ -92,21 +92,6 @@
                         <property name="title" translatable="yes">Dropzone</property>
                       </packing>
                     </child>
-                    <child>
-                      <object class="GtkImage" id="image">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="stock">gtk-missing-image</property>
-                        <style>
-                          <class name="preview-image"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="name">PreviewImage</property>
-                        <property name="title" translatable="yes">PreviewImage</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
                   </object>
                 </child>
               </object>
