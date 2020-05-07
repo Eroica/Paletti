@@ -11,7 +11,7 @@ namespace Paletti {
 		[GtkChild]
 		private Label label;
 
-		public void show (string notification, NotificationType type = NotificationType.ERROR) {
+		public void display (string notification, NotificationType type = NotificationType.ERROR) {
 			if (type == NotificationType.INFO) {
 				label.get_style_context ().add_class ("info");
 			}

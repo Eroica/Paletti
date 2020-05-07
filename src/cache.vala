@@ -9,7 +9,7 @@ namespace Paletti {
 		Leptonica.pix_write (dest_path, pix, pix.input_format);
 	}
 
-	public string load_cached_image () {
+	public string get_cached_image () {
 		return Path.build_filename (
 			Environment.get_user_cache_dir (),
 			"Paletti",
