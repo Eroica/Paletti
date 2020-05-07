@@ -13,7 +13,15 @@ namespace Paletti {
 	private const int MAX_COLORS = 32;
 	private const int DEFAULT_COLORS = 6;
 
-	[GtkTemplate (ui = "/com/moebots/paletti/ui/window.ui")]
+	// Simple check: if a cached image exists, then Paletti has been used before
+	private bool is_first_run () {
+		return !File.new_build_filename (Path.build_filename (
+			Environment.get_user_cache_dir (),
+			"Paletti", "cache.png"
+		)).query_exists ();
+	}
+
+	[GtkTemplate (ui = "/com/moebots/Paletti/ui/window.ui")]
 	public class Window : ApplicationWindow {
 		[GtkChild]
 		private HeaderBar header_bar;
@@ -22,7 +30,7 @@ namespace Paletti {
 		private Adjustment colors_range;
 
 		[GtkChild]
-		private Button copy_button;
+		private Switch mono_switch;
 
 		[GtkChild]
 		private Image image;
@@ -34,9 +42,11 @@ namespace Paletti {
 		private Stack stack;
 
 		[GtkChild]
-		private Revealer revealer;
+		private Overlay overlay;
 
 		private ColorPalette color_palette;
+
+		private Notification notification;
 
 		private IPosterizedImage pix = new PosterizedImage ();
 
@@ -45,15 +55,37 @@ namespace Paletti {
 			drag_dest_set (this, DestDefaults.ALL, targets, DragAction.COPY);
 			color_palette = new ColorPalette (DEFAULT_COLORS, MAX_COLORS);
 			box.add (color_palette);
+			notification = new Notification ();
+			overlay.add_overlay (notification);
 			show_all();
+
+			if (is_first_run ()) {
+				notification.show ("Press <b>Ctrl+?</b> for a list of keyboard shortcuts.", NotificationType.INFO);
+			}
 		}
 
-		private void show_notification () {
-			revealer.reveal_child = true;
-			Timeout.add (3600, () => {
-				revealer.reveal_child = false;
-				return false;
+		private void show_open_dialog () {
+			var dialog = new OpenFileDialog ();
+			dialog.response.connect ((dialog, response_id) => {
+				if (response_id == ResponseType.ACCEPT) {
+					var file_dialog = dialog as FileChooserDialog;
+					load_file (Filename.from_uri (file_dialog.get_file ().get_uri ()));
+				}
+				dialog.destroy ();
 			});
+			dialog.show ();
+		}
+
+		private void show_save_dialog () {
+			var dialog = new SaveFileDialog ();
+			dialog.response.connect ((dialog, response_id) => {
+				if (response_id == ResponseType.ACCEPT) {
+					var file_dialog = dialog as FileChooserDialog;
+					pix.save_to (Filename.from_uri (file_dialog.get_file ().get_uri ()));
+				}
+				dialog.destroy ();
+			});
+			dialog.show ();
 		}
 
 		private void load_image (string filename) {
@@ -67,13 +99,38 @@ namespace Paletti {
 					true
 				));
 			} catch (Error e) {
-				show_notification ();
+				notification.show ("Could not load this file.");
 			}
 		}
 
 		[GtkCallback]
+		private bool on_key_release (EventKey event) {
+			if (event.keyval == Key.o && event.state == ModifierType.CONTROL_MASK) {
+				show_open_dialog ();
+			} else if (event.keyval == Key.s && event.state == ModifierType.CONTROL_MASK) {
+				if (!pix.is_loaded) {
+					notification.show ("First load an image into Paletti.");
+				} else {
+					show_save_dialog ();
+				}
+			} else if (event.keyval == Key.c && event.state == ModifierType.CONTROL_MASK) {
+				if (!pix.is_loaded) {
+					notification.show ("First load an image into Paletti.");
+				} else {
+					Clipboard.get_for_display (
+						get_window ().get_display (),
+						Gdk.SELECTION_CLIPBOARD
+					).set_image (image.pixbuf);
+				}
+			} else if (event.keyval == Key.x) {
+				mono_switch.activate ();
+			}
+			return true;
+		}
+
+		[GtkCallback]
 		private bool on_click (EventButton event) {
-			// TODO File browser
+			show_open_dialog ();
 			return true;
 		}
 
@@ -97,26 +154,27 @@ namespace Paletti {
 			}
 		}
 
-		[GtkCallback]
-		private void on_drag_data_received (DragContext drag_context,
-		                                    int x, int y, SelectionData data,
-		                                    uint info, uint time) {
+		private void load_file (string filename) {
 			try {
-				var filename = Filename.from_uri (data.get_uris ()[0]);
 				pix.load_from_file (filename);
 				var colors = pix.posterize ((int) colors_range.value);
 				load_image (load_cached_image ());
 				color_palette.set_tile_colors (colors);
 				stack.set_visible_child_name("PreviewImage");
-				copy_button.sensitive = true;
 				header_bar.subtitle = filename;
 			} catch (Leptonica.Exception e) {
-				show_notification ();
+				notification.show ("Could not load this file.");
 			} catch (Error e) {
-				show_notification ();
-			} finally {
-				Gtk.drag_finish (drag_context, true, false, time);
+				notification.show (e.message);
 			}
+		}
+
+		[GtkCallback]
+		private void on_drag_data_received (DragContext drag_context,
+		                                    int x, int y, SelectionData data,
+		                                    uint info, uint time) {
+			load_file (Filename.from_uri (data.get_uris ()[0]));
+			Gtk.drag_finish (drag_context, true, false, time);
 		}
 
 		[GtkCallback]
@@ -129,17 +187,9 @@ namespace Paletti {
 			}
 			return false;
 		}
-
-		[GtkCallback]
-		private void on_copy_click () {
-			Clipboard.get_for_display (
-				get_window ().get_display (),
-				Gdk.SELECTION_CLIPBOARD
-			).set_image (image.pixbuf);
-		}
 	}
 
-	[GtkTemplate (ui = "/com/moebots/paletti/ui/color_palette.ui")]
+	[GtkTemplate (ui = "/com/moebots/Paletti/ui/color_palette.ui")]
 	public class ColorPalette : Box {
 		private int min_colors;
 		private int max_colors;
@@ -188,7 +238,7 @@ namespace Paletti {
 		}
 	}
 
-	[GtkTemplate (ui = "/com/moebots/paletti/ui/color_tile.ui")]
+	[GtkTemplate (ui = "/com/moebots/Paletti/ui/color_tile.ui")]
 	private class ColorTile : EventBox {
 		private RGB? _color;
 		public RGB? color {

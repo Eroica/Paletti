@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-	<gresource prefix="/com/moebots/paletti">
+	<gresource prefix="/com/moebots/Paletti">
 		<file>ui/window.ui</file>
+		<file>ui/notification.ui</file>
 		<file>ui/color_palette.ui</file>
 		<file>ui/color_tile.ui</file>
+		<file>ui/open_file_dialog.ui</file>
+		<file>ui/save_file_dialog.ui</file>
 		<file>resources/style.css</file>
 		<file>resources/copy.svg</file>
+	</gresource>
+	<gresource prefix="/com/moebots/Paletti/gtk">
+		<file alias="help-overlay.ui">ui/help-overlay.ui</file>
 	</gresource>
 </gresources>

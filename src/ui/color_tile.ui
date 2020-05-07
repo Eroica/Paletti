@@ -11,7 +11,7 @@
       <object class="GtkImage">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="resource">/com/moebots/paletti/resources/copy.svg</property>
+        <property name="resource">/com/moebots/Paletti/resources/copy.svg</property>
       </object>
     </child>
     <style>

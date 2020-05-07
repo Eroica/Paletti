@@ -43,11 +43,16 @@ namespace Paletti {
 		public abstract bool is_black_white { get; set; }
 		public abstract Colors? posterize (int color_count);
 		public abstract void load_from_file (string filename) throws Exception;
+		public abstract bool is_loaded { get; }
+		public abstract void save_to (string filename);
 	}
 
 	public class PosterizedImage : Object, IPosterizedImage {
 		private PIX? src;
 		public bool is_black_white { get; set; }
+		public bool is_loaded {
+			get { return src != null; }
+		}
 
 		public PosterizedImage.from_file (string filename) throws Exception {
 			load_from_file (filename);
@@ -58,6 +63,10 @@ namespace Paletti {
 			if (src == null) {
 				throw new Exception.UNSUPPORTED("Could not read this image");
 			}
+		}
+
+		public void save_to (string filename) {
+			Leptonica.pix_write (filename, src, 3);
 		}
 
 		public Colors? posterize (int color_count) {
