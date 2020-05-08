@@ -57,7 +57,7 @@ namespace Leptonica {
 			if (ok != 0) {
 				throw new Exception.FAILURE("Could not get color");
 			}
-			return new Paletti.RGB (r, g, b);
+			return Paletti.RGB (r, g, b);
 		}
 
 		public Paletti.RGB[] colors {
@@ -74,7 +74,7 @@ namespace Leptonica {
 
 				Paletti.RGB[] colors = new Paletti.RGB[count];
 				for (int i=0; i < count; i++) {
-					colors[i] = new Paletti.RGB (r[i], g[i], b[i]);
+					colors[i] = Paletti.RGB (r[i], g[i], b[i]);
 				}
 				return colors;
 			}

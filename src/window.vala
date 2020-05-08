@@ -21,8 +21,13 @@ namespace Paletti {
 		)).query_exists ();
 	}
 
+	public interface IPosterize {
+		public signal void posterize (int colors_count, bool is_black_white,
+		                              Allocation dimensions);
+	}
+
 	[GtkTemplate (ui = "/com/moebots/Paletti/ui/window.ui")]
-	public class Window : ApplicationWindow {
+	public class Window : ApplicationWindow, IPosterize {
 		[GtkChild]
 		private HeaderBar header_bar;
 
@@ -57,33 +62,33 @@ namespace Paletti {
 			show_all();
 
 			if (is_first_run ()) {
-				notification.display ("Press <b>Ctrl+?</b> for a list of keyboard shortcuts.", NotificationType.INFO);
+				notification.display (
+					"Press <b>Ctrl+?</b> for a list of keyboard shortcuts.",
+					NotificationType.INFO
+				);
 			}
 		}
 
 		private void load_file (string filename) {
+			var dimensions = Allocation ();
+			stack.get_allocation (out dimensions);
 			try {
-				image.load_from (filename);
-			} catch (Leptonica.Exception e) {
-				if (e is Leptonica.Exception.UNINITIALIZED) {
+				if (image is NullImage) {
 					stack.remove (image);
-					image = new PosterizedImage.from_file (filename, image.is_black_white);
-					image.show ();
+					image = new PosterizedImage (filename, notification, this);
+					image.load (filename);
+					image.change.connect (color_palette.set_tile_colors);
 					stack.add_named (image, "PreviewImage");
 					stack.visible_child_name = "PreviewImage";
 				} else {
-					notification.display (e.message);
+					image.load (filename);
 				}
-			}
-			try {
-				var colors = image.posterize ((int) colors_range.value);
-				color_palette.set_tile_colors (colors);
+				posterize ((int) colors_range.value, mono_switch.state, dimensions);
 				header_bar.subtitle = filename;
 			} catch (Leptonica.Exception e) {
-				var is_black_white = image.is_black_white;
 				stack.remove (image);
+				image.change.disconnect (color_palette.set_tile_colors);
 				image = new NullImage ();
-				image.is_black_white = is_black_white;
 				notification.display (e.message);
 			}
 		}
@@ -93,7 +98,7 @@ namespace Paletti {
 			dialog.response.connect ((dialog, response_id) => {
 				if (response_id == ResponseType.ACCEPT) {
 					var file_dialog = dialog as FileChooserDialog;
-					load_file (Filename.from_uri (file_dialog.get_file ().get_uri ()));
+					load_file (file_dialog.get_file ().get_path ());
 				}
 				dialog.destroy ();
 			});
@@ -137,35 +142,29 @@ namespace Paletti {
 		[GtkCallback]
 		private void on_colors_range_value_changed () {
 			color_palette.adjust_tiles_to ((int) colors_range.value);
-			try {
-				var colors = image.posterize ((int) colors_range.value);
-				color_palette.set_tile_colors (colors);
-			} catch (Leptonica.Exception e) {
-				if (!(e is Leptonica.Exception.UNINITIALIZED)) {
-					notification.display (e.message);
-				}
-			}
+			var dimensions = Allocation ();
+			stack.get_allocation (out dimensions);
+			posterize ((int) colors_range.value, mono_switch.state, dimensions);
 		}
 
 		[GtkCallback]
 		private void on_drag_data_received (DragContext drag_context,
 		                                    int x, int y, SelectionData data,
 		                                    uint info, uint time) {
-			load_file (Filename.from_uri (data.get_uris ()[0]));
-			Gtk.drag_finish (drag_context, true, false, time);
+			try {
+				load_file (Filename.from_uri (data.get_uris ()[0]));
+			} catch (Error e) {
+				notification.display (e.message);
+			} finally {
+				Gtk.drag_finish (drag_context, true, false, time);
+			}
 		}
 
 		[GtkCallback]
 		private bool on_mono_set (bool state) {
-			image.is_black_white = state;
-			try {
-				var colors = image.posterize ((int) colors_range.value);
-				color_palette.set_tile_colors (colors);
-			} catch (Leptonica.Exception e) {
-				if (!(e is Leptonica.Exception.UNINITIALIZED)) {
-					notification.display (e.message);
-				}
-			}
+			var dimensions = Allocation ();
+			stack.get_allocation (out dimensions);
+			posterize ((int) colors_range.value, state, dimensions);
 			return false;
 		}
 	}
