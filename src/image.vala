@@ -100,10 +100,10 @@ namespace Paletti {
 		                        IPosterize s) {
 			get_style_context ().add_class ("preview-image");
 			this.notification = notification;
-			s.posterize.connect ((colors_count, is_black_white, dimensions) => {
+			s.posterize.connect ((colors_count, is_black_white, parent) => {
 				try {
 					posterize (colors_count, is_black_white);
-					setup (dimensions);
+					setup (parent);
 				} catch (Leptonica.Exception e) {
 					if (!(e is Leptonica.Exception.UNINITIALIZED)) {
 						notification.display (e.message);
@@ -152,7 +152,9 @@ namespace Paletti {
 			change (pix.colors);
 		}
 
-		private void setup (Allocation dimensions) throws Error {
+		private void setup (Container parent) throws Error {
+			var dimensions = Allocation ();
+			parent.get_allocation (out dimensions);
 			var ratio = (double) src.width / src.height;
 			var target_width = (double) dimensions.width;
 			var target_height = (double) dimensions.height;
