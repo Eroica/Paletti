@@ -23,7 +23,7 @@ namespace Paletti {
 
 	public interface IPosterize {
 		public signal void posterize (int colors_count, bool is_black_white,
-		                              Allocation dimensions);
+		                              Container parent);
 	}
 
 	[GtkTemplate (ui = "/com/moebots/Paletti/ui/window.ui")]
@@ -70,8 +70,6 @@ namespace Paletti {
 		}
 
 		private void load_file (string filename) {
-			var dimensions = Allocation ();
-			stack.get_allocation (out dimensions);
 			try {
 				if (image is NullImage) {
 					stack.remove (image);
@@ -83,7 +81,7 @@ namespace Paletti {
 				} else {
 					image.load (filename);
 				}
-				posterize ((int) colors_range.value, mono_switch.state, dimensions);
+				posterize ((int) colors_range.value, mono_switch.state, stack);
 				header_bar.subtitle = filename;
 			} catch (Leptonica.Exception e) {
 				stack.remove (image);
@@ -142,9 +140,7 @@ namespace Paletti {
 		[GtkCallback]
 		private void on_colors_range_value_changed () {
 			color_palette.adjust_tiles_to ((int) colors_range.value);
-			var dimensions = Allocation ();
-			stack.get_allocation (out dimensions);
-			posterize ((int) colors_range.value, mono_switch.state, dimensions);
+			posterize ((int) colors_range.value, mono_switch.state, stack);
 		}
 
 		[GtkCallback]
@@ -162,9 +158,7 @@ namespace Paletti {
 
 		[GtkCallback]
 		private bool on_mono_set (bool state) {
-			var dimensions = Allocation ();
-			stack.get_allocation (out dimensions);
-			posterize ((int) colors_range.value, state, dimensions);
+			posterize ((int) colors_range.value, state, stack);
 			return false;
 		}
 	}
