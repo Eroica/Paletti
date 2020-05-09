@@ -51,4 +51,3 @@ The old version simply used https://lokeshdhakar.com/projects/color-thief/[color
 
 This newer version (2.0+) is written in Vala and GTK since I wanted to use Paletti natively on my new machine.
 I archived the old JavaFX version into a https://github.com/Eroica/Paletti/tree/JavaFX-WebView-1.1[separate branch `JavaFX-WebView-1.1`], and a precompiled Windows binary is available from the Releases (v1.1).
-

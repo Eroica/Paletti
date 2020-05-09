@@ -9,4 +9,3 @@ namespace Paletti {
 	public class SaveFileDialog : FileChooserDialog {
 	}
 }
-

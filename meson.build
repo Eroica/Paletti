@@ -29,4 +29,3 @@ sources += import('gnome').compile_resources(
 )
 
 executable('Paletti', sources, dependencies: dependencies, install : true)
-
