@@ -16,4 +16,3 @@ indent_size = 3
 [*.{css}]
 indent_style = tab
 indent_size = 2
-

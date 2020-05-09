@@ -121,4 +121,3 @@ namespace Leptonica {
 	[CCode (cname = "pixRemoveColormap")]
 	PIX pixRemoveColormap (PIX pix, int type = 1);
 }
-
