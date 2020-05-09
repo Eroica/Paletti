@@ -79,13 +79,26 @@ namespace Paletti {
 		}
 	}
 
-	public interface IPosterizedImage {
+	public interface IPosterizedImage : Object {
 		public signal void change (Colors colors);
 
 		public abstract void on_copy () throws Exception;
 		public abstract void on_save () throws Exception;
 		public abstract void on_load (string filename) throws Leptonica.Exception;
 		public abstract void posterize (int colors_count, bool is_black_white);
+	}
+
+	public class NullImage : IPosterizedImage, Object {
+		public void on_copy () throws Exception {
+			throw new Exception.UNINITIALIZED ("First load an image into Paletti.");
+		}
+
+		public void on_save () throws Exception {
+			throw new Exception.UNINITIALIZED ("First load an image into Paletti.");
+		}
+
+		public void on_load (string filename) throws Leptonica.Exception {}
+		public void posterize (int colors_count, bool is_black_white) {}
 	}
 
 	[GtkTemplate (ui = "/com/moebots/Paletti/ui/posterized-image.ui")]
@@ -98,18 +111,12 @@ namespace Paletti {
 		}
 
 		public void on_copy () throws Exception {
-			if (pixbuf == null) {
-				throw new Exception.UNINITIALIZED ("First load an image into Paletti.");
-			}
 			Clipboard.get_for_display (
 				get_window ().get_display (), Gdk.SELECTION_CLIPBOARD
 			).set_image (pixbuf);
 		}
 
 		public void on_save () throws Exception {
-			if (pixbuf == null) {
-				throw new Exception.UNINITIALIZED ("First load an image into Paletti.");
-			}
 			show_save_dialog ();
 		}
 
@@ -117,6 +124,21 @@ namespace Paletti {
 			src = new Leptonica.PIX.from_filename (filename);
 			if (src == null) {
 				throw new Leptonica.Exception.UNSUPPORTED ("Could not read this image");
+			}
+		}
+
+		public void posterize (int colors_count, bool is_black_white) {
+			try {
+				IPix tmp;
+				if (is_black_white) {
+					tmp = new CachedPix (new BlackWhitePix (new PosterizedPix (src, colors_count)));
+				} else {
+					tmp = new CachedPix (new PosterizedPix (src, colors_count));
+				}
+				load_image ();
+				change (tmp.colors);
+			} catch (Leptonica.Exception e) {
+				notification.display (e.message);
 			}
 		}
 
@@ -143,25 +165,6 @@ namespace Paletti {
 			dialog.show ();
 		}
 
-		public void posterize (int colors_count, bool is_black_white) {
-			if (src == null) {
-				return;
-			}
-			try {
-				IPix tmp;
-				if (is_black_white) {
-					tmp = new CachedPix (new BlackWhitePix (new PosterizedPix (src, colors_count)));
-				} else {
-					tmp = new CachedPix (new PosterizedPix (src, colors_count));
-				}
-				load_image ();
-				change (tmp.colors);
-			} catch (Leptonica.Exception e) {
-				notification.display (e.message);
-			}
-
-		}
-
 		private void load_image () {
 			try {
 				var tmp = new Pixbuf.from_file (get_cached_image ());
@@ -179,9 +182,7 @@ namespace Paletti {
 				}
 				var dest = new Pixbuf (Colorspace.RGB, false, 8, dimensions.width, dimensions.height);
 				tmp.scale (
-					dest,
-					0, 0,
-					dimensions.width, dimensions.height,
+					dest, 0, 0, dimensions.width, dimensions.height,
 					-(int) (target_width - dimensions.width) / 2,
 					-(int) (target_height - dimensions.height) / 2,
 					target_width/src.width, target_height/src.height,
@@ -192,6 +193,5 @@ namespace Paletti {
 				set_from_icon_name ("gtk-missing-image", IconSize.DND);
 			}
 		}
-
 	}
 }

@@ -6,12 +6,14 @@ namespace Paletti {
 		FILE
 	}
 
-	private const Gtk.TargetEntry[] targets = {
+	private const TargetEntry[] targets = {
 		{"text/uri-list", 0, Target.FILE}
 	};
 
 	private const int MAX_COLORS = 32;
 	private const int DEFAULT_COLORS = 6;
+
+	private delegate void SideEffect ();
 
 	// Simple check: if a cached image exists, then Paletti has been used before
 	private bool is_first_run () {
@@ -55,20 +57,23 @@ namespace Paletti {
 		[GtkChild]
 		private Overlay overlay;
 
-		private PosterizedImage image;
-		private ColorPalette color_palette;
+		private IPosterizedImage image;
 		private Notification notification;
+		private ColorPalette color_palette;
+		private SideEffect change_image_implementation;
 
 		public Window (Gtk.Application app) {
 			Object (application: app);
 			drag_dest_set (this, DestDefaults.ALL, targets, DragAction.COPY);
-			color_palette = new ColorPalette (DEFAULT_COLORS, MAX_COLORS);
-			box.add (color_palette);
-			notification = new Notification ();
-			overlay.add_overlay (notification);
-			image = new PosterizedImage (notification);
-			image.change.connect (color_palette.set_tile_colors);
-			stack.add_named (image, "PreviewImage");
+			this.color_palette = new ColorPalette (DEFAULT_COLORS, MAX_COLORS);
+			this.box.add (color_palette);
+			this.notification = new Notification ();
+			this.overlay.add_overlay (notification);
+			var _image = new PosterizedImage (notification);
+			this.image = new NullImage ();
+			_image.change.connect (color_palette.set_tile_colors);
+			change_image_implementation = () => { this.image = _image; };
+			this.stack.add_named (_image as PosterizedImage, "PreviewImage");
 			show_all();
 
 			if (is_first_run ()) {
@@ -80,6 +85,7 @@ namespace Paletti {
 		}
 
 		private void load_file (string filename) {
+			change_image_implementation ();
 			try {
 				stack.visible_child_name = "PreviewImage";
 				image.on_load (filename);
@@ -138,7 +144,7 @@ namespace Paletti {
 
 		[GtkCallback]
 		private void on_colors_range_value_changed () {
-			color_palette.adjust_tiles_to ((int) colors_range.value);
+			color_palette.adjust_tiles_to ((uint) colors_range.value);
 			image.posterize ((int) colors_range.value, mono_switch.state);
 		}
 
@@ -180,14 +186,14 @@ namespace Paletti {
 			show_all ();
 		}
 
-		public void adjust_tiles_to (int size) {
-			var child_count = (int) get_children ().length ();
+		public void adjust_tiles_to (uint size) {
+			var child_count = get_children ().length ();
 			if (child_count > size) {
-				for (int i=child_count; i > size; i--) {
+				for (uint i=child_count; i > size; i--) {
 					remove (get_children ().nth_data (i - 1));
 				}
 			} else if (child_count < size) {
-				for (int i=child_count; i < size; i++) {
+				for (uint i=child_count; i < size; i++) {
 					var tile = new ColorTile (i);
 					add (tile);
 					tile.show ();
@@ -230,11 +236,11 @@ namespace Paletti {
 			}
 		}
 
-		public ColorTile (int index) {
+		public ColorTile (uint index) {
 			name = @"Tile$index";
 		}
 
-		public ColorTile.with_color (int index, RGB color) {
+		public ColorTile.with_color (uint index, RGB color) {
 			this (index);
 			this.color = color;
 		}
