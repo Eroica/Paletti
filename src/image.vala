@@ -41,6 +41,34 @@ namespace Paletti {
 		}
 	}
 
+	public abstract class IPix : Object {
+		public Colors colors { get; protected set; }
+		public Leptonica.PIX pix { get; protected owned set; }
+	}
+
+	public class PosterizedPix : IPix {
+		public PosterizedPix (Leptonica.PIX src, int colors_count) throws Leptonica.Exception {
+			pix = Leptonica.pixMedianCutQuantGeneral (src, 0, 8, colors_count);
+			colors = new Colors (pix.colormap.colors);
+		}
+	}
+
+	public class BlackWhitePix : IPix {
+		public BlackWhitePix (IPix src) {
+			pix = Leptonica.pixAddMinimalGrayColormap8 (
+				Leptonica.pixRemoveColormap (src.pix)
+			);
+			colors = new Colors (pix.colormap.colors);
+		}
+	}
+
+	public class CachedPix : IPix {
+		public CachedPix (IPix src) {
+			pix = src.pix.clone ();
+			save_cached_image (src.pix);
+			colors = src.colors;
+		}
+	}
 
 	public interface IPosterizedImage : Image {
 		public signal void change (Colors colors);
@@ -48,28 +76,6 @@ namespace Paletti {
 		public abstract void copy () throws Leptonica.Exception;
 		public abstract void save () throws Leptonica.Exception;
 		public abstract void load (string filename) throws Leptonica.Exception;
-	}
-
-	public class PosterizedPix {
-		public Colors colors { get; private set; }
-
-		public PosterizedPix (Leptonica.PIX src,
-		                      int colors_count,
-		                      bool is_black_white) throws Leptonica.Exception {
-			Leptonica.PIX tmp;
-			if (is_black_white) {
-				tmp = Leptonica.pixAddMinimalGrayColormap8 (Leptonica.pixRemoveColormap (
-					Leptonica.pixMedianCutQuantGeneral (src, 0, 8, colors_count)
-				));
-			} else {
-				tmp = Leptonica.pixMedianCutQuantGeneral (src, 0, 8, colors_count);
-			}
-			if (tmp == null) {
-				throw new Leptonica.Exception.FAILURE ("Could not run quantization on this image.");
-			}
-			save_cached_image (tmp);
-			this.colors = new Colors (tmp.colormap.colors);
-		}
 	}
 
 	public class NullImage : Image, IPosterizedImage {
@@ -93,7 +99,6 @@ namespace Paletti {
 
 	public class PosterizedImage : Image, IPosterizedImage {
 		private Leptonica.PIX src;
-		private PosterizedPix pix;
 		private Notification notification;
 
 		public PosterizedImage (string filename, Notification notification,
@@ -105,9 +110,7 @@ namespace Paletti {
 					posterize (colors_count, is_black_white);
 					setup (parent);
 				} catch (Leptonica.Exception e) {
-					if (!(e is Leptonica.Exception.UNINITIALIZED)) {
-						notification.display (e.message);
-					}
+					notification.display (e.message);
 				} catch (Error e) {
 					notification.display (e.message);
 				}
@@ -148,8 +151,16 @@ namespace Paletti {
 
 		private void posterize (int colors_count,
 		                        bool is_black_white) throws Leptonica.Exception {
-			pix = new PosterizedPix (src, colors_count, is_black_white);
-			change (pix.colors);
+			IPix tmp;
+			if (is_black_white) {
+				tmp = new CachedPix (new BlackWhitePix (new PosterizedPix (src, colors_count)));
+			} else {
+				tmp = new CachedPix (new PosterizedPix (src, colors_count));
+			}
+			if (tmp.pix == null) {
+				throw new Leptonica.Exception.FAILURE ("Could not run quantization on this image.");
+			}
+			change (tmp.colors);
 		}
 
 		private void setup (Container parent) throws Error {
