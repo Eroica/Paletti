@@ -5,6 +5,7 @@
 		<file>ui/notification.ui</file>
 		<file>ui/color_palette.ui</file>
 		<file>ui/color_tile.ui</file>
+		<file>ui/posterized-image.ui</file>
 		<file>ui/open_file_dialog.ui</file>
 		<file>ui/save_file_dialog.ui</file>
 		<file>resources/style.css</file>

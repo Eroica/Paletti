@@ -21,13 +21,22 @@ namespace Paletti {
 		)).query_exists ();
 	}
 
-	public interface IPosterize {
-		public signal void posterize (int colors_count, bool is_black_white,
-		                              Container parent);
+	public interface LinkBehavior : Widget {
+		public void cursor_to_pointer () {
+			set_state_flags (StateFlags.PRELIGHT, false);
+			var window = get_window ();
+			window.set_cursor (new Cursor.from_name (window.get_display (), "pointer"));
+		}
+
+		public void cursor_to_default () {
+			unset_state_flags (StateFlags.PRELIGHT);
+			var window = get_window ();
+			window.set_cursor (new Cursor.from_name (window.get_display (), "default"));
+		}
 	}
 
 	[GtkTemplate (ui = "/com/moebots/Paletti/ui/window.ui")]
-	public class Window : ApplicationWindow, IPosterize {
+	public class Window : ApplicationWindow {
 		[GtkChild]
 		private HeaderBar header_bar;
 
@@ -46,10 +55,8 @@ namespace Paletti {
 		[GtkChild]
 		private Overlay overlay;
 
-		private IPosterizedImage image = new NullImage ();
-
+		private PosterizedImage image;
 		private ColorPalette color_palette;
-
 		private Notification notification;
 
 		public Window (Gtk.Application app) {
@@ -59,6 +66,9 @@ namespace Paletti {
 			box.add (color_palette);
 			notification = new Notification ();
 			overlay.add_overlay (notification);
+			image = new PosterizedImage (notification);
+			image.change.connect (color_palette.set_tile_colors);
+			stack.add_named (image, "PreviewImage");
 			show_all();
 
 			if (is_first_run ()) {
@@ -71,22 +81,11 @@ namespace Paletti {
 
 		private void load_file (string filename) {
 			try {
-				if (image is NullImage) {
-					stack.remove (image);
-					image = new PosterizedImage (filename, notification, this);
-					image.load (filename);
-					image.change.connect (color_palette.set_tile_colors);
-					stack.add_named (image, "PreviewImage");
-					stack.visible_child_name = "PreviewImage";
-				} else {
-					image.load (filename);
-				}
-				posterize ((int) colors_range.value, mono_switch.state, stack);
+				stack.visible_child_name = "PreviewImage";
+				image.on_load (filename);
+				image.posterize ((int) colors_range.value, mono_switch.state);
 				header_bar.subtitle = filename;
 			} catch (Leptonica.Exception e) {
-				stack.remove (image);
-				image.change.disconnect (color_palette.set_tile_colors);
-				image = new NullImage ();
 				notification.display (e.message);
 			}
 		}
@@ -109,13 +108,13 @@ namespace Paletti {
 				if (event.keyval == Key.o && event.state == ModifierType.CONTROL_MASK) {
 					show_open_dialog ();
 				} else if (event.keyval == Key.s && event.state == ModifierType.CONTROL_MASK) {
-					image.save ();
+					image.on_save ();
 				} else if (event.keyval == Key.c && event.state == ModifierType.CONTROL_MASK) {
-					image.copy ();
+					image.on_copy ();
 				} else if (event.keyval == Key.x) {
 					mono_switch.activate ();
 				}
-			} catch (Leptonica.Exception e) {
+			} catch (Exception e) {
 				notification.display (e.message);
 			}
 			return true;
@@ -140,7 +139,7 @@ namespace Paletti {
 		[GtkCallback]
 		private void on_colors_range_value_changed () {
 			color_palette.adjust_tiles_to ((int) colors_range.value);
-			posterize ((int) colors_range.value, mono_switch.state, stack);
+			image.posterize ((int) colors_range.value, mono_switch.state);
 		}
 
 		[GtkCallback]
@@ -158,7 +157,7 @@ namespace Paletti {
 
 		[GtkCallback]
 		private bool on_mono_set (bool state) {
-			posterize ((int) colors_range.value, state, stack);
+			image.posterize ((int) colors_range.value, state);
 			return false;
 		}
 	}
@@ -213,7 +212,7 @@ namespace Paletti {
 	}
 
 	[GtkTemplate (ui = "/com/moebots/Paletti/ui/color_tile.ui")]
-	private class ColorTile : EventBox {
+	private class ColorTile : EventBox, LinkBehavior {
 		private RGB? _color;
 		public RGB? color {
 			get { return _color; }
@@ -255,9 +254,7 @@ namespace Paletti {
 		[GtkCallback]
 		private bool on_enter (EventCrossing event) {
 			if (color != null) {
-				set_state_flags (StateFlags.PRELIGHT, false);
-				var window = get_window ();
-				window.set_cursor (new Cursor.from_name (window.get_display (), "pointer"));
+				cursor_to_pointer ();
 			}
 			return true;
 		}
@@ -265,9 +262,7 @@ namespace Paletti {
 		[GtkCallback]
 		private bool on_leave (EventCrossing event) {
 			if (color != null) {
-				unset_state_flags (StateFlags.PRELIGHT);
-				var window = get_window ();
-				window.set_cursor (new Cursor.from_name (window.get_display (), "default"));
+				cursor_to_default ();
 			}
 			return true;
 		}

@@ -6,8 +6,12 @@ namespace Paletti {
 		ERROR;
 	}
 
+	public interface INotification : Object {
+		public abstract void display (string message, NotificationType type = NotificationType.ERROR);
+	}
+
 	[GtkTemplate (ui = "/com/moebots/Paletti/ui/notification.ui")]
-	public class Notification : Revealer {
+	public class Notification : Revealer, INotification {
 		[GtkChild]
 		private Label label;
 
