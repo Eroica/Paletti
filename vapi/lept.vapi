@@ -33,6 +33,10 @@ namespace Leptonica {
 			[CCode (cname = "pixGetInputFormat")] get;
 		}
 
+		public int ref_count {
+			[CCode (cname = "pixGetRefcount")] get;
+		}
+
 		[CCode (cname = "pixRead")]
 		public PIX.from_filename (string filename);
 
@@ -42,6 +46,9 @@ namespace Leptonica {
 
 		[CCode (cname = "pixWriteStream", instance_pos = 0.5)]
 		public int write_stream (out GLib.FileStream fp, int format);
+
+		[CCode (cname = "pixClone")]
+		public PIX clone ();
 	}
 
 	[Compact]
