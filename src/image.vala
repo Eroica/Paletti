@@ -121,10 +121,16 @@ namespace Paletti {
 		}
 
 		public void on_load (string filename) throws Leptonica.Exception {
-			src = new Leptonica.PIX.from_filename (filename);
-			if (src == null) {
+			var tmp = new Leptonica.PIX.from_filename (filename);
+			// The second check might be a little bit wasteful, but is there to
+			// check whether the image is analyzable by Leptonica. To be exact,
+			// `pix != null' can never happen because PosterziedPix would have
+			// already raised a FAILURE exception. This exception prevents
+			// `src' from being assigned to the un-analyzable image.
+			if (tmp == null || new PosterizedPix (tmp, MAX_COLORS).pix == null) {
 				throw new Leptonica.Exception.UNSUPPORTED ("Could not read this image");
 			}
+			src = tmp.clone ();
 		}
 
 		public void posterize (int colors_count, bool is_black_white) {
