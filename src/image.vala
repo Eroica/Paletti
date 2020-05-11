@@ -13,37 +13,6 @@ namespace Paletti {
 		UNINITIALIZED
 	}
 
-	public struct RGB {
-		public int r;
-		public int g;
-		public int b;
-
-		public RGB (int r, int g, int b) {
-			this.r = r;
-			this.g = g;
-			this.b = b;
-		}
-
-		public string to_string () {
-			return "#%02x%02x%02x".printf (r, g, b);
-		}
-	}
-
-	public class Colors {
-		private RGB[] colors;
-		public int size {
-			get { return colors.length; }
-		}
-
-		public Colors (RGB[] colors) {
-			this.colors = colors;
-		}
-
-		public RGB get (int index) {
-			return colors[index];
-		}
-	}
-
 	public abstract class IPix : Object {
 		public Colors colors { get; protected set; }
 		public Leptonica.PIX pix { get; protected owned set; }
@@ -80,75 +49,44 @@ namespace Paletti {
 	}
 
 	public interface IPosterizedImage : Object {
-		public signal void change (Colors colors);
-
 		public abstract void on_copy () throws Exception;
 		public abstract void on_save () throws Exception;
 		public abstract void on_load (string filename) throws Leptonica.Exception;
 		public abstract void posterize (int colors_count, bool is_black_white);
 	}
 
-	public class NullImage : IPosterizedImage, Object {
-		public void on_copy () throws Exception {
-			throw new Exception.UNINITIALIZED ("First load an image into Paletti.");
-		}
+	public interface IColorPalette : Object {
+		public abstract Colors? colors { get; set; }
 
-		public void on_save () throws Exception {
-			throw new Exception.UNINITIALIZED ("First load an image into Paletti.");
-		}
-
-		public void on_load (string filename) throws Leptonica.Exception {}
-		public void posterize (int colors_count, bool is_black_white) {}
+		public abstract void export () throws Exception;
 	}
 
 	[GtkTemplate (ui = "/com/moebots/Paletti/ui/posterized-image.ui")]
 	public class PosterizedImage : Image, IPosterizedImage {
-		private Leptonica.PIX src;
+		private Leptonica.PIX? src;
 		private INotification notification;
+		private IColorPalette color_palette;
+		public string filename { get; private set; }
 
-		public PosterizedImage (INotification notification) {
+		public PosterizedImage (IColorPalette color_palette,
+		                        INotification notification) {
+			this.color_palette = color_palette;
 			this.notification = notification;
 		}
 
 		public void on_copy () throws Exception {
+			if (src == null) {
+				throw new Exception.UNINITIALIZED ("First load an image into Paletti.");
+			}
 			Clipboard.get_for_display (
 				get_window ().get_display (), Gdk.SELECTION_CLIPBOARD
 			).set_image (pixbuf);
 		}
 
 		public void on_save () throws Exception {
-			show_save_dialog ();
-		}
-
-		public void on_load (string filename) throws Leptonica.Exception {
-			var tmp = new Leptonica.PIX.from_filename (filename);
-			// The second check might be a little bit wasteful, but is there to
-			// check whether the image is analyzable by Leptonica. To be exact,
-			// `pix != null' can never happen because PosterziedPix would have
-			// already raised a FAILURE exception. This exception prevents
-			// `src' from being assigned to the un-analyzable image.
-			if (tmp == null || new PosterizedPix (tmp, MAX_COLORS).pix == null) {
-				throw new Leptonica.Exception.UNSUPPORTED ("Could not read this image");
+			if (src == null) {
+				throw new Exception.UNINITIALIZED ("First load an image into Paletti.");
 			}
-			src = tmp.clone ();
-		}
-
-		public void posterize (int colors_count, bool is_black_white) {
-			try {
-				IPix tmp;
-				if (is_black_white) {
-					tmp = new CachedPix (new BlackWhitePix (new PosterizedPix (src, colors_count)));
-				} else {
-					tmp = new CachedPix (new PosterizedPix (src, colors_count));
-				}
-				load_image ();
-				change (tmp.colors);
-			} catch (Leptonica.Exception e) {
-				notification.display (e.message);
-			}
-		}
-
-		private void show_save_dialog () {
 			var dialog = new SaveFileDialog ();
 			dialog.response.connect ((dialog, response_id) => {
 				if (response_id == ResponseType.ACCEPT) {
@@ -169,6 +107,38 @@ namespace Paletti {
 				dialog.destroy ();
 			});
 			dialog.show ();
+		}
+
+		public void on_load (string filename) throws Leptonica.Exception {
+			var tmp = new Leptonica.PIX.from_filename (filename);
+			// The second check might be a little bit wasteful, but is there to
+			// check whether the image is analyzable by Leptonica. To be exact,
+			// `pix != null' can never happen because PosterziedPix would have
+			// already raised a FAILURE exception. This exception prevents
+			// `src' from being assigned to the un-analyzable image.
+			if (tmp == null || new PosterizedPix (tmp, MAX_COLORS).pix == null) {
+				throw new Leptonica.Exception.UNSUPPORTED ("Could not read this image");
+			}
+			this.filename = filename;
+			src = tmp.clone ();
+		}
+
+		public void posterize (int colors_count, bool is_black_white) {
+			if (src == null) {
+				return;
+			}
+			try {
+				IPix tmp;
+				if (is_black_white) {
+					tmp = new CachedPix (new BlackWhitePix (new PosterizedPix (src, colors_count)));
+				} else {
+					tmp = new CachedPix (new PosterizedPix (src, colors_count));
+				}
+				load_image ();
+				color_palette.colors = tmp.colors;
+			} catch (Leptonica.Exception e) {
+				notification.display (e.message);
+			}
 		}
 
 		private void load_image () {

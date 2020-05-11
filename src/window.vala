@@ -2,6 +2,9 @@ using Gdk;
 using Gtk;
 
 namespace Paletti {
+	private const int DEFAULT_COLORS = 6;
+	private const int MAX_COLORS = 32;
+
 	enum Target {
 		FILE
 	}
@@ -9,11 +12,6 @@ namespace Paletti {
 	private const TargetEntry[] targets = {
 		{"text/uri-list", 0, Target.FILE}
 	};
-
-	private const int MAX_COLORS = 32;
-	private const int DEFAULT_COLORS = 6;
-
-	private delegate void SideEffect ();
 
 	// Simple check: if a cached image exists, then Paletti has been used before
 	private bool is_first_run () {
@@ -57,10 +55,9 @@ namespace Paletti {
 		[GtkChild]
 		private Overlay overlay;
 
-		private IPosterizedImage image;
+		private PosterizedImage image;
 		private Notification notification;
 		private ColorPalette color_palette;
-		private SideEffect change_image_implementation;
 
 		public Window (Gtk.Application app) {
 			Object (application: app);
@@ -69,12 +66,14 @@ namespace Paletti {
 			this.box.add (color_palette);
 			this.notification = new Notification ();
 			this.overlay.add_overlay (notification);
-			var _image = new PosterizedImage (notification);
-			this.image = new NullImage ();
-			_image.change.connect (color_palette.set_tile_colors);
-			change_image_implementation = () => { this.image = _image; };
-			this.stack.add_named (_image as PosterizedImage, "PreviewImage");
+			this.image = new PosterizedImage (this.color_palette, this.notification);
+			this.stack.add_named (image, "PreviewImage");
 			show_all();
+
+			this.image.notify["filename"].connect ((s, p) => {
+				this.header_bar.subtitle = this.image.filename;
+				this.stack.visible_child_name = "PreviewImage";
+			});
 
 			if (is_first_run ()) {
 				notification.display (
@@ -84,24 +83,17 @@ namespace Paletti {
 			}
 		}
 
-		private void load_file (string filename) {
-			change_image_implementation ();
-			try {
-				stack.visible_child_name = "PreviewImage";
-				image.on_load (filename);
-				image.posterize ((int) colors_range.value, mono_switch.state);
-				header_bar.subtitle = filename;
-			} catch (Leptonica.Exception e) {
-				notification.display (e.message);
-			}
-		}
-
 		private void show_open_dialog () {
 			var dialog = new OpenFileDialog ();
 			dialog.response.connect ((dialog, response_id) => {
 				if (response_id == ResponseType.ACCEPT) {
-					var file_dialog = dialog as FileChooserDialog;
-					load_file (file_dialog.get_file ().get_path ());
+					try {
+						var file_dialog = dialog as FileChooserDialog;
+						image.on_load (file_dialog.get_file ().get_path ());
+						image.posterize ((int) colors_range.value, mono_switch.state);
+					} catch (Leptonica.Exception e) {
+						notification.display (e.message);
+					}
 				}
 				dialog.destroy ();
 			});
@@ -117,6 +109,8 @@ namespace Paletti {
 					image.on_save ();
 				} else if (event.keyval == Key.c && event.state == ModifierType.CONTROL_MASK) {
 					image.on_copy ();
+				} else if (event.keyval == Key.e && event.state == ModifierType.CONTROL_MASK) {
+					color_palette.export ();
 				} else if (event.keyval == Key.x) {
 					mono_switch.activate ();
 				}
@@ -153,7 +147,8 @@ namespace Paletti {
 		                                    int x, int y, SelectionData data,
 		                                    uint info, uint time) {
 			try {
-				load_file (Filename.from_uri (data.get_uris ()[0]));
+				image.on_load (Filename.from_uri (data.get_uris ()[0]));
+				image.posterize ((int) colors_range.value, mono_switch.state);
 			} catch (Error e) {
 				notification.display (e.message);
 			} finally {
@@ -169,7 +164,26 @@ namespace Paletti {
 	}
 
 	[GtkTemplate (ui = "/com/moebots/Paletti/ui/color_palette.ui")]
-	public class ColorPalette : Box {
+	public class ColorPalette : Box, IColorPalette {
+		private Colors? _colors;
+		public Colors? colors {
+			get { return _colors; }
+			set {
+				_colors = value;
+				if (colors.size < get_children ().length ()) {
+					adjust_tiles_to (colors.size);
+				}
+
+				int i = 0;
+				get_children ().foreach ((it) => {
+					var tile = it as ColorTile;
+					if (tile != null) {
+						tile.color = colors[i];
+					}
+					i++;
+				});
+			}
+		}
 		private int min_colors;
 		private int max_colors;
 		private int current_count;
@@ -201,19 +215,43 @@ namespace Paletti {
 			}
 		}
 
-		public void set_tile_colors (Colors colors) {
-			if (colors.size < get_children ().length ()) {
-				adjust_tiles_to (colors.size);
+		public void export () throws Exception {
+			if (colors == null) {
+				throw new Exception.UNINITIALIZED ("First load an image into Paletti.");
 			}
-
-			int i = 0;
-			get_children ().foreach ((it) => {
-				var tile = it as ColorTile;
-				if (tile != null) {
-					tile.color = colors[i];
+			var dialog = new SaveFileDialog ();
+			dialog.response.connect ((dialog, response_id) => {
+				if (response_id == ResponseType.ACCEPT) {
+					try {
+						var file_dialog = dialog as FileChooserDialog;
+						var window = new ExportColorPaletteWindow (
+							colors, get_allocated_width (), get_allocated_height ()
+						);
+						window.export (file_dialog.get_file ().get_path ());
+					} catch (Error e) {
+						stderr.printf (e.message);
+					}
 				}
-				i++;
+				dialog.destroy ();
 			});
+			dialog.show ();
+		}
+	}
+
+	public class ExportColorPaletteWindow : OffscreenWindow {
+		public ExportColorPaletteWindow (Colors colors, int width, int height) {
+			set_size_request (width, height);
+			var palette = new ColorPalette (DEFAULT_COLORS, MAX_COLORS);
+			palette.colors = colors;
+			palette.show_all ();
+			add (palette);
+			show_all ();
+			var context = new Cairo.Context (get_surface ());
+			draw (context);
+		}
+
+		public void export (string filename) throws Error {
+			get_pixbuf ().save (filename, "png");
 		}
 	}
 

@@ -1,77 +1,83 @@
 <interface>
-  <object class="GtkShortcutsWindow" id="help_overlay">
-    <child>
-      <object class="GtkShortcutsSection">
-        <property name="visible">1</property>
-			<child>
-          <object class="GtkShortcutsGroup">
-            <property name="visible">1</property>
-            <property name="title" translatable="yes" context="shortcut window">Color Palette Actions</property>
-         	 <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
-                <property name="accelerator">Up</property>
-                <property name="title" translatable="yes" context="shortcut window">Increase color palette size</property>
-              </object>
-            </child>
-				 <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
-                <property name="accelerator">Down</property>
-                <property name="title" translatable="yes" context="shortcut window">Decrease color palette size</property>
-              </object>
-            </child>
-				 <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
-                <property name="accelerator">x</property>
-                <property name="title" translatable="yes" context="shortcut window">Toggle between black/white and colored image</property>
-              </object>
-            </child>
+	<object class="GtkShortcutsWindow" id="help_overlay">
+		<child>
+			<object class="GtkShortcutsSection">
+				<property name="visible">1</property>
+				<child>
+					<object class="GtkShortcutsGroup">
+						<property name="visible">1</property>
+						<property name="title" translatable="yes" context="shortcut window">Color Palette Actions</property>
+						<child>
+							<object class="GtkShortcutsShortcut">
+								<property name="visible">1</property>
+								<property name="accelerator">Up</property>
+								<property name="title" translatable="yes" context="shortcut window">Increase color palette size</property>
+							</object>
+						</child>
+						<child>
+							<object class="GtkShortcutsShortcut">
+								<property name="visible">1</property>
+								<property name="accelerator">Down</property>
+								<property name="title" translatable="yes" context="shortcut window">Decrease color palette size</property>
+							</object>
+						</child>
+						<child>
+							<object class="GtkShortcutsShortcut">
+								<property name="visible">1</property>
+								<property name="accelerator">x</property>
+								<property name="title" translatable="yes" context="shortcut window">Toggle between black/white and colored image</property>
+							</object>
+						</child>
+					</object>
+				</child>
+				<child>
+					<object class="GtkShortcutsGroup">
+						<property name="visible">1</property>
+						<property name="title" translatable="yes" context="shortcut window">Image Actions</property>
+						<child>
+							<object class="GtkShortcutsShortcut">
+								<property name="visible">1</property>
+								<property name="accelerator">&lt;Primary&gt;o</property>
+								<property name="title" translatable="yes" context="shortcut window">Open an image</property>
+							</object>
+						</child>
+						<child>
+							<object class="GtkShortcutsShortcut">
+								<property name="visible">1</property>
+								<property name="accelerator">&lt;Primary&gt;s</property>
+								<property name="title" translatable="yes" context="shortcut window">Save current image</property>
+							</object>
+						</child>
+						<child>
+							<object class="GtkShortcutsShortcut">
+								<property name="visible">1</property>
+								<property name="accelerator">&lt;Primary&gt;c</property>
+								<property name="title" translatable="yes" context="shortcut window">Put current image into clipboard</property>
+						</object>
+						</child>
+						<child>
+							<object class="GtkShortcutsShortcut">
+								<property name="visible">1</property>
+								<property name="accelerator">&lt;Primary&gt;e</property>
+								<property name="title" translatable="yes" context="shortcut window">Save current color palette as PNG</property>
+							</object>
+						</child>
+					</object>
+				</child>
+				<child>
+					<object class="GtkShortcutsGroup">
+						<property name="visible">1</property>
+						<property name="title" translatable="yes" context="shortcut window">General</property>
+						<child>
+							<object class="GtkShortcutsShortcut">
+								<property name="visible">1</property>
+								<property name="accelerator">&lt;Primary&gt;F1 &lt;Primary&gt;question</property>
+								<property name="title" translatable="yes" context="shortcut window">Show this window</property>
+							</object>
+						</child>
+					</object>
+				</child>
 			</object>
-	    </child>
-        <child>
-          <object class="GtkShortcutsGroup">
-            <property name="visible">1</property>
-            <property name="title" translatable="yes" context="shortcut window">Image Actions</property>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
-                <property name="accelerator">&lt;Primary&gt;o</property>
-                <property name="title" translatable="yes" context="shortcut window">Open an image</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
-                <property name="accelerator">&lt;Primary&gt;s</property>
-                <property name="title" translatable="yes" context="shortcut window">Save current image</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
-                <property name="accelerator">&lt;Primary&gt;c</property>
-                <property name="title" translatable="yes" context="shortcut window">Put current image into clipboard</property>
-              </object>
-            </child>
-			</object>
-	    </child>
-		 <child>
-			<object class="GtkShortcutsGroup">
-          <property name="visible">1</property>
-          <property name="title" translatable="yes" context="shortcut window">General</property>
-          <child>
-            <object class="GtkShortcutsShortcut">
-              <property name="visible">1</property>
-              <property name="accelerator">&lt;Primary&gt;F1 &lt;Primary&gt;question</property>
-              <property name="title" translatable="yes" context="shortcut window">Show this window</property>
-            </object>
-          </child>
-         </object>
-        </child>
-      </object>
-    </child>
-  </object>
+		</child>
+	</object>
 </interface>
-

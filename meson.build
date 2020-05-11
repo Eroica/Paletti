@@ -19,6 +19,7 @@ sources = files('src/main.vala',
                 'src/dialog.vala',
                 'src/notification.vala',
                 'src/image.vala',
+                'src/color.vala',
                 'src/cache.vala')
 
 sources += import('gnome').compile_resources(

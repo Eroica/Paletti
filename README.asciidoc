@@ -27,6 +27,9 @@ You can save the segmented image separately, or copy it into the clipboard.
 |Ctrl+C
 |Copy current image into clipboard
 
+|Ctrl+E
+|Export current color palette
+
 |x
 |Toggle between black/white and colored segmentation
 
