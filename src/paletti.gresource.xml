@@ -8,6 +8,7 @@
 		<file>ui/posterized-image.ui</file>
 		<file>ui/open_file_dialog.ui</file>
 		<file>ui/save_file_dialog.ui</file>
+		<file>ui/export_palette_dialog.ui</file>
 		<file>resources/style.css</file>
 		<file>resources/copy.svg</file>
 	</gresource>
