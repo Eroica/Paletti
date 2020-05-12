@@ -62,11 +62,13 @@ namespace Paletti {
 		public Window (Gtk.Application app) {
 			Object (application: app);
 			drag_dest_set (this, DestDefaults.ALL, targets, DragAction.COPY);
-			this.color_palette = new ColorPalette (DEFAULT_COLORS, MAX_COLORS);
+			this.color_palette = new ColorPalette ();
 			this.box.add (color_palette);
 			this.notification = new Notification ();
 			this.overlay.add_overlay (notification);
-			this.image = new PosterizedImage (this.color_palette, this.notification);
+			this.image = new PosterizedImage (
+				this.notification, this.color_palette
+			);
 			this.stack.add_named (image, "PreviewImage");
 			show_all();
 
@@ -137,12 +139,6 @@ namespace Paletti {
 		}
 
 		[GtkCallback]
-		private void on_colors_range_value_changed () {
-			color_palette.adjust_tiles_to ((uint) colors_range.value);
-			image.posterize ((int) colors_range.value, mono_switch.state);
-		}
-
-		[GtkCallback]
 		private void on_drag_data_received (DragContext drag_context,
 		                                    int x, int y, SelectionData data,
 		                                    uint info, uint time) {
@@ -161,42 +157,36 @@ namespace Paletti {
 			image.posterize ((int) colors_range.value, state);
 			return false;
 		}
+
+		[GtkCallback]
+		private void on_colors_range_value_changed () {
+			color_palette.adjust_tiles_to ((uint) colors_range.value);
+			image.posterize ((int) colors_range.value, mono_switch.state);
+		}
 	}
 
 	[GtkTemplate (ui = "/com/moebots/Paletti/ui/color_palette.ui")]
-	public class ColorPalette : Box, IColorPalette {
+	public class ColorPalette : Box {
 		private Colors? _colors;
 		public Colors? colors {
 			get { return _colors; }
 			set {
 				_colors = value;
-				if (colors.size < get_children ().length ()) {
-					adjust_tiles_to (colors.size);
-				}
-
+				adjust_tiles_to (_colors.size);
 				int i = 0;
 				get_children ().foreach ((it) => {
 					var tile = it as ColorTile;
 					if (tile != null) {
-						tile.color = colors[i];
+						tile.color = colors[i++];
 					}
-					i++;
 				});
 			}
 		}
-		private int min_colors;
-		private int max_colors;
-		private int current_count;
 
-		public ColorPalette (int min_colors, int max_colors) {
-			this.min_colors = min_colors;
-			this.max_colors = max_colors;
-			this.current_count = int.max (min_colors, DEFAULT_COLORS);
-
-			for (int i=0; i < current_count; i++) {
+		public ColorPalette () {
+			for (int i=0; i < DEFAULT_COLORS; i++) {
 				add (new ColorTile (i));
 			}
-
 			show_all ();
 		}
 
@@ -219,21 +209,11 @@ namespace Paletti {
 			if (colors == null) {
 				throw new Exception.UNINITIALIZED ("First load an image into Paletti.");
 			}
-			var dialog = new SaveFileDialog ();
-			dialog.response.connect ((dialog, response_id) => {
-				if (response_id == ResponseType.ACCEPT) {
-					try {
-						var file_dialog = dialog as FileChooserDialog;
-						var window = new ExportColorPaletteWindow (
-							colors, get_allocated_width (), get_allocated_height ()
-						);
-						window.export (file_dialog.get_file ().get_path ());
-					} catch (Error e) {
-						stderr.printf (e.message);
-					}
-				}
-				dialog.destroy ();
-			});
+			var dialog = new ExportPaletteDialog (
+				new ExportColorPaletteWindow (
+					colors, get_allocated_width (), get_allocated_height ()
+				)
+			);
 			dialog.show ();
 		}
 	}
@@ -241,7 +221,7 @@ namespace Paletti {
 	public class ExportColorPaletteWindow : OffscreenWindow {
 		public ExportColorPaletteWindow (Colors colors, int width, int height) {
 			set_size_request (width, height);
-			var palette = new ColorPalette (DEFAULT_COLORS, MAX_COLORS);
+			var palette = new ColorPalette ();
 			palette.colors = colors;
 			palette.show_all ();
 			add (palette);

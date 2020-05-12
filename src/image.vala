@@ -41,10 +41,26 @@ namespace Paletti {
 	}
 
 	public class CachedPix : IPix {
+		public string path = Path.build_filename (
+			Environment.get_user_cache_dir (), "Paletti", "cache.png"
+		);
+
 		public CachedPix (IPix src) {
 			pix = src.pix.clone ();
-			save_cached_image (src.pix);
+			var paletti_cache_dir = Path.build_filename (
+				Environment.get_user_cache_dir (),
+				"Paletti"
+			);
+			DirUtils.create_with_parents (paletti_cache_dir, 755);
+			var dest_path = Path.build_filename (paletti_cache_dir, "cache.png");
+			Leptonica.pix_write (dest_path, pix, pix.input_format);
 			colors = src.colors;
+		}
+
+		public void copy (File destination) throws Error {
+			File.new_for_path (path).copy (
+				destination, FileCopyFlags.OVERWRITE
+			);
 		}
 	}
 
@@ -55,23 +71,18 @@ namespace Paletti {
 		public abstract void posterize (int colors_count, bool is_black_white);
 	}
 
-	public interface IColorPalette : Object {
-		public abstract Colors? colors { get; set; }
-
-		public abstract void export () throws Exception;
-	}
-
 	[GtkTemplate (ui = "/com/moebots/Paletti/ui/posterized-image.ui")]
 	public class PosterizedImage : Image, IPosterizedImage {
+		private CachedPix? pix;
 		private Leptonica.PIX? src;
 		private INotification notification;
-		private IColorPalette color_palette;
+		private ColorPalette color_palette;
 		public string filename { get; private set; }
 
-		public PosterizedImage (IColorPalette color_palette,
-		                        INotification notification) {
-			this.color_palette = color_palette;
+		public PosterizedImage (INotification notification,
+								ColorPalette color_palette) {
 			this.notification = notification;
+			this.color_palette = color_palette;
 		}
 
 		public void on_copy () throws Exception {
@@ -87,25 +98,7 @@ namespace Paletti {
 			if (src == null) {
 				throw new Exception.UNINITIALIZED ("First load an image into Paletti.");
 			}
-			var dialog = new SaveFileDialog ();
-			dialog.response.connect ((dialog, response_id) => {
-				if (response_id == ResponseType.ACCEPT) {
-					try {
-						var file_dialog = dialog as FileChooserDialog;
-						var file = file_dialog.get_file ();
-						File.new_for_path (get_cached_image ()).copy (
-							file, FileCopyFlags.OVERWRITE
-						);
-						notification.display (
-							@"Copied image to $(file.get_path ())",
-							NotificationType.INFO
-						);
-					} catch (Error e) {
-						notification.display (e.message);
-					}
-				}
-				dialog.destroy ();
-			});
+			var dialog = new SaveFileDialog (notification, pix);
 			dialog.show ();
 		}
 
@@ -128,14 +121,13 @@ namespace Paletti {
 				return;
 			}
 			try {
-				IPix tmp;
 				if (is_black_white) {
-					tmp = new CachedPix (new BlackWhitePix (new PosterizedPix (src, colors_count)));
+					pix = new CachedPix (new BlackWhitePix (new PosterizedPix (src, colors_count)));
 				} else {
-					tmp = new CachedPix (new PosterizedPix (src, colors_count));
+					pix = new CachedPix (new PosterizedPix (src, colors_count));
 				}
 				load_image ();
-				color_palette.colors = tmp.colors;
+				color_palette.colors = pix.colors;
 			} catch (Leptonica.Exception e) {
 				notification.display (e.message);
 			}
@@ -143,7 +135,7 @@ namespace Paletti {
 
 		private void load_image () {
 			try {
-				var tmp = new Pixbuf.from_file (get_cached_image ());
+				var tmp = new Pixbuf.from_file (pix.path);
 				var parent = parent as Stack;
 				var dimensions = Allocation ();
 				parent.get_allocation (out dimensions);
