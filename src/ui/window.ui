@@ -33,6 +33,8 @@
                 <property name="vexpand">True</property>
                 <property name="above_child">True</property>
                 <signal name="button-release-event" handler="on_click" swapped="no"/>
+                <signal name="enter-notify-event" handler="on_enter_dropzone" swapped="no"/>
+                <signal name="leave-notify-event" handler="on_leave_dropzone" swapped="no"/>
                 <child>
                   <object class="GtkStack" id="stack">
                     <property name="visible">True</property>
@@ -43,7 +45,7 @@
                     <property name="margin_bottom">8</property>
                     <property name="transition_type">crossfade</property>
                     <child>
-                      <object class="GtkLabel" id="label">
+                      <object class="GtkLabel" id="dropzone">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Drop a file into this area.</property>
