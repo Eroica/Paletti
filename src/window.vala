@@ -23,20 +23,18 @@ namespace Paletti {
 
 	public interface LinkBehavior : Widget {
 		public void cursor_to_pointer () {
-			set_state_flags (StateFlags.PRELIGHT, false);
 			var window = get_window ();
 			window.set_cursor (new Cursor.from_name (window.get_display (), "pointer"));
 		}
 
 		public void cursor_to_default () {
-			unset_state_flags (StateFlags.PRELIGHT);
 			var window = get_window ();
 			window.set_cursor (new Cursor.from_name (window.get_display (), "default"));
 		}
 	}
 
 	[GtkTemplate (ui = "/com/moebots/Paletti/ui/window.ui")]
-	public class Window : ApplicationWindow {
+	public class Window : ApplicationWindow, LinkBehavior {
 		[GtkChild]
 		private HeaderBar header_bar;
 
@@ -51,6 +49,9 @@ namespace Paletti {
 
 		[GtkChild]
 		private Stack stack;
+
+		[GtkChild]
+		private Label dropzone;
 
 		[GtkChild]
 		private Overlay overlay;
@@ -156,6 +157,20 @@ namespace Paletti {
 		private bool on_mono_set (bool state) {
 			image.posterize ((int) colors_range.value, state);
 			return false;
+		}
+
+		[GtkCallback]
+		private bool on_enter_dropzone (EventCrossing event) {
+			dropzone.set_state_flags (StateFlags.PRELIGHT, false);
+			cursor_to_pointer ();
+			return true;
+		}
+
+		[GtkCallback]
+		private bool on_leave_dropzone (EventCrossing event) {
+			dropzone.unset_state_flags (StateFlags.PRELIGHT);
+			cursor_to_default ();
+			return true;
 		}
 
 		[GtkCallback]
@@ -278,6 +293,7 @@ namespace Paletti {
 		[GtkCallback]
 		private bool on_enter (EventCrossing event) {
 			if (color != null) {
+				set_state_flags (StateFlags.PRELIGHT, false);
 				cursor_to_pointer ();
 			}
 			return true;
@@ -286,6 +302,7 @@ namespace Paletti {
 		[GtkCallback]
 		private bool on_leave (EventCrossing event) {
 			if (color != null) {
+				unset_state_flags (StateFlags.PRELIGHT);
 				cursor_to_default ();
 			}
 			return true;
