@@ -6,6 +6,58 @@ namespace Leptonica {
 		UNSUPPORTED,
 		FAILURE,
 	}
+
+	public enum Format {
+		UNKNOWN, BMP, JFIF_JPEG, PNG, TIFF, TIFF_PACKBITS, TIFF_RLE, TIFF_G3,
+		TIFF_G4, TIFF_LZW, TIFF_ZIP, PNM, PS, GIF, JP2, WEBP, LPDF, TIFF_JPEG,
+		DEFAULT, SPIX;
+
+		public string to_string () {
+			switch (this) {
+				case BMP: return "bmp";
+				case JFIF_JPEG: return "jpg";
+				case PNG: return "png";
+				case TIFF: return "tiff";
+				case TIFF_PACKBITS: return "tiff";
+				case TIFF_RLE: return "tiff";
+				case TIFF_G3: return "tiff";
+				case TIFF_G4: return "tiff";
+				case TIFF_LZW: return "tiff";
+				case TIFF_ZIP: return "tiff";
+				case PNM: return "pnm";
+				case PS: return "ps";
+				case GIF: return "gif";
+				case JP2: return "jp2";
+				case WEBP: return "webp";
+				case LPDF: return "lpdf";
+				case TIFF_JPEG: return "tiff";
+				default: return "";
+			}
+		}
+
+		public int to_int () {
+			switch (this) {
+				case BMP: return 1;
+				case JFIF_JPEG: return 2;
+				case PNG: return 3;
+				case TIFF: return 4;
+				case TIFF_PACKBITS: return 5;
+				case TIFF_RLE: return 6;
+				case TIFF_G3: return 7;
+				case TIFF_G4: return 8;
+				case TIFF_LZW: return 9;
+				case TIFF_ZIP: return 10;
+				case PNM: return 11;
+				case PS: return 12;
+				case GIF: return 13;
+				case JP2: return 14;
+				case WEBP: return 15;
+				case LPDF: return 16;
+				case TIFF_JPEG: return 17;
+				default: return 0;
+			}
+		}
+	}
 }
 
 namespace Paletti {
@@ -16,11 +68,31 @@ namespace Paletti {
 	public abstract class IPix : Object {
 		public Colors colors { get; protected set; }
 		public Leptonica.PIX pix { get; protected owned set; }
-		public int width {
-			get { return pix.width; }
-		}
-		public int height {
-			get { return pix.height; }
+		public int width { get { return pix.width; } }
+		public int height { get { return pix.height; } }
+		public Leptonica.Format format {
+			get {
+				switch (pix.input_format) {
+					case 1: return Leptonica.Format.BMP;
+					case 2: return Leptonica.Format.JFIF_JPEG;
+					case 3: return Leptonica.Format.PNG;
+					case 4: return Leptonica.Format.TIFF;
+					case 5: return Leptonica.Format.TIFF_PACKBITS;
+					case 6: return Leptonica.Format.TIFF_RLE;
+					case 7: return Leptonica.Format.TIFF_G3;
+					case 8: return Leptonica.Format.TIFF_G4;
+					case 9: return Leptonica.Format.TIFF_LZW;
+					case 10: return Leptonica.Format.TIFF_ZIP;
+					case 11: return Leptonica.Format.PNM;
+					case 12: return Leptonica.Format.PS;
+					case 13: return Leptonica.Format.GIF;
+					case 14: return Leptonica.Format.JP2;
+					case 15: return Leptonica.Format.WEBP;
+					case 16: return Leptonica.Format.LPDF;
+					case 17: return Leptonica.Format.TIFF_JPEG;
+					default: return Leptonica.Format.UNKNOWN;
+				}
+			}
 		}
 	}
 
@@ -109,7 +181,7 @@ namespace Paletti {
 		public void on_shortcut (EventKey event) throws Exception {
 			if (src == null) {
 				if (event.state == ModifierType.CONTROL_MASK
-					&& (event.keyval == Key.s || event.keyval == Key.c)) {
+					&& (event.keyval == Key.s || event.keyval == Key.c || event.keyval == Key.e)) {
 					throw new Exception.UNINITIALIZED ("First load an image into Paletti.");
 				}
 			}
