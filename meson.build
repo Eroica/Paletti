@@ -16,9 +16,10 @@ dependencies = [
 
 sources = files('src/main.vala',
                 'src/window.vala',
+                'src/scene.vala',
                 'src/dialog.vala',
                 'src/notification.vala',
-                'src/image.vala',
+                'src/pix.vala',
                 'src/color.vala')
 
 sources += import('gnome').compile_resources(

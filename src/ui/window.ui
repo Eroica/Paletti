@@ -7,7 +7,6 @@
     <property name="upper">32</property>
     <property name="value">6</property>
     <property name="step_increment">1</property>
-    <signal name="value-changed" handler="on_colors_range_value_changed" swapped="no"/>
   </object>
   <template class="PalettiWindow" parent="GtkApplicationWindow">
     <property name="width_request">540</property>
@@ -22,43 +21,19 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
+        <signal name="button-release-event" handler="on_click" swapped="no"/>
         <child>
           <object class="GtkOverlay" id="overlay">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="vexpand">True</property>
             <child>
-              <object class="GtkEventBox">
+              <object class="GtkStack" id="stack">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="vexpand">True</property>
-                <property name="above_child">True</property>
-                <signal name="button-release-event" handler="on_click" swapped="no"/>
-                <signal name="enter-notify-event" handler="on_enter_dropzone" swapped="no"/>
-                <signal name="leave-notify-event" handler="on_leave_dropzone" swapped="no"/>
+                <property name="interpolate_size">True</property>
                 <child>
-                  <object class="GtkStack" id="stack">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_start">8</property>
-                    <property name="margin_end">8</property>
-                    <property name="margin_top">8</property>
-                    <property name="margin_bottom">8</property>
-                    <property name="transition_type">crossfade</property>
-                    <child>
-                      <object class="GtkLabel" id="dropzone">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Drop a file into this area.</property>
-                        <style>
-                          <class name="droparea"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="name">Dropzone</property>
-                        <property name="title" translatable="yes">Dropzone</property>
-                      </packing>
-                    </child>
-                  </object>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -67,10 +42,13 @@
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
+        </child>
+        <child>
+          <placeholder/>
         </child>
       </object>
     </child>
@@ -100,7 +78,6 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="tooltip_text" translatable="yes">Toggle black/white</property>
-            <signal name="state-set" handler="on_mono_set" swapped="no"/>
           </object>
           <packing>
             <property name="pack_type">end</property>
