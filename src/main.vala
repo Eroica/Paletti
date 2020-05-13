@@ -1,6 +1,14 @@
 using Gdk;
 using Gtk;
 
+// Simple check: if a cached image exists, then Paletti has been used before
+private bool is_first_run () {
+	return !File.new_build_filename (Path.build_filename (
+		Environment.get_user_cache_dir (),
+		"Paletti", "cache.png"
+	)).query_exists ();
+}
+
 int main (string[] args) {
 	var app = new Gtk.Application ("com.moebots.Paletti", ApplicationFlags.FLAGS_NONE);
 	app.activate.connect (() => {
@@ -14,7 +22,7 @@ int main (string[] args) {
 
 		var win = app.active_window;
 		if (win == null) {
-			win = new Paletti.Window (app, new Paletti.ImageViewModel ());
+			win = new Paletti.Window (app, is_first_run ());
 		}
 		win.present ();
 	});

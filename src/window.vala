@@ -13,14 +13,6 @@ namespace Paletti {
 		{"text/uri-list", 0, Target.FILE}
 	};
 
-	// Simple check: if a cached image exists, then Paletti has been used before
-	private bool is_first_run () {
-		return !File.new_build_filename (Path.build_filename (
-			Environment.get_user_cache_dir (),
-			"Paletti", "cache.png"
-		)).query_exists ();
-	}
-
 	public interface LinkBehavior : Widget {
 		public void cursor_to_pointer () {
 			var window = get_window ();
@@ -33,65 +25,64 @@ namespace Paletti {
 		}
 	}
 
+	public interface IControl : Object {
+		public abstract ColorPalette color_palette { get; protected set; }
+		public abstract Adjustment colors_range { get; protected set; }
+		public abstract Switch mono_switch { get; protected set; }
+	}
+
+	public interface IScene : Widget {
+		public abstract void on_load (string filename) throws Leptonica.Exception;
+		public abstract void on_shortcut (EventKey event);
+	}
+
+	public interface INavigation : Object {
+		public abstract void next (IScene scene);
+	}
+
 	[GtkTemplate (ui = "/com/moebots/Paletti/ui/window.ui")]
-	public class Window : ApplicationWindow, LinkBehavior {
+	public class Window : ApplicationWindow, IControl, LinkBehavior, INavigation {
+		[GtkChild]
+		public Adjustment colors_range { get; protected set; }
+
+		[GtkChild]
+		public Switch mono_switch { get; protected set; }
+
 		[GtkChild]
 		private HeaderBar header_bar;
-
-		[GtkChild]
-		private Adjustment colors_range;
-
-		[GtkChild]
-		private Switch mono_switch;
 
 		[GtkChild]
 		private Box box;
 
 		[GtkChild]
-		private Stack stack;
-
-		[GtkChild]
-		private Label dropzone;
-
-		[GtkChild]
 		private Overlay overlay;
 
-		private IViewModel view_model;
-		private PosterizedImage image;
-		private Notification notification;
-		private ColorPalette color_palette;
+		[GtkChild]
+		private Stack stack;
 
-		public Window (Gtk.Application app, IViewModel view_model) {
+		public ColorPalette color_palette { get; protected set; }
+		private IScene scene;
+		private Notification notification;
+
+		public Window (Gtk.Application app, bool is_first_run) {
 			Object (application: app);
 			drag_dest_set (this, DestDefaults.ALL, targets, DragAction.COPY);
-			this.view_model = view_model;
-			this.color_palette = new ColorPalette (view_model);
-			this.box.add (color_palette);
 			this.notification = new Notification ();
 			this.overlay.add_overlay (notification);
-			this.image = new PosterizedImage (view_model);
-			this.stack.add_named (image, "PreviewImage");
+			this.color_palette = new ColorPalette (this);
+			this.box.add (color_palette);
+			this.scene = new InitialScene (notification, this, this, is_first_run);
+			this.stack.add_named (scene, "Dropzone");
 			this.show_all();
-
-			if (is_first_run ()) {
-				this.notification.display (
-					"Press <b>Ctrl+?</b> for a list of keyboard shortcuts.",
-					NotificationType.INFO
-				);
-			}
 		}
 
-		private void load (string filename) {
-			try {
-				view_model.on_load (filename, (int) colors_range.value);
-				stack.set_visible_child_name ("PreviewImage");
-				header_bar.subtitle = filename;
-			} catch (Leptonica.Exception e) {
-				notification.display (e.message);
-			}
+		public void next (IScene scene) {
+			stack.add_named (scene, "PosterizedImage");
+			stack.set_visible_child_name ("PosterizedImage");
+			this.scene = scene;
 		}
 
-		private void show_open_dialog () {
+		public void open_file_dialog () {
 			var dialog = new OpenFileDialog ();
 			dialog.response.connect ((dialog, response_id) => {
 				if (response_id == ResponseType.ACCEPT) {
@@ -103,33 +94,30 @@ namespace Paletti {
 			dialog.show ();
 		}
 
-		[GtkCallback]
-		private bool on_key_release (EventKey event) {
+		private void load (string filename) {
 			try {
-				view_model.on_shortcut (event);
-				if (event.keyval == Key.o && event.state == ModifierType.CONTROL_MASK) {
-					show_open_dialog ();
-				} else if (event.keyval == Key.s && event.state == ModifierType.CONTROL_MASK) {
-					var dialog = new SaveFileDialog (notification, view_model.pix);
-					dialog.show ();
-				} else if (event.keyval == Key.c && event.state == ModifierType.CONTROL_MASK) {
-					Clipboard.get_for_display (
-						get_window ().get_display (), Gdk.SELECTION_CLIPBOARD
-					).set_image (image.pixbuf);
-				} else if (event.keyval == Key.e && event.state == ModifierType.CONTROL_MASK) {
-					color_palette.export ();
-				} else if (event.keyval == Key.x) {
-					mono_switch.activate ();
-				}
-			} catch (Exception e) {
+				scene.on_load (filename);
+				header_bar.subtitle = filename;
+			} catch (Error e) {
 				notification.display (e.message);
 			}
-			return true;
 		}
 
 		[GtkCallback]
 		private bool on_click (EventButton event) {
-			show_open_dialog ();
+			open_file_dialog ();
+			return true;
+		}
+
+		[GtkCallback]
+		private bool on_key_release (EventKey event) {
+			if (event.keyval == Key.o && event.state == ModifierType.CONTROL_MASK) {
+				open_file_dialog ();
+			} else if (event.keyval == Key.x) {
+				mono_switch.activate ();
+			} else {
+				scene.on_shortcut (event);
+			}
 			return true;
 		}
 
@@ -155,46 +143,11 @@ namespace Paletti {
 				Gtk.drag_finish (drag_context, true, false, time);
 			}
 		}
-
-		[GtkCallback]
-		private bool on_mono_set (bool state) {
-			try {
-				view_model.on_set_black_white (state);
-			} catch (Leptonica.Exception e) {
-				notification.display (e.message);
-			}
-			return false;
-		}
-
-		[GtkCallback]
-		private void on_colors_range_value_changed () {
-			color_palette.adjust_tiles_to ((uint) colors_range.value);
-			try {
-				view_model.on_colors_range_change ((int) colors_range.value);
-			} catch (Leptonica.Exception e) {
-				notification.display (e.message);
-			}
-		}
-
-		[GtkCallback]
-		private bool on_enter_dropzone (EventCrossing event) {
-			dropzone.set_state_flags (StateFlags.PRELIGHT, false);
-			cursor_to_pointer ();
-			return true;
-		}
-
-		[GtkCallback]
-		private bool on_leave_dropzone (EventCrossing event) {
-			dropzone.unset_state_flags (StateFlags.PRELIGHT);
-			cursor_to_default ();
-			return true;
-		}
 	}
 
 	[GtkTemplate (ui = "/com/moebots/Paletti/ui/color_palette.ui")]
 	public class ColorPalette : Box {
-		private Colors _colors;
-		private Colors colors {
+		public Colors colors {
 			get { return _colors; }
 			set {
 				_colors = value;
@@ -208,15 +161,16 @@ namespace Paletti {
 				});
 			}
 		}
+		private Colors _colors;
 
-		public ColorPalette (IViewModel view_model) {
+		public ColorPalette (IControl controller) {
 			for (int i=0; i < DEFAULT_COLORS; i++) {
 				this.add (new ColorTile (i));
 			}
-			this.show_all ();
-			view_model.notify["pix"].connect (() => {
-				this.colors = view_model.pix.colors;
+			controller.colors_range.value_changed.connect (() => {
+				adjust_tiles_to ((uint) controller.colors_range.value);
 			});
+			this.show_all ();
 		}
 
 		public ColorPalette.with_colors (Colors colors) {
@@ -224,7 +178,16 @@ namespace Paletti {
 			this.show_all ();
 		}
 
-		public void adjust_tiles_to (uint size) {
+		public void export () {
+			var dialog = new ExportPaletteDialog (
+				new ExportColorPaletteWindow (
+					colors, get_allocated_width (), get_allocated_height ()
+				)
+			);
+			dialog.show ();
+		}
+
+		private void adjust_tiles_to (uint size) {
 			var child_count = get_children ().length ();
 			if (child_count > size) {
 				for (uint i=child_count; i > size; i--) {
@@ -237,15 +200,6 @@ namespace Paletti {
 					tile.show ();
 				}
 			}
-		}
-
-		public void export () throws Exception {
-			var dialog = new ExportPaletteDialog (
-				new ExportColorPaletteWindow (
-					colors, get_allocated_width (), get_allocated_height ()
-				)
-			);
-			dialog.show ();
 		}
 	}
 
@@ -274,7 +228,7 @@ namespace Paletti {
 				tooltip_text = _color.to_string ();
 				try {
 					var css = new CssProvider ();
-					css.load_from_data (@".$(name) { background-color: rgba($(color.r), $(color.g), $(color.b), 1.0); }");
+					css.load_from_data (@".$(name) { background-color: $color; }");
 					get_style_context ().add_class (name);
 					get_style_context ().add_provider (css, STYLE_PROVIDER_PRIORITY_USER);
 				} catch (Error e) {
