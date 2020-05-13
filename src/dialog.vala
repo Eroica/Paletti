@@ -11,9 +11,12 @@ namespace Paletti {
 			this.response.connect ((self, response_id) => {
 				if (response_id == ResponseType.ACCEPT) {
 					try {
-						pix.copy (get_file ());
+						var filename = File.new_for_path (
+							get_file ().get_path () + @".$(pix.format)"
+						);
+						pix.copy (filename);
 						notification.display (
-							@"Copied image to $(get_file ().get_path ())",
+							@"Copied image to $(filename.get_path ())",
 							NotificationType.INFO
 						);
 					} catch (Error e) {

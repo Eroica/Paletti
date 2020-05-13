@@ -240,9 +240,6 @@ namespace Paletti {
 		}
 
 		public void export () throws Exception {
-			if (colors == null) {
-				throw new Exception.UNINITIALIZED ("First load an image into Paletti.");
-			}
 			var dialog = new ExportPaletteDialog (
 				new ExportColorPaletteWindow (
 					colors, get_allocated_width (), get_allocated_height ()
@@ -263,7 +260,7 @@ namespace Paletti {
 		}
 
 		public void export (string filename) throws Error {
-			get_pixbuf ().save (filename, "png");
+			get_pixbuf ().save (@"$filename.png", "png");
 		}
 	}
 
