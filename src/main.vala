@@ -14,7 +14,7 @@ int main (string[] args) {
 
 		var win = app.active_window;
 		if (win == null) {
-			win = new Paletti.Window (app);
+			win = new Paletti.Window (app, new Paletti.ImageViewModel ());
 		}
 		win.present ();
 	});
