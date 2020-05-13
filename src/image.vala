@@ -16,6 +16,12 @@ namespace Paletti {
 	public abstract class IPix : Object {
 		public Colors colors { get; protected set; }
 		public Leptonica.PIX pix { get; protected owned set; }
+		public int width {
+			get { return pix.width; }
+		}
+		public int height {
+			get { return pix.height; }
+		}
 	}
 
 	public class PosterizedPix : IPix {
@@ -64,96 +70,81 @@ namespace Paletti {
 		}
 	}
 
-	public interface IPosterizedImage : Object {
-		public abstract void on_copy () throws Exception;
-		public abstract void on_save () throws Exception;
-		public abstract void on_load (string filename) throws Leptonica.Exception;
-		public abstract void posterize (int colors_count, bool is_black_white);
+	public interface IViewModel : Object {
+		public abstract CachedPix? pix { get; protected set; }
+
+		public abstract void on_shortcut (EventKey event) throws Exception;
+		public abstract void on_colors_range_change (int count) throws Leptonica.Exception;
+		public abstract void on_load (string filename, int count) throws Leptonica.Exception;
+		public abstract void on_set_black_white (bool is_black_white) throws Leptonica.Exception;
 	}
 
-	[GtkTemplate (ui = "/com/moebots/Paletti/ui/posterized-image.ui")]
-	public class PosterizedImage : Image, IPosterizedImage {
-		private CachedPix? pix;
-		private Leptonica.PIX? src;
-		private INotification notification;
-		private ColorPalette color_palette;
-		public string filename { get; private set; }
+	public class ImageViewModel : IViewModel, Object {
+		public CachedPix? pix { get; protected set; }
+		protected bool is_black_white { get; set; }
+		private Leptonica.PIX? src { get; owned set; }
 
-		public PosterizedImage (INotification notification,
-								ColorPalette color_palette) {
-			this.notification = notification;
-			this.color_palette = color_palette;
+		public void on_load (string filename, int count) throws Leptonica.Exception {
+			this.src = new Leptonica.PIX.from_filename (filename);
+			on_colors_range_change (count);
 		}
 
-		public void on_copy () throws Exception {
-			if (src == null) {
-				throw new Exception.UNINITIALIZED ("First load an image into Paletti.");
-			}
-			Clipboard.get_for_display (
-				get_window ().get_display (), Gdk.SELECTION_CLIPBOARD
-			).set_image (pixbuf);
-		}
-
-		public void on_save () throws Exception {
-			if (src == null) {
-				throw new Exception.UNINITIALIZED ("First load an image into Paletti.");
-			}
-			var dialog = new SaveFileDialog (notification, pix);
-			dialog.show ();
-		}
-
-		public void on_load (string filename) throws Leptonica.Exception {
-			var tmp = new Leptonica.PIX.from_filename (filename);
-			// The second check might be a little bit wasteful, but is there to
-			// check whether the image is analyzable by Leptonica. To be exact,
-			// `pix != null' can never happen because PosterziedPix would have
-			// already raised a FAILURE exception. This exception prevents
-			// `src' from being assigned to the un-analyzable image.
-			if (tmp == null || new PosterizedPix (tmp, MAX_COLORS).pix == null) {
-				throw new Leptonica.Exception.UNSUPPORTED ("Could not read this image");
-			}
-			this.filename = filename;
-			src = tmp.clone ();
-		}
-
-		public void posterize (int colors_count, bool is_black_white) {
+		public void on_colors_range_change (int count) throws Leptonica.Exception {
 			if (src == null) {
 				return;
 			}
-			try {
-				if (is_black_white) {
-					pix = new CachedPix (new BlackWhitePix (new PosterizedPix (src, colors_count)));
-				} else {
-					pix = new CachedPix (new PosterizedPix (src, colors_count));
-				}
-				load_image ();
-				color_palette.colors = pix.colors;
-			} catch (Leptonica.Exception e) {
-				notification.display (e.message);
+			if (is_black_white) {
+				pix = new CachedPix (new BlackWhitePix (new PosterizedPix (src, count)));
+			} else {
+				pix = new CachedPix (new PosterizedPix (src, count));
 			}
 		}
 
-		private void load_image () {
+		public void on_set_black_white (bool is_black_white) throws Leptonica.Exception {
+			this.is_black_white = is_black_white;
+			if (src != null) {
+				on_colors_range_change (pix.colors.size);
+			}
+		}
+		public void on_shortcut (EventKey event) throws Exception {
+			if (src == null) {
+				if (event.state == ModifierType.CONTROL_MASK
+					&& (event.keyval == Key.s || event.keyval == Key.c)) {
+					throw new Exception.UNINITIALIZED ("First load an image into Paletti.");
+				}
+			}
+		}
+	}
+
+	[GtkTemplate (ui = "/com/moebots/Paletti/ui/posterized-image.ui")]
+	public class PosterizedImage : Image {
+		public PosterizedImage (IViewModel view_model) {
+			view_model.notify["pix"].connect (() => {
+				this.load (view_model.pix);
+			});
+		}
+
+		private void load (CachedPix pix) {
 			try {
 				var tmp = new Pixbuf.from_file (pix.path);
 				var parent = parent as Stack;
 				var dimensions = Allocation ();
 				parent.get_allocation (out dimensions);
-				var ratio = (double) src.width / src.height;
+				var ratio = (double) pix.width / pix.height;
 				var target_width = (double) dimensions.width;
 				var target_height = (double) dimensions.height;
 
 				if (ratio >= 1) {
-					target_width = (double) dimensions.height/src.height * src.width;
+					target_width = (double) dimensions.height/pix.height * pix.width;
 				} else {
-					target_height = (double) dimensions.width/src.width * src.height;
+					target_height = (double) dimensions.width/pix.width * pix.height;
 				}
 				var dest = new Pixbuf (Colorspace.RGB, false, 8, dimensions.width, dimensions.height);
 				tmp.scale (
 					dest, 0, 0, dimensions.width, dimensions.height,
 					-(int) (target_width - dimensions.width) / 2,
 					-(int) (target_height - dimensions.height) / 2,
-					target_width/src.width, target_height/src.height,
+					target_width/pix.width, target_height/pix.height,
 					InterpType.BILINEAR
 				);
 				set_from_pixbuf (dest);

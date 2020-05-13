@@ -8,7 +8,7 @@ namespace Paletti {
 	[GtkTemplate (ui = "/com/moebots/Paletti/ui/save_file_dialog.ui")]
 	public class SaveFileDialog : FileChooserDialog {
 		public SaveFileDialog (INotification notification, CachedPix pix) {
-			response.connect ((self, response_id) => {
+			this.response.connect ((self, response_id) => {
 				if (response_id == ResponseType.ACCEPT) {
 					try {
 						pix.copy (get_file ());
@@ -28,7 +28,7 @@ namespace Paletti {
 	[GtkTemplate (ui = "/com/moebots/Paletti/ui/export_palette_dialog.ui")]
 	public class ExportPaletteDialog : FileChooserDialog {
 		public ExportPaletteDialog (ExportColorPaletteWindow palette) {
-			response.connect ((self, response_id) => {
+			this.response.connect ((self, response_id) => {
 				if (response_id == ResponseType.ACCEPT) {
 					try {
 						palette.export (get_file ().get_path ());
