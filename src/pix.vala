@@ -66,10 +66,13 @@ namespace Paletti {
 	}
 
 	public abstract class IPix : Object {
-		public Colors colors { get; protected set; }
-		public Leptonica.PIX pix { get; protected owned set; }
 		public int width { get { return pix.width; } }
 		public int height { get { return pix.height; } }
+		public double ratio { get { return width/height; } }
+		public Colors colors { get; protected set; }
+		public Leptonica.PIX pix { get; protected owned set; }
+
+
 		public Leptonica.Format format {
 			get {
 				switch (pix.input_format) {

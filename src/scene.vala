@@ -32,9 +32,7 @@ namespace Paletti {
 				throw new Leptonica.Exception.UNSUPPORTED ("Could not read this image.");
 			}
 			var scene = new PosterizeScene (pix, notification, controller);
-			var dimensions = Allocation ();
-			dropzone.get_allocation (out dimensions);
-			scene.posterize (controller.mono_switch.state, dimensions);
+			scene.posterize (controller.mono_switch.state);
 			navigation.next (scene);
 		}
 
@@ -67,6 +65,8 @@ namespace Paletti {
 		private Image image;
 
 		public Leptonica.PIX src;
+		private int64 time;
+		private Mutex mutex = Mutex ();
 		private IControl controller;
 		private CachedPix cached_pix;
 		private INotification notification;
@@ -79,14 +79,10 @@ namespace Paletti {
 			this.show_all ();
 
 			controller.colors_range.value_changed.connect (() => {
-				var dimensions = Allocation ();
-				image.get_allocation (out dimensions);
-				this.posterize (controller.mono_switch.state, dimensions);
+				this.posterize (controller.mono_switch.state);
 			});
 			controller.mono_switch.state_set.connect ((is_black_white) => {
-				var dimensions = Allocation ();
-				image.get_allocation (out dimensions);
-				this.posterize (is_black_white, dimensions);
+				this.posterize (is_black_white);
 				return false;
 			});
 		}
@@ -97,9 +93,7 @@ namespace Paletti {
 				throw new Leptonica.Exception.UNSUPPORTED ("Could not read this image.");
 			}
 			src = tmp.clone ();
-			var dimensions = Allocation ();
-			image.get_allocation (out dimensions);
-			posterize (controller.mono_switch.state, dimensions);
+			posterize (controller.mono_switch.state);
 		}
 
 		public void on_shortcut (EventKey event) {
@@ -115,40 +109,78 @@ namespace Paletti {
 			}
 		}
 
-		public void posterize (bool is_black_white, Allocation dimensions) {
-			try {
-				if (is_black_white) {
-					cached_pix = new CachedPix (new BlackWhitePix (
-						new PosterizedPix (src, (int) controller.colors_range.value)
-					));
-				} else {
-					cached_pix = new CachedPix (new PosterizedPix (
-						src, (int) controller.colors_range.value)
-					);
+		private async bool create_image (bool is_black_white) {
+			var result = new Thread<bool> (null, () => {
+				try {
+					mutex.lock ();
+					if (is_black_white) {
+						cached_pix = new CachedPix (new BlackWhitePix (
+							new PosterizedPix (src, (int) controller.colors_range.value)
+						));
+					} else {
+						cached_pix = new CachedPix (new PosterizedPix (
+							src, (int) controller.colors_range.value)
+						);
+					}
+				} catch {
+					return false;
+				} finally {
+					mutex.unlock ();
+					Idle.add (create_image.callback);
 				}
-				controller.color_palette.colors = cached_pix.colors;
+				return true;
+			});
+			yield;
+			return result.join ();
+		}
 
-				var tmp = new Pixbuf.from_file (cached_pix.path);
-				var ratio = (double) cached_pix.width / cached_pix.height;
-				var target_width = (double) dimensions.width;
-				var target_height = (double) dimensions.height;
-				if (ratio >= 1) {
-					target_width = (double) dimensions.height/cached_pix.height * cached_pix.width;
-				} else {
-					target_height = (double) dimensions.width/cached_pix.width * cached_pix.height;
+		public void posterize (bool is_black_white) {
+			// Sliding the color slider rapidly will make many calls to this
+			// method. To improve performance, do not call posterize on every
+			// tick. It is only called if at least 100 milliseconds have passed
+			// between each call.
+			time = get_monotonic_time ();
+			Timeout.add (100, () => {
+				var delta = get_monotonic_time ();
+				// Difference in MICROseconds
+				if (delta - time >= 100000) {
+					debounced_posterize (is_black_white);
 				}
-				var dest = new Pixbuf (Colorspace.RGB, false, 8, dimensions.width, dimensions.height);
-				tmp.scale (
-					dest, 0, 0, dimensions.width, dimensions.height,
-					-(int) (target_width - dimensions.width) / 2,
-					-(int) (target_height - dimensions.height) / 2,
-					target_width/cached_pix.width, target_height/cached_pix.height,
-					InterpType.BILINEAR
-				);
-				image.pixbuf = dest;
-			} catch (Error e) {
-				notification.display (e.message);
-			}
+				return false;
+			});
+		}
+
+		private void debounced_posterize (bool is_black_white) {
+			create_image.begin (is_black_white, (obj, res) => {
+				if (!create_image.end (res)) {
+					notification.display ("Could not run quantization on this image.");
+					return;
+				}
+				try {
+					var tmp = new Pixbuf.from_file (cached_pix.path);
+					var dimensions = Allocation ();
+					image.get_allocation (out dimensions);
+					var target_width = (double) dimensions.width;
+					var target_height = (double) dimensions.height;
+					if (cached_pix.ratio >= 1) {
+						target_width = (double) dimensions.height/cached_pix.height * cached_pix.width;
+					} else {
+						target_height = (double) dimensions.width/cached_pix.width * cached_pix.height;
+					}
+					var dest = new Pixbuf (Colorspace.RGB, false, 8, dimensions.width, dimensions.height);
+					tmp.scale (
+						dest, 0, 0, dimensions.width, dimensions.height,
+						-(int) (target_width - dimensions.width) / 2,
+						-(int) (target_height - dimensions.height) / 2,
+						target_width/cached_pix.width, target_height/cached_pix.height,
+						InterpType.BILINEAR
+					);
+					image.pixbuf = dest;
+					controller.color_palette.colors = cached_pix.colors;
+				} catch (Error e) {
+					notification.display (e.message);
+				}
+			});
 		}
 
 		[GtkCallback]
