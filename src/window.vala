@@ -69,7 +69,7 @@ namespace Paletti {
 			drag_dest_set (this, DestDefaults.ALL, targets, DragAction.COPY);
 			this.notification = new Notification ();
 			this.overlay.add_overlay (notification);
-			this.color_palette = new ColorPalette (this);
+			this.color_palette = new ColorPalette ();
 			this.box.add (color_palette);
 			this.scene = new InitialScene (notification, this, this, is_first_run);
 			this.stack.add_named (scene, "Dropzone");
@@ -163,13 +163,10 @@ namespace Paletti {
 		}
 		private Colors _colors;
 
-		public ColorPalette (IControl controller) {
+		public ColorPalette () {
 			for (int i=0; i < DEFAULT_COLORS; i++) {
 				this.add (new ColorTile (i));
 			}
-			controller.colors_range.value_changed.connect (() => {
-				adjust_tiles_to ((uint) controller.colors_range.value);
-			});
 			this.show_all ();
 		}
 
@@ -187,7 +184,7 @@ namespace Paletti {
 			dialog.show ();
 		}
 
-		private void adjust_tiles_to (uint size) {
+		public void adjust_tiles_to (uint size) {
 			var child_count = get_children ().length ();
 			if (child_count > size) {
 				for (uint i=child_count; i > size; i--) {

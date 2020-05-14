@@ -10,6 +10,7 @@ namespace Paletti {
 		private IControl controller;
 		private INavigation navigation;
 		private INotification notification;
+		private ulong adjust_palette_signal;
 
 		public InitialScene (INotification notification,
 		                     INavigation navigation, IControl controller,
@@ -17,7 +18,9 @@ namespace Paletti {
 			this.controller = controller;
 			this.navigation = navigation;
 			this.notification = notification;
-
+			adjust_palette_signal = controller.colors_range.value_changed.connect (() => {
+				controller.color_palette.adjust_tiles_to ((int) controller.colors_range.value);
+			});
 			if (is_first_run) {
 				this.notification.display (
 					"Press <b>Ctrl+?</b> for a list of keyboard shortcuts.",
@@ -33,6 +36,7 @@ namespace Paletti {
 			}
 			var scene = new PosterizeScene (pix, notification, controller);
 			scene.posterize (controller.mono_switch.state);
+			controller.colors_range.disconnect (adjust_palette_signal);
 			navigation.next (scene);
 		}
 
