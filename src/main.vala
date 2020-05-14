@@ -4,8 +4,7 @@ using Gtk;
 // Simple check: if a cached image exists, then Paletti has been used before
 private bool is_first_run () {
 	return !File.new_build_filename (Path.build_filename (
-		Environment.get_user_cache_dir (),
-		"Paletti", "cache.png"
+		Environment.get_user_cache_dir (), "Paletti"
 	)).query_exists ();
 }
 

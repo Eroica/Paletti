@@ -119,9 +119,7 @@ namespace Paletti {
 	}
 
 	public class CachedPix : IPix {
-		public string path = Path.build_filename (
-			Environment.get_user_cache_dir (), "Paletti", "cache.png"
-		);
+		public string path { get; private set; }
 
 		public CachedPix (IPix src) {
 			pix = src.pix.clone ();
@@ -130,9 +128,10 @@ namespace Paletti {
 				"Paletti"
 			);
 			DirUtils.create_with_parents (paletti_cache_dir, 755);
-			var dest_path = Path.build_filename (paletti_cache_dir, "cache.png");
+			var dest_path = Path.build_filename (paletti_cache_dir, @"cache.$(src.format)");
 			Leptonica.pix_write (dest_path, pix, pix.input_format);
 			colors = src.colors;
+			path = Path.build_filename (Environment.get_user_cache_dir (), "Paletti", @"cache.$(src.format)");
 		}
 
 		public void copy (File destination) throws Error {
