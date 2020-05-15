@@ -113,7 +113,23 @@ namespace Paletti {
 			}
 		}
 
-		private async bool create_image (bool is_black_white) {
+		public void posterize (bool is_black_white) {
+			// Sliding the color slider rapidly will make many calls to this
+			// method. To improve performance, do not call posterize on every
+			// tick. It is only called if at least 100 milliseconds have passed
+			// between each call.
+			time = get_monotonic_time ();
+			Timeout.add (100, () => {
+				var delta = get_monotonic_time ();
+				// Difference in MICROseconds
+				if (delta - time >= 100000) {
+					debounced_posterize.begin (is_black_white);
+				}
+				return false;
+			});
+		}
+
+		private async void debounced_posterize (bool is_black_white) {
 			var result = new Thread<bool> (null, () => {
 				try {
 					mutex.lock ();
@@ -130,38 +146,18 @@ namespace Paletti {
 					return false;
 				} finally {
 					mutex.unlock ();
-					Idle.add (create_image.callback);
+					Idle.add (debounced_posterize.callback);
 				}
 				return true;
 			});
 			yield;
-			return result.join ();
-		}
 
-		public void posterize (bool is_black_white) {
-			// Sliding the color slider rapidly will make many calls to this
-			// method. To improve performance, do not call posterize on every
-			// tick. It is only called if at least 100 milliseconds have passed
-			// between each call.
-			time = get_monotonic_time ();
-			Timeout.add (100, () => {
-				var delta = get_monotonic_time ();
-				// Difference in MICROseconds
-				if (delta - time >= 100000) {
-					debounced_posterize (is_black_white);
-				}
-				return false;
-			});
-		}
-
-		private void debounced_posterize (bool is_black_white) {
-			create_image.begin (is_black_white, (obj, res) => {
-				if (!create_image.end (res)) {
-					notification.display ("Could not run quantization on this image.");
-					return;
-				}
+			if (!result.join ()) {
+				notification.display ("Could not run quantization on this image.");
+			} else {
 				try {
-					var tmp = new Pixbuf.from_file (cached_pix.path);
+					var tmp = yield new Pixbuf.from_stream_async (
+						File.new_for_path (cached_pix.path).read ());
 					var dimensions = Allocation ();
 					image.get_allocation (out dimensions);
 					var target_width = (double) dimensions.width;
@@ -184,7 +180,7 @@ namespace Paletti {
 				} catch (Error e) {
 					notification.display (e.message);
 				}
-			});
+			}
 		}
 
 		[GtkCallback]
