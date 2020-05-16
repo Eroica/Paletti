@@ -70,7 +70,6 @@ namespace Paletti {
 
 		public Leptonica.PIX src;
 		private int64 time;
-		private Mutex mutex = Mutex ();
 		private IControl controller;
 		private CachedPix cached_pix;
 		private INotification notification;
@@ -132,22 +131,21 @@ namespace Paletti {
 		private async void debounced_posterize (bool is_black_white) {
 			var result = new Thread<bool> (null, () => {
 				try {
-					mutex.lock ();
-					if (is_black_white) {
-						cached_pix = new CachedPix (new BlackWhitePix (
-							new PosterizedPix (src, (int) controller.colors_range.value)
-						));
-					} else {
-						cached_pix = new CachedPix (new PosterizedPix (
-							src, (int) controller.colors_range.value)
-						);
+					lock (cached_pix) {
+						if (is_black_white) {
+							cached_pix = new CachedPix (new BlackWhitePix (
+								new PosterizedPix (src, (int) controller.colors_range.value)
+							));
+						} else {
+							cached_pix = new CachedPix (new PosterizedPix (
+								src, (int) controller.colors_range.value)
+							);
+						}
 					}
 				} catch {
 					return false;
-				} finally {
-					mutex.unlock ();
-					Idle.add (debounced_posterize.callback);
 				}
+				Idle.add (debounced_posterize.callback);
 				return true;
 			});
 			yield;
