@@ -1,16 +1,14 @@
 project('Paletti', ['c', 'vala'],
         version: '2.0',
-        meson_version: '>= 0.50.0',
+        meson_version: '>= 0.29.0',
         default_options: ['warning_level=2'])
 
-vapi_dir = meson.current_source_dir() / 'vapi'
-
-add_project_arguments(['--vapidir', vapi_dir], language: 'vala')
+vapi_dir = meson.current_source_dir() + '/vapi'
 
 dependencies = [
-    dependency('glib-2.0', version: '>=2.38'),
+    dependency('glib-2.0', version: '>=2.48'),
     dependency('gobject-2.0'),
-    dependency('gtk+-3.0'),
+    dependency('gtk+-3.0', version: '>=3.18'),
     dependency('lept')
 ]
 
@@ -29,4 +27,6 @@ sources += import('gnome').compile_resources(
     c_name: 'paletti'
 )
 
-executable('Paletti', sources, dependencies: dependencies, install : true)
+executable('Paletti', sources, dependencies: dependencies, install : true,
+           vala_args: ['--vapidir=../vapi', '--gresources=../src/paletti.gresource.xml'])
+
