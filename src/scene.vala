@@ -18,8 +18,8 @@ namespace Paletti {
 			this.controller = controller;
 			this.navigation = navigation;
 			this.notification = notification;
-			adjust_palette_signal = controller.colors_range.value_changed.connect (() => {
-				controller.color_palette.adjust_tiles_to ((int) controller.colors_range.value);
+			adjust_palette_signal = controller.get_colors_range ().value_changed.connect (() => {
+				controller.color_palette.adjust_tiles_to ((int) controller.get_colors_range ().value);
 			});
 			if (is_first_run) {
 				this.notification.display (
@@ -35,8 +35,8 @@ namespace Paletti {
 				throw new Leptonica.Exception.UNSUPPORTED ("Could not read this image.");
 			}
 			var scene = new PosterizeScene (pix, notification, controller);
-			scene.posterize (controller.mono_switch.state);
-			controller.colors_range.disconnect (adjust_palette_signal);
+			scene.posterize (controller.get_mono_switch ().state);
+			controller.get_colors_range ().disconnect (adjust_palette_signal);
 			navigation.next (scene);
 		}
 
@@ -81,10 +81,10 @@ namespace Paletti {
 			this.controller = controller;
 			this.show_all ();
 
-			controller.colors_range.value_changed.connect (() => {
-				this.posterize (controller.mono_switch.state);
+			controller.get_colors_range ().value_changed.connect (() => {
+				this.posterize (controller.get_mono_switch ().state);
 			});
-			controller.mono_switch.state_set.connect ((is_black_white) => {
+			controller.get_mono_switch ().state_set.connect ((is_black_white) => {
 				this.posterize (is_black_white);
 				return false;
 			});
@@ -96,7 +96,7 @@ namespace Paletti {
 				throw new Leptonica.Exception.UNSUPPORTED ("Could not read this image.");
 			}
 			src = tmp.clone ();
-			posterize (controller.mono_switch.state);
+			posterize (controller.get_mono_switch ().state);
 		}
 
 		public void on_shortcut (EventKey event) {
@@ -134,11 +134,11 @@ namespace Paletti {
 					lock (cached_pix) {
 						if (is_black_white) {
 							cached_pix = new CachedPix (new BlackWhitePix (
-								new PosterizedPix (src, (int) controller.colors_range.value)
+								new PosterizedPix (src, (int) controller.get_colors_range ().value)
 							));
 						} else {
 							cached_pix = new CachedPix (new PosterizedPix (
-								src, (int) controller.colors_range.value)
+								src, (int) controller.get_colors_range ().value)
 							);
 						}
 					}
@@ -155,7 +155,8 @@ namespace Paletti {
 			} else {
 				try {
 					var tmp = yield new Pixbuf.from_stream_async (
-						File.new_for_path (cached_pix.path).read ());
+						File.new_for_path (cached_pix.path).read (), null
+					);
 					var dimensions = Allocation ();
 					image.get_allocation (out dimensions);
 					var target_width = (double) dimensions.width;

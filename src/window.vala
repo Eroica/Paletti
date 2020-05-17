@@ -27,8 +27,9 @@ namespace Paletti {
 
 	public interface IControl : Object {
 		public abstract ColorPalette color_palette { get; protected set; }
-		public abstract Adjustment colors_range { get; protected set; }
-		public abstract Switch mono_switch { get; protected set; }
+
+		public abstract Switch get_mono_switch ();
+		public abstract Adjustment get_colors_range ();
 	}
 
 	public interface IScene : Widget {
@@ -43,10 +44,10 @@ namespace Paletti {
 	[GtkTemplate (ui = "/com/moebots/Paletti/ui/window.ui")]
 	public class Window : ApplicationWindow, IControl, LinkBehavior, INavigation {
 		[GtkChild]
-		public Adjustment colors_range { get; protected set; }
+		private Adjustment colors_range;
 
 		[GtkChild]
-		public Switch mono_switch { get; protected set; }
+		private Switch mono_switch;
 
 		[GtkChild]
 		private HeaderBar header_bar;
@@ -74,6 +75,14 @@ namespace Paletti {
 			this.scene = new InitialScene (notification, this, this, is_first_run);
 			this.stack.add_named (scene, "Dropzone");
 			this.show_all();
+		}
+
+		public Adjustment get_colors_range () {
+			return colors_range;
+		}
+
+		public Switch get_mono_switch () {
+			return mono_switch;
 		}
 
 		public void next (IScene scene) {
@@ -225,7 +234,7 @@ namespace Paletti {
 				tooltip_text = _color.to_string ();
 				try {
 					var css = new CssProvider ();
-					css.load_from_data (@".$(name) { background-color: $color; }");
+					css.load_from_data (@".$(name) { background-color: $color; }", -1);
 					get_style_context ().add_class (name);
 					get_style_context ().add_provider (css, STYLE_PROVIDER_PRIORITY_USER);
 				} catch (Error e) {
