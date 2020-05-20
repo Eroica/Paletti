@@ -40,12 +40,8 @@ namespace Leptonica {
 		[CCode (cname = "pixRead")]
 		public PIX.from_filename (string filename);
 
-		// TODO
-		[CCode (cname = "pixWrite", instance_pos = 0.5)]
+		[CCode (cname = "pixWrite", instance_pos = 1.1)]
 		public void write (string filename, int format);
-
-		[CCode (cname = "pixWriteStream", instance_pos = 0.5)]
-		public int write_stream (out GLib.FileStream fp, int format);
 
 		[CCode (cname = "pixClone")]
 		public PIX clone ();
@@ -105,9 +101,6 @@ namespace Leptonica {
 	                              l_int32  sigbits = 0,
 	                              l_int32  maxsub = 0,
 	                              l_int32  checkbw = 0);
-
-	[CCode (cname = "pixWrite")]
-	int pix_write (string filename, PIX pix, int format);
 
 	[CCode (cname = "pixQuantizeIfFewColors")]
 	int pixQuantizeIfFewColors (PIX pix,
