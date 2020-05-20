@@ -124,6 +124,8 @@ namespace Paletti {
 				open_file_dialog ();
 			} else if (event.keyval == Key.x) {
 				mono_switch.activate ();
+			} else if (event.keyval == Key.F1) {
+				AboutDialog (this);
 			} else {
 				scene.on_shortcut (event);
 			}
