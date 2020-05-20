@@ -101,23 +101,23 @@ namespace Paletti {
 
 	public class PosterizedPix : IPix {
 		public PosterizedPix (Leptonica.PIX src, int colors_count) throws Leptonica.Exception {
-			pix = Leptonica.pixMedianCutQuantGeneral (src, 0, 8, colors_count);
-			if (pix == null) {
+			this.pix = Leptonica.pixMedianCutQuantGeneral (src, 0, 8, colors_count);
+			if (this.pix == null) {
 				throw new Leptonica.Exception.FAILURE ("Could not run quantization on this image.");
 			}
-			colors = new Colors (pix.colormap.colors);
+			this.colors = new Colors (pix.colormap.colors);
 		}
 	}
 
 	public class BlackWhitePix : IPix {
 		public BlackWhitePix (IPix src) throws Leptonica.Exception {
-			pix = Leptonica.pixAddMinimalGrayColormap8 (
+			this.pix = Leptonica.pixAddMinimalGrayColormap8 (
 				Leptonica.pixRemoveColormap (src.pix)
 			);
-			if (pix == null) {
+			if (this.pix == null) {
 				throw new Leptonica.Exception.FAILURE ("Could not run quantization on this image.");
 			}
-			colors = new Colors (pix.colormap.colors);
+			this.colors = new Colors (pix.colormap.colors);
 		}
 	}
 
@@ -125,16 +125,19 @@ namespace Paletti {
 		public string path { get; private set; }
 
 		public CachedPix (IPix src) {
-			pix = src.pix.clone ();
+			this.pix = src.pix.clone ();
 			var paletti_cache_dir = Path.build_filename (
 				Environment.get_user_cache_dir (),
 				"Paletti"
 			);
 			DirUtils.create_with_parents (paletti_cache_dir, 755);
 			var dest_path = Path.build_filename (paletti_cache_dir, @"cache.$(src.format)");
-			Leptonica.pix_write (dest_path, pix, pix.input_format);
-			colors = src.colors;
-			path = Path.build_filename (Environment.get_user_cache_dir (), "Paletti", @"cache.$(src.format)");
+			this.pix.write (dest_path, pix.input_format);
+			this.colors = src.colors;
+			this.path = Path.build_filename (
+				Environment.get_user_cache_dir (), "Paletti",
+				@"cache.$(src.format)"
+			);
 		}
 
 		public void copy (File destination) throws Error {
