@@ -157,20 +157,18 @@ namespace Paletti {
 					var tmp = yield new Pixbuf.from_stream_async (
 						File.new_for_path (cached_pix.path).read (), null
 					);
-					var dimensions = Allocation ();
-					image.get_allocation (out dimensions);
-					var target_width = (double) dimensions.width;
-					var target_height = (double) dimensions.height;
-					if (cached_pix.ratio >= 1) {
-						target_width = (double) dimensions.height/cached_pix.height * cached_pix.width;
+					var target_width = (double) image.get_allocated_width ();
+					var target_height = (double) image.get_allocated_height ();
+					if (target_width / target_height >= 1) {
+						target_height = target_width/cached_pix.width * cached_pix.height;
 					} else {
-						target_height = (double) dimensions.width/cached_pix.width * cached_pix.height;
+						target_width = target_height/cached_pix.height * cached_pix.width;
 					}
-					var dest = new Pixbuf (Colorspace.RGB, false, 8, dimensions.width, dimensions.height);
+					var dest = new Pixbuf (Colorspace.RGB, false, 8, image.get_allocated_width (), image.get_allocated_height ());
 					tmp.scale (
-						dest, 0, 0, dimensions.width, dimensions.height,
-						-(int) (target_width - dimensions.width) / 2,
-						-(int) (target_height - dimensions.height) / 2,
+						dest, 0, 0, image.get_allocated_width (), image.get_allocated_height (),
+						-(int) (target_width - image.get_allocated_width ()) / 2,
+						-(int) (target_height - image.get_allocated_height ()) / 2,
 						target_width/cached_pix.width, target_height/cached_pix.height,
 						InterpType.BILINEAR
 					);
