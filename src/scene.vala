@@ -5,7 +5,7 @@ namespace Paletti {
 	[GtkTemplate (ui = "/com/moebots/Paletti/ui/scene-initial.ui")]
 	public class InitialScene : EventBox, IScene, LinkBehavior {
 		[GtkChild]
-		private Label dropzone;
+		private Box dropzone;
 
 		private IControl controller;
 		private INavigation navigation;

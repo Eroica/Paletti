@@ -12,6 +12,7 @@
 		<file>ui/export_palette_dialog.ui</file>
 		<file>resources/style.css</file>
 		<file>resources/com.moebots.Paletti.png</file>
+		<file>resources/dropzone.svg</file>
 		<file>resources/LICENSE</file>
 	</gresource>
 	<gresource prefix="/com/moebots/Paletti/gtk">
