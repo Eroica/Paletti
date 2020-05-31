@@ -19,9 +19,9 @@
 	box-shadow: 0 1px 0 1px rgba(0, 0, 0, 0.06);
 }
 .notification.info {
-  color: #465a6b;
-  border-color: #a0c9f5 #95bfe5 #91b6dd;
-  background: #d1ecfe;
+	color: #465a6b;
+	border-color: #a0c9f5 #95bfe5 #91b6dd;
+	background: #d1ecfe;
 }
 
 .preview-image {
