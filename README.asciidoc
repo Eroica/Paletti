@@ -83,8 +83,4 @@ Leptonica License:
 
 '''
 
-There is an old version of Paletti (1.1) that I built with Kotlin and JavaFX when I was using Windows.
-The old version simply used https://lokeshdhakar.com/projects/color-thief/[color-thief] inside a WebView.
-
-This newer version (2.0+) is written in Vala and GTK since I wanted to use Paletti natively on my new machine.
-I archived the old JavaFX version into a https://github.com/Eroica/Paletti/tree/JavaFX-WebView-1.1[separate branch `JavaFX-WebView-1.1`], and a precompiled Windows binary is available from the Releases (v1.1).
+A Windows version (written in Kotlin and JavaFX) is available at https://github.com/Eroica/Paletti-Windows.
