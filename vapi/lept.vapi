@@ -95,12 +95,12 @@ namespace Leptonica {
 
 	[CCode (cname = "pixMedianCutQuantGeneral")]
 	PIX pixMedianCutQuantGeneral (PIX pix,
-	                              l_int32  ditherflag,
-	                              l_int32  outdepth,
-	                              l_int32  maxcolors,
-	                              l_int32  sigbits = 0,
-	                              l_int32  maxsub = 0,
-	                              l_int32  checkbw = 0);
+	                              l_int32 ditherflag,
+	                              l_int32 outdepth,
+	                              l_int32 maxcolors,
+	                              l_int32 sigbits = 0,
+	                              l_int32 maxsub = 0,
+	                              l_int32 checkbw = 0);
 
 	[CCode (cname = "pixQuantizeIfFewColors")]
 	int pixQuantizeIfFewColors (PIX pix,
