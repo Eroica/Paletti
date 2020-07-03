@@ -45,6 +45,17 @@ namespace Paletti {
 				|| (event.keyval == Key.c && event.state == ModifierType.CONTROL_MASK)
 				|| (event.keyval == Key.e && event.state == ModifierType.CONTROL_MASK)) {
 			notification.display ("First load an image into Paletti.");
+			} else if (event.keyval == Key.v && event.state == ModifierType.CONTROL_MASK) {
+				Clipboard.get_default (Display.get_default ()).request_image ((clipboard, pixbuf) => {
+					var paletti_cache_dir = Path.build_filename (
+						Environment.get_user_cache_dir (),
+						"Paletti"
+					);
+					DirUtils.create_with_parents (paletti_cache_dir, 755);
+					var dest_path = Path.build_filename (paletti_cache_dir, @"cache.png");
+					pixbuf.save (dest_path, "png");
+					on_load (dest_path);
+				});
 			}
 		}
 
@@ -90,7 +101,7 @@ namespace Paletti {
 			});
 		}
 
-		public void on_load (string filename) throws Leptonica.Exception{
+		public void on_load (string filename) throws Leptonica.Exception {
 			var tmp = new Leptonica.PIX.from_filename (filename);
 			if (tmp == null) {
 				throw new Leptonica.Exception.UNSUPPORTED ("Could not read this image.");
@@ -109,6 +120,17 @@ namespace Paletti {
 				).set_image (image.pixbuf);
 			} else if (event.keyval == Key.e && event.state == ModifierType.CONTROL_MASK) {
 				controller.color_palette.export ();
+			} else if (event.keyval == Key.v && event.state == ModifierType.CONTROL_MASK) {
+				Clipboard.get_default (Display.get_default ()).request_image ((clipboard, pixbuf) => {
+					var paletti_cache_dir = Path.build_filename (
+						Environment.get_user_cache_dir (),
+						"Paletti"
+					);
+					DirUtils.create_with_parents (paletti_cache_dir, 755);
+					var dest_path = Path.build_filename (paletti_cache_dir, @"cache.png");
+					pixbuf.save (dest_path, "png");
+					on_load (dest_path);
+				});
 			}
 		}
 
