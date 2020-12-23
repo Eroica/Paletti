@@ -6,7 +6,7 @@ before_install:
 - sudo apt-get -y install valac meson pkg-config libgtk-3-dev libleptonica-dev libxml2-utils
 install:
 - git clone https://github.com/Eroica/Paletti.git
-- pushd Paletti && mkdir build
+- pushd Paletti/gtk && mkdir build
 - meson build && cd build
 - ninja && cd ../dist
 - make
