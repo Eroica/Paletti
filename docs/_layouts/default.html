@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% include head.html %}
+
+<body class="is-loading no-js">
+	{% include header.html %}
+
+	<main class="container" data-vbox="-medium">
+		<div data-vbox="Page">
+			{{ content }}
+
+			{% include footer.html %}
+		</div>
+	</main>
+
+	<script>
+		"use strict";
+	</script>
+</body>
+</html>
