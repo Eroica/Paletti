@@ -1,0 +1,142 @@
+.stage-shadow {
+	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 24, 0, 0, 0);
+	-fx-background-insets: 24;
+	-fx-padding: 24;
+	-fx-background-radius: 2px;
+}
+
+.tooltip {
+	-fx-background-color: #F2F2F2;
+	-fx-background-radius: 4px;
+	-fx-border-color: #D1D1D1;
+	-fx-border-radius: 4px;
+	-fx-text-fill: #000000;
+	-fx-padding: 4px 8px;
+	-fx-font-size: 12px;
+	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0, 0, 2);
+}
+
+.slider .track {
+	-fx-background-color: #999999;
+	-fx-max-height: 2px;
+	-fx-pref-height: 2px;
+}
+.slider:hover .track {
+	-fx-background-color: #666666;
+}
+.slider:pressed .track {
+	-fx-background-color: #999999;
+}
+.slider .thumb {
+	-fx-background-color: #0078D7;
+}
+.slider:hover .thumb {
+	-fx-background-color: #429CE3;
+}
+.slider:pressed .thumb {
+	-fx-background-color: #005A9D;
+}
+
+.check-box .box {
+	-fx-background-color: transparent;
+	-fx-border-color: #818181;
+	-fx-border-radius: 2px;
+	-fx-max-height: 20px;
+	-fx-pref-height: 20px;
+	-fx-max-width: 20px;
+	-fx-pref-width: 20px;
+}
+.check-box .box .mark {
+	-fx-background-color: null;
+	-fx-shape: "M1,3.5L0.5,4L4.5,6L11,2L10.5,1.5L4.5,5L1,3.5Z"
+}
+.check-box:hover .box {
+	-fx-border-color: #333333;
+}
+.check-box:pressed .box {
+	-fx-background-color: #999999;
+	-fx-border-color: #000000;
+}
+.check-box:selected .box .mark {
+	-fx-background-color: #ffffff;
+}
+.check-box:selected .box {
+	-fx-background-color: #0078D7;
+	-fx-border-color: #0078D7;
+}
+.check-box:selected:hover .box {
+	-fx-background-color: #429CE3;
+	-fx-border-color: #429CE3;
+}
+.check-box:selected:pressed .box {
+	-fx-background-color: #005A9E;
+	-fx-border-color: #005A9E;
+}
+
+.window-controls .button {
+	-fx-border-radius: 0 0 0 0;
+	-fx-background-color: transparent;
+	-fx-background-radius: 0;
+}
+.window-controls .button:hover > .text {
+	-fx-fill: #000000;
+}
+.window-controls .button:hover {
+	-fx-background-color: #dfdfdf;
+}
+.window-controls .close-button {
+	-fx-background-radius: 0 2px 0 0;
+}
+.window-controls .close-button .text {
+	-fx-fill: #000000;
+}
+.window-controls .close-button:hover {
+	-fx-background-color: #e81123;
+}
+.window-controls .close-button:hover > .text {
+	-fx-fill: #ffffff;
+}
+.window-controls .button:pressed {
+	-fx-background-color: #7a7a7a;
+}
+.window-controls .close-button:pressed {
+	-fx-background-color: #f1707a;
+	-fx-fill: #000000;
+}
+.window-controls .close-button:pressed .text {
+	-fx-fill: #000000;
+}
+
+.paletti-no-focus .window-controls .button > .text {
+	-fx-fill: #999999;
+}
+.paletti-no-focus .window-controls .button:hover > .text {
+	-fx-fill: #000000;
+}
+.paletti-no-focus .window-controls .close-button:hover > .text {
+	-fx-fill: #ffffff;
+}
+
+.droparea {
+	-fx-background-color: #ffffff;
+	-fx-border-radius: 5px;
+	-fx-border-color: rgba(0, 0, 0, 0.1);
+	-fx-background-radius: 5px;
+	-fx-border-width: 1px;
+}
+.droparea .droparea-icon .text {
+	-fx-fill: rgba(0, 0, 0, .2);
+}
+.droparea:hover {
+	-fx-border-color: #1D9EF3;
+}
+.droparea:hover .droparea-icon .text {
+	-fx-fill: #1D9EF3;
+}
+
+.color-tile .label .text {
+	-fx-fill: transparent;
+}
+.color-tile.has-color:hover .label .text {
+	-fx-fill: rgba(0, 0, 0, .5);
+}

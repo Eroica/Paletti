@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<fx:root StackPane.Alignment="CENTER" alignment="CENTER" styleClass="droparea" type="VBox"
+			xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+	<StackPane.margin>
+		<Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+	</StackPane.margin>
+	<Label text="" textFill="#00000033" styleClass="droparea-icon">
+		<font>
+			<Font name="Segoe MDL2 Assets" size="96.0"/>
+		</font>
+	</Label>
+	<Label text="Click here or drag an image into this area."/>
+</fx:root>

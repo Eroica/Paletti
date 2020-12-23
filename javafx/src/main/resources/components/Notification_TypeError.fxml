@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<Label alignment="CENTER"
+		 style="-fx-background-color: #151c24; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 4, 0, 0, 2); -fx-background-insets: 2px; -fx-background-radius: 2px;"
+		 textAlignment="CENTER" textFill="#999999" xmlns="http://javafx.com/javafx/10.0.2-internal">
+	<padding>
+		<Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+	</padding>
+</Label>
