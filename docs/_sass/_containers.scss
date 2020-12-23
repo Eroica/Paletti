@@ -37,6 +37,7 @@ aside {
 
 table.shortcuts {
 	text-align: center;
+	white-space: nowrap;
 
 	th {
 		text-align: center;
@@ -66,10 +67,6 @@ table.shortcuts {
 	svg {
 		width: 16px;
 		vertical-align: middle;
-	}
-
-	kbd {
-		white-space: nowrap;
 	}
 
 	kbd + kbd {
