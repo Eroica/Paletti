@@ -1,0 +1,64 @@
+body, input, select, textarea {
+	font-family: "Clear Sans", sans-serif;
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 1.8;
+	color: #526173;
+	letter-spacing: .015em;
+}
+
+h1, h2, h3, h4, h5, h6,
+strong, b, .text--strong {
+	color: #000;
+	font-weight: 600;
+}
+
+kbd {
+	padding: 4px 8px;
+	background-color: #fff;
+	border-radius: 5px;
+	border: 2px solid #DEE1E4;
+	font-size: 13px;
+}
+
+del, .text--pale {color: $font-color-pale; }
+.text--xlarge {font-size: 2.0rem; }
+.text--large {font-size: 1.2rem; }
+.text--small {font-size: .95rem; }
+.text--xsmall {font-size: 14px; }
+
+.monospace, kbd, code, .code {
+	font-family: "Cascadia Mono", "Consolas", "Inconsolata", monospace;
+	letter-spacing: 0;
+}
+
+a {
+	transition: color .2s $easing;
+	color: inherit;
+}
+.colored-links a {
+	color: $blue-hue-1;
+	&:hover {color: lighten($blue-hue-1, 10); }
+}
+
+img, video {max-width: 100%; }
+video {display: block; }
+
+ul.actions {
+	li ~ li {
+		margin-top: .5em;
+	}
+
+	.button, button {
+		width: 100%;
+	display: block;
+	}
+
+	@include breakpoint($sm) {
+		text-align: center;
+
+		li {
+			display: inline-block;
+		}
+	}
+}

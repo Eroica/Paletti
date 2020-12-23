@@ -1,0 +1,6 @@
+_site/
+bower_components/
+.sass-cache/
+.jekyll-cache/
+
+**/.DS_Store

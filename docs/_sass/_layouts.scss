@@ -1,0 +1,19 @@
+$PREFIX: "data-";
+
+[#{$PREFIX}VBox] {
+	> * + * {margin-top: 1em; }
+	&[#{$PREFIX}VBox~="-small"] > * + * {margin-top: .5em; }
+	&[#{$PREFIX}VBox~="-medium"] > * + * {margin-top: 2em; }
+	&[#{$PREFIX}VBox~="Page"] > * + * {margin-top: calc(2em + 2%); }
+}
+
+[#{$PREFIX}HBox] {
+	> *:not(:last-child) { margin-right: 1em; }
+	&[#{$PREFIX}HBox~="-small"] > *:not(:last-child) { margin-right: .5em; }
+	&[#{$PREFIX}HBox~="-medium"] > *:not(:last-child) { margin-right: 2em; }
+}
+
+[#{$PREFIX}Flow] {
+	display: flex;
+	&[#{$PREFIX}Flow~="baseline"] {align-items: baseline}
+}
