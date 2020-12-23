@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<fx:root alignment="CENTER" onMousePressed="#onPress" onMouseReleased="#onRelease" onMouseClicked="#onClick"
+			prefHeight="48.0" prefWidth="48.0"
+			style="-fx-background-color: transparent; -fx-border-color: rgba(0, 0, 0, .2); -fx-border-width: 1; -fx-border-radius: 4px; -fx-background-radius: 4px;"
+			styleClass="color-tile" type="VBox" HBox.hgrow="ALWAYS" xmlns="http://javafx.com/javafx/10.0.2-internal"
+			xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+		<Label ellipsisString="" text="">
+			<font>
+				<Font name="Segoe MDL2 Assets" size="24.0"/>
+			</font>
+		</Label>
+	</children>
+</fx:root>

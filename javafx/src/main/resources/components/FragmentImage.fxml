@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
+<fx:root style="-fx-background-color: #ffffff" type="StackPane" StackPane.Alignment="CENTER"
+			xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+		<ImageView fx:id="imageView" preserveRatio="true" StackPane.alignment="CENTER"/>
+	</children>
+</fx:root>
