@@ -1,0 +1,52 @@
+.droparea {
+	border-radius: 5px;
+	border: 2px dashed #D6D8DB;
+	background-color: #ffffff;
+	color: rgba(146, 149, 149, .75);
+	transition: border 200ms, color 200ms;
+}
+.droparea:hover {
+	border-color: #1D9EF3;
+	color: #1D9EF3;
+}
+
+.notification {
+	border-radius: 5px;
+	border: 1px solid #ffcccc;
+	background-color: #ffe5e5;
+	color: #d14545;
+	padding: 4px 8px;
+	box-shadow: 0 1px 0 1px rgba(0, 0, 0, 0.06);
+}
+.notification.info {
+	color: #465a6b;
+	border-color: #a0c9f5 #95bfe5 #91b6dd;
+	background: #d1ecfe;
+}
+
+.preview-image {
+	border-radius: 5px;
+	box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.palette {
+	background-color: #fafafa;
+	box-shadow: inset 0 1px 1px #e9e7e6;
+	padding: 8px;
+}
+
+.palette-tile {
+	background: transparent;
+	border-radius: 5px;
+	box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+	border: 0 solid transparent;
+}
+
+.palette-tile image {
+	opacity: 0;
+	transition: opacity 200ms;
+}
+
+.palette-tile:hover image {
+	opacity: 1.0;
+}
