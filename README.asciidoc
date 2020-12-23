@@ -14,18 +14,17 @@ Click on a color in the palette to copy its Hex code into the clipboard.
 You can also export the simplified version or a screenshot of the color palette to use elsewhere.
 <<Shortcuts,Look at the list of shortcuts below.>>
 
-Paletti's website is https://paletti.app.
-While I probably mostly use Paletti for myself, I develop it publicly in the hope that it is helpful for other people as well.
-You are welcome to raise bugs and feature requests here.
-
-Nowadays, I mostly work as a 2D/3D artist on Windows, but I have been working with GNU/Linux in the past, so this is why I like to see Paletti on these two systems.
-
-Recently, I started developing an Android version of Paletti as well.
-
 You can download a version for Windows, an ELF binary (AppImage), and a pre-release for Android from the https://github.com/Eroica/Paletti/releases[Releases].
 See also: https://docs.appimage.org/user-guide/faq.html[What is an AppImage?]
 
 <<Development,Read more about each version below.>>
+
+Paletti's website is https://paletti.app.
+While I probably mostly use Paletti for myself, I develop it publicly in the hope that it is helpful for other people as well.
+
+Nowadays, I mostly work as a 2D/3D artist on Windows, but I have been working with GNU/Linux in the past, so this is why I like to see Paletti on these two systems. Recently, I started developing an Android version as well.
+
+You are welcome to raise bugs and feature requests here.
 
 == Shortcuts
 
