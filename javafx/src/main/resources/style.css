@@ -78,16 +78,16 @@
 	-fx-background-color: transparent;
 	-fx-background-radius: 0;
 }
-.window-controls .button:hover > .text {
-	-fx-fill: #000000;
-}
-.window-controls .button:hover {
-	-fx-background-color: #dfdfdf;
-}
 .window-controls .close-button {
 	-fx-background-radius: 0 2px 0 0;
 }
 .window-controls .close-button .text {
+	-fx-fill: #000000;
+}
+.window-controls .button:hover {
+	-fx-background-color: #eaeaea;
+}
+.window-controls .button:hover > .text {
 	-fx-fill: #000000;
 }
 .window-controls .close-button:hover {
@@ -97,7 +97,7 @@
 	-fx-fill: #ffffff;
 }
 .window-controls .button:pressed {
-	-fx-background-color: #7a7a7a;
+	-fx-background-color: #cacacb;
 }
 .window-controls .close-button:pressed {
 	-fx-background-color: #f1707a;
