@@ -1,6 +1,7 @@
 .gradle
 .idea
 build
+libs
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Kotlin template

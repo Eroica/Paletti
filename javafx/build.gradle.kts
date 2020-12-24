@@ -22,7 +22,8 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.4.2")
-    implementation("net.sourceforge.lept4j:lept4j:1.13.0")
+    implementation("net.harawata:appdirs:1.2.0")
+    implementation("org.slf4j:slf4j-simple:1.7.30")
 }
 
 tasks {
@@ -32,6 +33,15 @@ tasks {
     compileTestKotlin {
         kotlinOptions.jvmTarget = "1.8"
     }
+    jpackage {
+        dependsOn(":copyDlls")
+    }
+}
+
+tasks.register<Copy>("copyDlls") {
+        from(file("$projectDir/libs"))
+        include("*.dll")
+        into(file("$buildDir/jpackage/Paletti"))
 }
 
 application {

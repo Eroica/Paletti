@@ -1,74 +1,67 @@
+import app.paletti.lib.FilePaths
 import javafx.beans.property.*
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.image.Image
-import javafx.scene.paint.Color
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import net.sourceforge.lept4j.Leptonica1
-import net.sourceforge.lept4j.Pix
-import net.sourceforge.lept4j.util.LeptUtils
+import kotlinx.coroutines.*
+import kotlinx.coroutines.javafx.JavaFx
+import javax.imageio.ImageIO
 import kotlin.coroutines.CoroutineContext
 
 interface IViewModel {
-    val colorsCount: IntegerProperty
+    val count: IntegerProperty
     val isBlackWhite: BooleanProperty
-    val colors: SimpleObjectProperty<Array<Color>>
-    var pix: SimpleObjectProperty<IPix?>
+    val image: SimpleObjectProperty<IPosterizedImage>
 
     suspend fun load(path: String)
     suspend fun load(image: Image)
 }
 
-class ImageViewModel : IViewModel, CoroutineScope {
+class ImageViewModel(private val filePaths: FilePaths) : IViewModel, CoroutineScope {
     override val coroutineContext: CoroutineContext = Dispatchers.IO
 
-    override val colorsCount: IntegerProperty = SimpleIntegerProperty(6)
+    override val count: IntegerProperty = SimpleIntegerProperty(6)
     override val isBlackWhite: BooleanProperty = SimpleBooleanProperty(false)
-    override val colors: SimpleObjectProperty<Array<Color>> = SimpleObjectProperty()
-    override var pix: SimpleObjectProperty<IPix?> = SimpleObjectProperty(null)
-    private var pixSource: Pix? = null
+    override val image = SimpleObjectProperty<IPosterizedImage>()
 
     private var time: Long = 0
 
     init {
-        this.colorsCount.addListener { _, _, count ->
-            if (pixSource != null) {
+        this.count.addListener { _, _, count ->
+            image.value?.let {
                 time = System.nanoTime()
                 launch {
                     delay(100)
                     val delta = System.nanoTime()
                     // Difference in NANOseconds
                     if (delta - time >= 100000000) {
-                        posterize(count.toInt(), isBlackWhite.value)
+                        posterize(it.path, count.toInt(), isBlackWhite.value)
                     }
                 }
             }
+
         }
         this.isBlackWhite.addListener { _, _, isBlackWhite ->
-            if (pixSource != null) {
-                launch { posterize(colorsCount.value, isBlackWhite) }
+            image.value?.let {
+                launch {
+                    posterize(it.path, count.value, isBlackWhite)
+                }
             }
         }
     }
 
     override suspend fun load(path: String) {
-        pixSource = Leptonica1.pixRead(path) ?: throw LeptonicaReadError
-        posterize(colorsCount.value, isBlackWhite.value)
+        posterize(path, count.value, isBlackWhite.value)
     }
 
     override suspend fun load(image: Image) {
-        pixSource = LeptUtils.convertImageToPix(SwingFXUtils.fromFXImage(image, null))
-        posterize(colorsCount.value, isBlackWhite.value)
+        ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", filePaths.tmpImage)
+        posterize(filePaths.tmpImage.toString(), count.value, isBlackWhite.value)
     }
 
-    private fun posterize(count: Int, isBlackWhite: Boolean) {
-        pix.value = if (isBlackWhite) {
-            BlackWhitePix(PosterizedPix(pixSource ?: return, count).src)
-        } else {
-            PosterizedPix(pixSource ?: return, count)
+    private suspend fun posterize(path: String, count: Int, isBlackWhite: Boolean) {
+        val posterizedImage = coroutineScope { async { PosterizedImage(path, count, isBlackWhite, filePaths) } }
+        withContext(Dispatchers.JavaFx) {
+            image.value = posterizedImage.await()
         }
-        colors.value = pix.value?.colors
     }
 }

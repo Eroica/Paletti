@@ -1,7 +1,6 @@
 package components
 
 import javafx.beans.DefaultProperty
-import javafx.beans.NamedArg
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList

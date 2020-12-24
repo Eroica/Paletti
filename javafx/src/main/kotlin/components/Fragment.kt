@@ -2,8 +2,8 @@ package components
 
 import IViewModel
 import Uninitialized
+import javafx.beans.InvalidationListener
 import javafx.beans.NamedArg
-import javafx.embed.swing.SwingFXUtils
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.scene.image.Image
@@ -13,6 +13,7 @@ import javafx.scene.input.ClipboardContent
 import javafx.scene.input.KeyEvent
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
+import java.io.File
 
 interface IFragment {
     suspend fun onLoad(path: String)
@@ -59,9 +60,9 @@ class ImageFragment(private val saveDialog: ISaveDialog, private val viewModel: 
             setController(this@ImageFragment)
             load()
         }
-        viewModel.pix.addListener { _, _, pix ->
-            imageView.image = SwingFXUtils.toFXImage(pix?.image, null)
-        }
+        viewModel.image.addListener(InvalidationListener {
+            imageView.image = viewModel.image.value.image
+        })
     }
 
     override suspend fun onLoad(path: String) {
@@ -75,10 +76,10 @@ class ImageFragment(private val saveDialog: ISaveDialog, private val viewModel: 
     override fun onShortcut(event: KeyEvent) {
         when {
             COMBINATION_SAVE.match(event) -> {
-                viewModel.pix.value?.let { saveDialog.saveImage(it.src) }
+                viewModel.image.value?.let { saveDialog.saveImage(File(it.path)) }
             }
             COMBINATION_EXPORT_PALETTE.match(event) -> {
-                viewModel.pix.value?.let { saveDialog.savePalette() }
+                viewModel.image.value?.let { saveDialog.savePalette() }
             }
             COMBINATION_COPY_TO_CLIPBOARD.match(event) -> {
                 Clipboard.getSystemClipboard().setContent(ClipboardContent().apply {
