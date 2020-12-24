@@ -22,8 +22,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.javafx.JavaFx
 import kotlinx.coroutines.launch
-import net.sourceforge.lept4j.Pix
-import net.sourceforge.lept4j.util.LeptUtils
+import java.io.File
 import java.io.IOException
 import java.nio.file.Paths
 import javax.imageio.ImageIO
@@ -34,7 +33,7 @@ interface INavigation {
 }
 
 interface ISaveDialog {
-    fun saveImage(pix: Pix)
+    fun saveImage(image: File)
     fun savePalette()
 }
 
@@ -45,7 +44,7 @@ val COMBINATION_EXPORT_PALETTE = KeyCodeCombination(KeyCode.E, KeyCodeCombinatio
 val COMBINATION_COPY_TO_CLIPBOARD = KeyCodeCombination(KeyCode.C, KeyCodeCombination.SHORTCUT_DOWN)
 val COMBINATION_PASTE_FROM_CLIPBOARD = KeyCodeCombination(KeyCode.V, KeyCodeCombination.SHORTCUT_DOWN)
 
-class PalettiWindow(private val viewModel: IViewModel) : Stage(), INavigation, ISaveDialog, CoroutineScope {
+class PalettiWindow(val viewModel: IViewModel) : Stage(), INavigation, ISaveDialog, CoroutineScope {
     @FXML
     private lateinit var headerBar: HeaderBar
 
@@ -79,16 +78,17 @@ class PalettiWindow(private val viewModel: IViewModel) : Stage(), INavigation, I
         }
         initStyle(StageStyle.TRANSPARENT)
         headerBar.stage = this
-        slider.valueProperty().bindBidirectional(viewModel.colorsCount)
+        slider.valueProperty().bindBidirectional(viewModel.count)
         monoSwitch.selectedProperty().bindBidirectional(viewModel.isBlackWhite)
-        viewModel.colorsCount.addListener { _, _, count -> setColorPalette(count.toInt()) }
-        viewModel.colors.addListener(InvalidationListener {
-            setColorPalette(viewModel.colors.value.size)
-            viewModel.colors.value.forEachIndexed { index, color ->
+        viewModel.image.addListener(InvalidationListener {
+            val colors = viewModel.image.value.colors
+            setColorPalette(colors.size)
+            colors.forEachIndexed { index, color ->
                 (colorPalette.children[index] as ColorTile).setColor(color)
             }
         })
-        while (colorPalette.children.size < viewModel.colorsCount.value) {
+        viewModel.count.addListener { _, _, count -> setColorPalette(count.toInt()) }
+        while (colorPalette.children.size < viewModel.count.value) {
             colorPalette.children.add(ColorTile())
         }
     }
@@ -196,12 +196,12 @@ class PalettiWindow(private val viewModel: IViewModel) : Stage(), INavigation, I
         }
     }
 
-    override fun saveImage(pix: Pix) {
+    override fun saveImage(image: File) {
         val fileChooser = FileChooser()
         fileChooser.extensionFilters.add(FileChooser.ExtensionFilter("PNG Image", "*.png"))
         fileChooser.showSaveDialog(this)?.let {
             try {
-                ImageIO.write(LeptUtils.convertPixToImage(pix), "png", it)
+                image.copyTo(it, true)
                 notification.show("Saved image to ${Paths.get(it.toURI())}")
             } catch (e: IOException) {
                 e.message?.let { error -> notification.show(error) } ?: e.printStackTrace()
