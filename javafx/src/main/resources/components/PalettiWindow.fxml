@@ -10,6 +10,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.Scene?>
 <?import javafx.stage.Stage?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.Label?>
 <fx:root type="Stage" minHeight="450.0" minWidth="500.0" title="Paletti" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
 	<scene>
 		<Scene fx:id="scene" fill="#00000000" onDragDropped="#onDragDropped" onDragOver="#onDragOver"
@@ -47,6 +49,11 @@
 							<Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
 						</padding>
 					</HBox>
+					<Label text="" style="-fx-opacity: .2" StackPane.alignment="BOTTOM_RIGHT" translateY="1.0">
+						<font>
+							<Font name="Segoe MDL2 Assets" size="16.0"/>
+						</font>
+					</Label>
 					<Pane maxWidth="16.0" maxHeight="16.0" translateX="8.0" translateY="8.0"
 							StackPane.alignment="BOTTOM_RIGHT"
 							style="-fx-background-color: transparent; -fx-cursor: se_resize;" onMousePressed="#onResizeBegin"
