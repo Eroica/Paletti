@@ -38,15 +38,15 @@ class Notification : StackPane(), INotification {
             isRunning = true
             val label = FXMLLoader.load<Label>(javaClass.getResource("Notification_TypeError.fxml"))
             label.text = message
-            label.translateY = height / 10
+            label.translateY = height / 12
             children.add(label)
 
-            val slideDown = TranslateTransition(ANIM_DURATION, label)
-            slideDown.byY = height / 5
-            slideDown.interpolator = EASING
             val slideUp = TranslateTransition(ANIM_DURATION, label)
-            slideUp.byY = -height / 10
+            slideUp.byY = -height / 12
             slideUp.interpolator = EASING
+            val slideDown = TranslateTransition(ANIM_DURATION, label)
+            slideDown.byY = height / 6
+            slideDown.interpolator = EASING
 
             SequentialTransition(slideUp, PauseTransition(Duration.seconds(2.0)), slideDown).apply {
                 setOnFinished {
