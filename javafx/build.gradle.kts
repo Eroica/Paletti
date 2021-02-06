@@ -36,14 +36,14 @@ tasks {
         kotlinOptions.jvmTarget = "1.8"
     }
     jpackage {
-        dependsOn(":copyDlls")
+        finalizedBy("copyDlls")
     }
 }
 
 tasks.register<Copy>("copyDlls") {
-        from(file("$projectDir/libs"))
-        include("*.dll")
-        into(file("$buildDir/jpackage/Paletti"))
+    from("/libs")
+    include("*.dll")
+    into(file(layout.buildDirectory.dir("jpackage/Paletti")))
 }
 
 application {
@@ -56,7 +56,7 @@ runtime {
         skipInstaller = true
         imageOptions = listOf(
             "--icon", "src/main/resources/Paletti.ico",
-            "--copyright", "2020",
+            "--copyright", "2021",
 			"--vendor", "Paletti"
         )
     }
