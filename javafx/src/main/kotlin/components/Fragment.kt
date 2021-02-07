@@ -3,8 +3,11 @@ package components
 import IViewModel
 import Uninitialized
 import io.reactivex.disposables.CompositeDisposable
+import javafx.beans.InvalidationListener
+import javafx.beans.value.ObservableValue
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
+import javafx.geometry.Rectangle2D
 import javafx.scene.image.ImageView
 import javafx.scene.input.Clipboard
 import javafx.scene.input.ClipboardContent
@@ -40,8 +43,11 @@ class InitialFragment : VBox(), IFragment {
     override fun onDestroy() {}
 }
 
-class ImageFragment(viewModel: IViewModel,
-                    private val saveDialog: ISaveDialog) : StackPane(), IFragment {
+class ImageFragment(
+    viewModel: IViewModel,
+    private val saveDialog: ISaveDialog,
+    viewportRectangle: ObservableValue<Rectangle2D>
+) : StackPane(), IFragment {
     @FXML
     lateinit var imageView: ImageView
 
@@ -53,7 +59,22 @@ class ImageFragment(viewModel: IViewModel,
             setController(this@ImageFragment)
             load()
         }
-        disposables.add(viewModel.image.subscribe { imageView.image = it.image })
+        viewportRectangle.addListener(InvalidationListener {
+            val r = viewportRectangle.value
+            val image = imageView.image
+            val minX = (image.width - r.width) / 2
+            val minY = (image.height - r.height) / 2
+            imageView.viewport = Rectangle2D(minX, minY, r.width, r.height)
+        })
+        imageView.viewport = viewportRectangle.value
+        disposables.add(viewModel.image.subscribe {
+            val image = it.image
+            val r = viewportRectangle.value
+            val minX = (image.width - r.width) / 2
+            val minY = (image.height - r.height) / 2
+            imageView.image = image
+            imageView.viewport = Rectangle2D(minX, minY, r.width, r.height)
+        })
     }
 
     override fun onShortcut(event: KeyEvent) {
