@@ -140,18 +140,8 @@ class PalettiWindow(private val viewModel: IViewModel) : Stage(), ISaveDialog {
 
     fun onResize(event: MouseEvent) {
         if (!headerBar.isMaximized.value) {
-            if (width + event.screenX - left >= minWidth) {
-                width = width + event.screenX - left
-            } else {
-                event.consume()
-                return
-            }
-            if (height + event.screenY - top >= minHeight) {
-                height = height + event.screenY - top
-            } else {
-                event.consume()
-                return
-            }
+            width = (left - x).coerceAtLeast(minWidth)
+            height = (top - y).coerceAtLeast(minHeight)
             left = event.screenX
             top = event.screenY
         }
