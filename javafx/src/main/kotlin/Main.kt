@@ -5,17 +5,20 @@ import javafx.stage.Stage
 import net.harawata.appdirs.AppDirsFactory
 import java.io.File
 
+const val APP_NAME = "Paletti"
+const val DB_NAME = "Paletti.db"
+
 fun main(args: Array<String>) {
     Application.launch(Paletti::class.java, *args)
 }
 
 class Paletti : Application() {
     override fun start(primaryStage: Stage) {
-        val cacheDir = File(AppDirsFactory.getInstance().getUserCacheDir("Paletti", null, null))
+        val cacheDir = File(AppDirsFactory.getInstance().getUserCacheDir(APP_NAME, null, null))
         cacheDir.mkdirs()
-        val database = Database(cacheDir.resolve("Paletti.db"), cacheDir)
+        val database = Database(cacheDir.resolve(DB_NAME), cacheDir)
         val images = SqlImages(database)
-        val viewModel = ViewModel(images, cacheDir.resolve("Paletti.db").toString(), cacheDir)
+        val viewModel = ViewModel(images, cacheDir.resolve(DB_NAME).toString(), cacheDir)
         val stage = PalettiWindow(viewModel)
         stage.icons += Image(javaClass.getResourceAsStream("icons/256.png"))
         stage.focusedProperty().addListener { _, _, hasFocus ->
