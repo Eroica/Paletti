@@ -57,10 +57,9 @@ data class SqlImage(
     private val setParameters: PreparedStatement
 ) : IPosterizedImage {
     override val path: String
-        get() = getPath.apply { setInt(1, id) }
-            .executeQuery().use {
-                it.getString(1)
-            }
+        get() = getPath.apply { setInt(1, id) }.executeQuery().use {
+            it.getString(1)
+        }
     override val image: Image
         get() = Image(File(path).toURI().toString())
     override val colors: List<Color>
@@ -84,29 +83,27 @@ data class SqlImage(
     }
 }
 
-class SqlImages(private val database: Database) {
+class SqlImages(database: Database) {
+    private val GET_PATH = database.statement("""UPDATE image SET count=?, is_black_white=? WHERE id=?""")
+    private val GET_COLORS = database.statement("""SELECT rgb FROM color WHERE image_id=?""")
+    private val GET_SOURCE = database.statement("""SELECT source FROM image WHERE id=?""")
+    private val ADD_IMAGE = database.statement("""INSERT INTO image (count, is_black_white, source) VALUES (?, ?, ?)""")
+    private val DELETE_IMAGES = database.statement("""DELETE FROM image""")
+
     operator fun get(imageId: Int): SqlImage {
-        return SqlImage(
-            imageId,
-            database.statement("""SELECT source FROM image WHERE id=?"""),
-            database.statement("""SELECT rgb FROM color WHERE image_id=?"""),
-            database.statement("""UPDATE image SET count=?, is_black_white=? WHERE id=?""")
-        )
+        return SqlImage(imageId, GET_SOURCE, GET_COLORS, GET_PATH)
     }
 
     fun add(count: Int, isBlackWhite: Boolean, source: String): Int {
-        return database.statement("""INSERT INTO image (count, is_black_white, source) VALUES (?, ?, ?)""".trimIndent())
-            .apply {
-                setInt(1, count)
-                setInt(2, if (isBlackWhite) 1 else 0)
-                setString(3, source)
-                execute()
-            }.use {
-                it.generatedKeys.getInt(1)
-            }
+        ADD_IMAGE.apply {
+            setInt(1, count)
+            setInt(2, if (isBlackWhite) 1 else 0)
+            setString(3, source)
+        }.execute()
+        return ADD_IMAGE.generatedKeys.getInt(1)
     }
 
     fun delete(imageId: Int) {
-        database.statement("""DELETE FROM image""").execute()
+        DELETE_IMAGES.execute()
     }
 }
