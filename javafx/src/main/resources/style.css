@@ -78,7 +78,7 @@
 	-fx-background-color: transparent;
 	-fx-background-radius: 0;
 }
-.window-controls .close-button {
+.stage-shadow .window-controls .close-button {
 	-fx-background-radius: 0 2px 0 0;
 }
 .window-controls .close-button .text {
