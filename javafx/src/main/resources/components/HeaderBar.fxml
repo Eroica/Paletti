@@ -34,5 +34,14 @@
 			<Tooltip text="Minimize"/>
 		</tooltip>
 	</Button>
+	<Button maxHeight="36.0" maxWidth="46.0" minHeight="36.0" minWidth="46.0" mnemonicParsing="false"
+			  onAction="#onAlwaysOnTop" prefHeight="36.0" prefWidth="46.0" text="" styleClass="top-button">
+		<font>
+			<Font name="Segoe MDL2 Assets" size="16.0"/>
+		</font>
+		<tooltip>
+			<Tooltip text="Always display on top"/>
+		</tooltip>
+	</Button>
 	<Pane HBox.hgrow="ALWAYS"/>
 </fx:root>
