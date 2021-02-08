@@ -12,11 +12,11 @@ class Database(path: File, cacheDir: File) : Closeable {
         db.createStatement().apply {
             addBatch(
                 """CREATE TABLE IF NOT EXISTS image (
-                id INTEGER PRIMARY KEY,
-                count INTEGER NON NULL DEFAULT 3,
-                is_black_white INTEGER NON NULL DEFAULT 0,
-                source VARCHAR NON NULL
-            );"""
+                    id INTEGER PRIMARY KEY,
+                    count INTEGER NON NULL DEFAULT 3,
+                    is_black_white INTEGER NON NULL DEFAULT 0,
+                    source VARCHAR NON NULL
+                );"""
             )
             addBatch(
                 """CREATE TABLE IF NOT EXISTS color (
@@ -88,7 +88,7 @@ class SqlImages(database: Database) {
     private val GET_COLORS = database.statement("""SELECT rgb FROM color WHERE image_id=?""")
     private val GET_SOURCE = database.statement("""SELECT source FROM image WHERE id=?""")
     private val ADD_IMAGE = database.statement("""INSERT INTO image (count, is_black_white, source) VALUES (?, ?, ?)""")
-    private val DELETE_IMAGES = database.statement("""DELETE FROM image""")
+    private val DELETE_IMAGE = database.statement("""DELETE FROM image WHERE id=?""")
 
     operator fun get(imageId: Int): SqlImage {
         return SqlImage(imageId, GET_SOURCE, GET_COLORS, GET_PATH)
@@ -104,6 +104,7 @@ class SqlImages(database: Database) {
     }
 
     fun delete(imageId: Int) {
-        DELETE_IMAGES.execute()
+        DELETE_IMAGE.setInt(1, imageId)
+        DELETE_IMAGE.execute()
     }
 }
