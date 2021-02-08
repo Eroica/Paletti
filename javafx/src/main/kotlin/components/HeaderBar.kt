@@ -64,11 +64,6 @@ class HeaderBar : HBox() {
         event.consume()
     }
 
-    fun onMinimize(event: ActionEvent) {
-        stage?.isIconified = true
-        event.consume()
-    }
-
     fun onMaximize(event: ActionEvent) {
         isMaximized.value = !isMaximized.value
         stage?.let {
@@ -95,5 +90,22 @@ class HeaderBar : HBox() {
             }
         }
         event.consume()
+    }
+
+    fun onMinimize(event: ActionEvent) {
+        stage?.isIconified = true
+        event.consume()
+    }
+
+    fun onAlwaysOnTop(event: ActionEvent) {
+        stage?.let {
+            if (it.isAlwaysOnTop) {
+                it.isAlwaysOnTop = false
+                it.scene.root.styleClass.remove("is-always-on-top")
+            } else {
+                it.isAlwaysOnTop = true
+                it.scene.root.styleClass.add("is-always-on-top")
+            }
+        }
     }
 }
