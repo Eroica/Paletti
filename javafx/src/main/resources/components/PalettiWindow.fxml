@@ -48,15 +48,13 @@
 							<Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
 						</padding>
 					</HBox>
-					<Label text="" style="-fx-opacity: .2" StackPane.alignment="BOTTOM_RIGHT" translateY="1.0">
+					<Label styleClass="resize-icon" text="" StackPane.alignment="BOTTOM_RIGHT" translateY="1.0">
 						<font>
 							<Font name="Segoe MDL2 Assets" size="16.0"/>
 						</font>
 					</Label>
-					<Pane maxWidth="16.0" maxHeight="16.0" translateX="8.0" translateY="8.0"
-							StackPane.alignment="BOTTOM_RIGHT"
-							style="-fx-background-color: transparent; -fx-cursor: se_resize;" onMousePressed="#onResizeBegin"
-							onMouseDragged="#onResize"/>
+					<Pane styleClass="resize-pane" maxWidth="16.0" maxHeight="16.0" translateX="8.0" translateY="8.0"
+							StackPane.alignment="BOTTOM_RIGHT" onMousePressed="#onResizeBegin" onMouseDragged="#onResize"/>
 				</StackPane>
 			</VBox>
 		</Scene>
