@@ -66,8 +66,8 @@ class ViewModel(
     override val notification: StringProperty = SimpleStringProperty()
 
     private val _image = BehaviorSubject.create<IPosterizedImage>()
-    override val image: Observable<IPosterizedImage>
-        get() = _image.subscribeOn(Schedulers.io()).observeOn(JavaFxScheduler.platform())
+    override val image: Observable<IPosterizedImage> = _image.subscribeOn(Schedulers.io())
+        .observeOn(JavaFxScheduler.platform())
 
     private val _posterize = PublishSubject.create<Unit>()
     private val disposables = CompositeDisposable()
@@ -101,7 +101,7 @@ class ViewModel(
     override fun load(path: String) {
         hasImage = true
         images.delete(1)
-        val imageId = images.add(count.get(), isBlackWhite.get(), path)
+        images.add(count.get(), isBlackWhite.get(), path)
         _posterize.onNext(Unit)
     }
 
