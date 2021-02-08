@@ -106,6 +106,12 @@
 .window-controls .close-button:pressed .text {
 	-fx-fill: #000000;
 }
+.is-always-on-top .window-controls .top-button {
+	-fx-background-color: #62b6f8;
+}
+.is-always-on-top .window-controls .top-button > .text {
+	-fx-fill: #ffffff;
+}
 
 .paletti-no-focus .window-controls .button > .text {
 	-fx-fill: #999999;
@@ -114,6 +120,9 @@
 	-fx-fill: #000000;
 }
 .paletti-no-focus .window-controls .close-button:hover > .text {
+	-fx-fill: #ffffff;
+}
+.paletti-no-focus.is-always-on-top .window-controls .top-button > .text {
 	-fx-fill: #ffffff;
 }
 
