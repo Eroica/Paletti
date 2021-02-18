@@ -109,6 +109,9 @@
 .is-always-on-top .window-controls .top-button {
 	-fx-background-color: #62b6f8;
 }
+.is-always-on-top .window-controls .top-button:focused {
+	-fx-background-insets: 0 0 -1 0;
+}
 .is-always-on-top .window-controls .top-button > .text {
 	-fx-fill: #ffffff;
 }
