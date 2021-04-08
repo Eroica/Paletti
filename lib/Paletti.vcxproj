@@ -157,6 +157,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="sqlite_modern_cpp.h" />
+    <ClInclude Include="sqlite_modern_cpp\errors.h" />
+    <ClInclude Include="sqlite_modern_cpp\lists\error_codes.h" />
+    <ClInclude Include="sqlite_modern_cpp\log.h" />
+    <ClInclude Include="sqlite_modern_cpp\sqlcipher.h" />
+    <ClInclude Include="sqlite_modern_cpp\utility\function_traits.h" />
+    <ClInclude Include="sqlite_modern_cpp\utility\uncaught_exceptions.h" />
+    <ClInclude Include="sqlite_modern_cpp\utility\utf16_utf8.h" />
+    <ClInclude Include="sqlite_modern_cpp\utility\variant.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
