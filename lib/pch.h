@@ -11,5 +11,6 @@
 #include <jni.h>
 #include "leptonica/allheaders.h"
 #include "sqlite3.h"
+#include "sqlite_modern_cpp.h"
 
 #endif //PCH_H
