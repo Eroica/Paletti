@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "app.paletti.javafx"
-version = "2.0"
+version = "2.0.1"
 
 repositories {
     mavenCentral()
@@ -20,8 +20,10 @@ javafx {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.4.2")
+
+    implementation("io.reactivex.rxjava2:rxjava:2.2.20")
+    implementation("io.reactivex.rxjava2:rxjavafx:2.2.2")
+    implementation("org.xerial:sqlite-jdbc:3.34.0")
     implementation("net.harawata:appdirs:1.2.0")
     implementation("org.slf4j:slf4j-simple:1.7.30")
 }
