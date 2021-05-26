@@ -2,40 +2,28 @@ package components
 
 import IViewModel
 import Uninitialized
-import javafx.beans.InvalidationListener
-import javafx.beans.NamedArg
+import io.reactivex.disposables.CompositeDisposable
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
-import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.input.Clipboard
 import javafx.scene.input.ClipboardContent
 import javafx.scene.input.KeyEvent
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
-import java.io.File
 
 interface IFragment {
-    suspend fun onLoad(path: String)
-    suspend fun onLoad(image: Image)
     fun onShortcut(event: KeyEvent)
+    fun onDestroy()
 }
 
-class InitialFragment(@NamedArg("navigation") private val navigation: INavigation) : VBox(), IFragment {
+class InitialFragment : VBox(), IFragment {
     init {
         FXMLLoader(javaClass.getResource("FragmentInitial.fxml")).apply {
             setRoot(this@InitialFragment)
             setController(this@InitialFragment)
             load()
         }
-    }
-
-    override suspend fun onLoad(path: String) {
-        navigation.next(path)
-    }
-
-    override suspend fun onLoad(image: Image) {
-        navigation.next(image)
     }
 
     override fun onShortcut(event: KeyEvent) {
@@ -48,11 +36,16 @@ class InitialFragment(@NamedArg("navigation") private val navigation: INavigatio
         }
         event.consume()
     }
+
+    override fun onDestroy() {}
 }
 
-class ImageFragment(private val saveDialog: ISaveDialog, private val viewModel: IViewModel) : StackPane(), IFragment {
+class ImageFragment(viewModel: IViewModel,
+                    private val saveDialog: ISaveDialog) : StackPane(), IFragment {
     @FXML
     lateinit var imageView: ImageView
+
+    private val disposables = CompositeDisposable()
 
     init {
         FXMLLoader(javaClass.getResource("FragmentImage.fxml")).apply {
@@ -60,27 +53,13 @@ class ImageFragment(private val saveDialog: ISaveDialog, private val viewModel: 
             setController(this@ImageFragment)
             load()
         }
-        viewModel.image.addListener(InvalidationListener {
-            imageView.image = viewModel.image.value.image
-        })
-    }
-
-    override suspend fun onLoad(path: String) {
-        viewModel.load(path)
-    }
-
-    override suspend fun onLoad(image: Image) {
-        viewModel.load(image)
+        disposables.add(viewModel.image.subscribe { imageView.image = it.image })
     }
 
     override fun onShortcut(event: KeyEvent) {
         when {
-            COMBINATION_SAVE.match(event) -> {
-                viewModel.image.value?.let { saveDialog.saveImage(File(it.path)) }
-            }
-            COMBINATION_EXPORT_PALETTE.match(event) -> {
-                viewModel.image.value?.let { saveDialog.savePalette() }
-            }
+            COMBINATION_SAVE.match(event) -> saveDialog.saveImage()
+            COMBINATION_EXPORT_PALETTE.match(event) -> saveDialog.savePalette()
             COMBINATION_COPY_TO_CLIPBOARD.match(event) -> {
                 Clipboard.getSystemClipboard().setContent(ClipboardContent().apply {
                     putImage(imageView.image)
@@ -88,5 +67,9 @@ class ImageFragment(private val saveDialog: ISaveDialog, private val viewModel: 
             }
         }
         event.consume()
+    }
+
+    override fun onDestroy() {
+        disposables.dispose()
     }
 }

@@ -22,7 +22,7 @@ See also: https://docs.appimage.org/user-guide/faq.html[What is an AppImage?]
 Paletti's website is https://paletti.app.
 While I probably mostly use Paletti for myself, I develop it publicly in the hope that it is helpful for other people as well.
 
-Nowadays, I mostly work as a 2D/3D artist on Windows, but I have been working with GNU/Linux in the past, so this is why I like to see Paletti on these two systems. Recently, I started developing an Android version as well.
+Nowadays, I mostly work as a 2D/3D artist on Windows, but I have also been using GNU/Linux in the past, so this is why I like to see Paletti on these two systems. Recently, I started developing an Android version as well.
 
 You are welcome to raise bugs and feature requests here.
 
@@ -71,7 +71,17 @@ You are welcome to raise bugs and feature requests here.
 
 == Development
 
+There are currently three distinct versions of Paletti:
 
+1. A version written in Kotlin and JavaFX.
+This is targeted to run on Windows.
+2. A version written in Vala and GTK.
+This gets packaged into an AppImage to be run on GNU/Linux.
+3. An Android version (written in Kotlin).
+
+I try to develop each version in tandem, i.e. keeping the same version number, and adding the same features.
+
+**Paletti's current version is 2.0.**
 
 ....
 PALETTI

@@ -22,6 +22,9 @@
 						<HBox.margin>
 							<Insets top="4.0"/>
 						</HBox.margin>
+						<tooltip>
+							<Tooltip text="Toggle black/white and colored mode"/>
+						</tooltip>
 					</CheckBox>
 					<Slider fx:id="slider" blockIncrement="1.0" max="32.0" min="3.0" value="6.0">
 						<HBox.margin>
@@ -34,11 +37,7 @@
 				</HeaderBar>
 				<StackPane fx:id="fragmentContainer" minHeight="300.0" minWidth="450.0" onMouseClicked="#onDropareaClick"
 							  prefHeight="300.0" prefWidth="450.0" style="-fx-cursor: hand;" VBox.vgrow="ALWAYS">
-					<InitialFragment fx:id="fragment">
-						<navigation>
-							<fx:reference source="controller"/>
-						</navigation>
-					</InitialFragment>
+					<InitialFragment fx:id="fragment"/>
 					<Notification fx:id="notification" StackPane.alignment="BOTTOM_CENTER"/>
 				</StackPane>
 				<StackPane>

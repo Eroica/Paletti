@@ -1,4 +1,3 @@
-import app.paletti.lib.FilePaths
 import components.PalettiWindow
 import javafx.application.Application
 import javafx.scene.image.Image
@@ -13,15 +12,10 @@ fun main(args: Array<String>) {
 class Paletti : Application() {
     override fun start(primaryStage: Stage) {
         val cacheDir = File(AppDirsFactory.getInstance().getUserCacheDir("Paletti", null, null))
-        val filePaths = FilePaths(
-            cacheDir.resolve("Colors.txt"),
-            cacheDir.resolve("tmp.dat"),
-            cacheDir.resolve("tmp.png"),
-            cacheDir.resolve("out.png"),
-            cacheDir.resolve("Palette.png")
-        )
         cacheDir.mkdirs()
-        val viewModel = ImageViewModel(filePaths)
+        val database = Database(cacheDir.resolve("Paletti.db"), cacheDir)
+        val images = SqlImages(database)
+        val viewModel = ViewModel(images, cacheDir.resolve("Paletti.db").toString(), cacheDir)
         val stage = PalettiWindow(viewModel)
         stage.icons += Image(javaClass.getResourceAsStream("icons/256.png"))
         stage.focusedProperty().addListener { _, _, hasFocus ->
@@ -30,6 +24,11 @@ class Paletti : Application() {
             } else {
                 stage.scene.root.styleClass.add("paletti-no-focus")
             }
+        }
+        stage.setOnCloseRequest {
+            stage.onDestroy()
+            viewModel.onDestroy()
+            database.close()
         }
         stage.show()
     }
