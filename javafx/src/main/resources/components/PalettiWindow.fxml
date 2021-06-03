@@ -16,7 +16,7 @@
 	<scene>
 		<Scene fx:id="scene" fill="#00000000" onDragDropped="#onDragDropped" onDragOver="#onDragOver"
 				 onKeyPressed="#onKeyPressed" onScroll="#onScroll" stylesheets="@../style.css">
-			<VBox styleClass="stage-shadow">
+			<VBox styleClass="stage-shadow" style="-fx-background-color: #f7f7f7">
 				<HeaderBar fx:id="headerBar" VBox.vgrow="NEVER">
 					<CheckBox fx:id="monoSwitch" mnemonicParsing="false" text="Black/White">
 						<HBox.margin>
@@ -42,7 +42,7 @@
 				</StackPane>
 				<StackPane>
 					<HBox fx:id="colorPalette" spacing="4.0"
-							style="-fx-background-color: #fafafa; -fx-border-color: #e9e7e6; -fx-border-width: 1px 0 0 0; -fx-background-radius: 0 0 2px 2px;"
+							style="-fx-background-radius: 0 0 2px 2px;"
 							VBox.vgrow="NEVER">
 						<padding>
 							<Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
