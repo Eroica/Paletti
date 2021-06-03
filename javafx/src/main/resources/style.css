@@ -135,6 +135,7 @@
 	-fx-border-color: rgba(0, 0, 0, 0.1);
 	-fx-background-radius: 5px;
 	-fx-border-width: 1px;
+	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 4, 0, 0, 0);
 }
 .droparea .droparea-icon .text {
 	-fx-fill: rgba(0, 0, 0, .2);
