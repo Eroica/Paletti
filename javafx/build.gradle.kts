@@ -55,7 +55,7 @@ tasks.register<Copy>("copyDlls") {
 }
 
 application {
-    mainClassName = "MainKt"
+    mainClass.set("MainKt")
 }
 
 runtime {
