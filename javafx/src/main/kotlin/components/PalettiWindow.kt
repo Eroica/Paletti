@@ -3,8 +3,6 @@ package components
 import IViewModel
 import Uninitialized
 import io.reactivex.disposables.CompositeDisposable
-import javafx.beans.binding.Bindings
-import javafx.beans.property.SimpleObjectProperty
 import javafx.embed.swing.SwingFXUtils
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
@@ -84,16 +82,7 @@ class PalettiWindow(private val viewModel: IViewModel) : Stage(), ISaveDialog {
             }
         }, { notification.show(it.message ?: "") }))
         disposables.add(viewModel.image.take(1).subscribe {
-            val viewportRectangle = SimpleObjectProperty<Rectangle2D>()
-            viewportRectangle.bind(Bindings.createObjectBinding({
-                Rectangle2D(
-                    fragmentContainer.width / 2,
-                    fragmentContainer.height / 2,
-                    fragmentContainer.width,
-                    fragmentContainer.height
-                )
-            }, fragmentContainer.widthProperty(), fragmentContainer.heightProperty()))
-            val fragment = ImageFragment(viewModel, this, viewportRectangle)
+            val fragment = ImageFragment(viewModel, this)
             fragmentContainer.children.removeAt(0)
             fragmentContainer.children.add(0, fragment)
             this.fragment = fragment
