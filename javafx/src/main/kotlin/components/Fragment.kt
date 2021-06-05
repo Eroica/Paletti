@@ -4,10 +4,10 @@ import IViewModel
 import Uninitialized
 import io.reactivex.disposables.CompositeDisposable
 import javafx.beans.InvalidationListener
-import javafx.beans.value.ObservableValue
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.geometry.Rectangle2D
+import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.input.Clipboard
 import javafx.scene.input.ClipboardContent
@@ -43,10 +43,26 @@ class InitialFragment : VBox(), IFragment {
     override fun onDestroy() {}
 }
 
+private fun fitRectangle(width: Double, height: Double, outerWidth: Double, outerHeight: Double): Rectangle2D {
+    val innerAspect = width / height
+    val outerAspect = outerWidth / outerHeight
+
+    var targetWidth = outerWidth
+    var targetHeight = outerHeight
+    if (outerAspect >= innerAspect) {
+        targetWidth = targetHeight * innerAspect
+    } else {
+        targetHeight = targetWidth / innerAspect
+    }
+    val minX = (outerWidth - targetWidth) / 2
+    val minY = (outerHeight - targetHeight) / 2
+
+    return Rectangle2D(minX, minY, targetWidth, targetHeight)
+}
+
 class ImageFragment(
     viewModel: IViewModel,
     private val saveDialog: ISaveDialog,
-    viewportRectangle: ObservableValue<Rectangle2D>
 ) : StackPane(), IFragment {
     @FXML
     lateinit var imageView: ImageView
@@ -59,21 +75,18 @@ class ImageFragment(
             setController(this@ImageFragment)
             load()
         }
-        viewportRectangle.addListener(InvalidationListener {
-            val r = viewportRectangle.value
-            val image = imageView.image
-            val minX = (image.width - r.width) / 2
-            val minY = (image.height - r.height) / 2
-            imageView.viewport = Rectangle2D(minX, minY, r.width, r.height)
-        })
-        imageView.viewport = viewportRectangle.value
+
+        val resizeListener = InvalidationListener {
+            imageView.image?.let { image ->
+                imageView.viewport = fitRectangle(this@ImageFragment.width, this@ImageFragment.height, image.width, image.height)
+            }
+        }
+        this.widthProperty().addListener(resizeListener)
+        this.heightProperty().addListener(resizeListener)
+
         disposables.add(viewModel.image.subscribe {
-            val image = it.image
-            val r = viewportRectangle.value
-            val minX = (image.width - r.width) / 2
-            val minY = (image.height - r.height) / 2
-            imageView.image = image
-            imageView.viewport = Rectangle2D(minX, minY, r.width, r.height)
+            imageView.viewport = fitRectangle(this.width, this.height, it.image.width, it.image.height)
+            imageView.image = it.image
         })
     }
 
