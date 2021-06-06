@@ -39,7 +39,6 @@ class InitialFragment : VBox(), IFragment {
                 throw Uninitialized
             }
         }
-        event.consume()
     }
 
     override fun onDestroy() {}
@@ -112,15 +111,21 @@ class ImageFragment(
 
     override fun onShortcut(event: KeyEvent) {
         when {
-            COMBINATION_SAVE.match(event) -> saveDialog.saveImage()
-            COMBINATION_EXPORT_PALETTE.match(event) -> saveDialog.savePalette()
+            COMBINATION_SAVE.match(event) -> {
+                saveDialog.saveImage()
+                event.consume()
+            }
+            COMBINATION_EXPORT_PALETTE.match(event) -> {
+                saveDialog.savePalette()
+                event.consume()
+            }
             COMBINATION_COPY_TO_CLIPBOARD.match(event) -> {
                 Clipboard.getSystemClipboard().setContent(ClipboardContent().apply {
                     putImage(imageView.image)
                 })
+                event.consume()
             }
         }
-        event.consume()
     }
 
     override fun onDestroy() {
