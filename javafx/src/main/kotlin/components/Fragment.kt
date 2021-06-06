@@ -7,7 +7,8 @@ import javafx.beans.InvalidationListener
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.geometry.Rectangle2D
-import javafx.scene.image.Image
+import javafx.scene.control.CheckMenuItem
+import javafx.scene.control.ContextMenu
 import javafx.scene.image.ImageView
 import javafx.scene.input.Clipboard
 import javafx.scene.input.ClipboardContent
@@ -76,9 +77,27 @@ class ImageFragment(
             load()
         }
 
+        val cropImageItem = CheckMenuItem("Crop and zoom image").apply { isSelected = true }
+        val imageContextMenu = ContextMenu().apply { items.add(cropImageItem) }
+        imageView.setOnContextMenuRequested {
+            imageContextMenu.show(imageView, it.screenX, it.screenY)
+        }
+
+        cropImageItem.selectedProperty().addListener(InvalidationListener {
+            imageView.image?.let { image ->
+                if (!cropImageItem.isSelected) {
+                    imageView.viewport = Rectangle2D(0.0, 0.0, image.width, image.height)
+                } else {
+                    imageView.viewport = fitRectangle(this.width, this.height, image.width, image.height)
+                }
+            }
+        })
+
         val resizeListener = InvalidationListener {
             imageView.image?.let { image ->
-                imageView.viewport = fitRectangle(this@ImageFragment.width, this@ImageFragment.height, image.width, image.height)
+                if (cropImageItem.isSelected) {
+                    imageView.viewport = fitRectangle(this@ImageFragment.width, this@ImageFragment.height, image.width, image.height)
+                }
             }
         }
         this.widthProperty().addListener(resizeListener)

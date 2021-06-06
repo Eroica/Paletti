@@ -73,6 +73,39 @@
 	-fx-border-color: #005A9E;
 }
 
+.context-menu {
+	-fx-background-color: #e8e8e8;
+	-fx-text-fill: black;
+	-fx-border-radius: 4px;
+	-fx-background-radius: 4px;
+	-fx-border-color: #c8c8c8;
+	-fx-border-width: 1px;
+	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0.0, 0.0, 1.0);
+	-fx-padding: 0.333333em 0 0.333333em 0;
+}
+.context-menu .menu-item {
+	-fx-padding: 0.666666em 0.41777em 0.666666em 0.41777em;
+}
+.context-menu .menu-item .label {
+	-fx-padding: 0em 0.5em 0em 4px;
+}
+.context-menu .menu-item:focused {
+	-fx-background-color: #c6c6c5;
+	-fx-focused-mark-color: #000000;
+}
+.context-menu .menu-item:focused > .label {
+	-fx-text-fill: #000000;
+}
+.context-menu .check-menu-item .left-container {
+	-fx-background-color: #ffffff;
+	-fx-border-color: #c8c8c8;
+	-fx-border-width: 1px;
+	-fx-padding: 6px;
+}
+.context-menu .check-menu-item:checked .check {
+	-fx-shape: "M8.659,-0.006L3.5,7.733L0.841,5.739L0,7L4,10L10,1L8.659,-0.006Z";
+}
+
 .window-controls .button {
 	-fx-border-radius: 0 0 0 0;
 	-fx-background-color: transparent;
