@@ -3,6 +3,7 @@ package components
 import IViewModel
 import Uninitialized
 import io.reactivex.disposables.CompositeDisposable
+import javafx.application.Platform
 import javafx.beans.InvalidationListener
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader

@@ -27,7 +27,7 @@
 					</CheckBox>
 					<Slider fx:id="slider" blockIncrement="1.0" max="32.0" min="3.0" value="6.0">
 						<HBox.margin>
-							<Insets left="8.0" right="8.0" top="2.0"/>
+							<Insets left="8.0" right="8.0" top="6.0"/>
 						</HBox.margin>
 						<tooltip>
 							<Tooltip text="Adjust size of color palette"/>
