@@ -107,5 +107,6 @@ class HeaderBar : HBox() {
                 it.scene.root.styleClass.add("is-always-on-top")
             }
         }
+        event.consume()
     }
 }
