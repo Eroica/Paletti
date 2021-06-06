@@ -138,8 +138,10 @@ class PalettiWindow(private val viewModel: IViewModel) : Stage(), ISaveDialog {
     }
 
     fun onDropareaClick(event: MouseEvent) {
-        openFileDialog()
-        event.consume()
+        if (!event.isPopupTrigger) {
+            openFileDialog()
+            event.consume()
+        }
     }
 
     fun onDragOver(event: DragEvent) {
