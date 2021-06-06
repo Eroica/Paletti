@@ -167,9 +167,18 @@ class PalettiWindow(private val viewModel: IViewModel) : Stage(), ISaveDialog {
     fun onKeyPressed(event: KeyEvent) {
         try {
             when {
-                event.code == KeyCode.X -> monoSwitch.isSelected = !monoSwitch.isSelected
-                COMBINATION_OPEN.match(event) -> openFileDialog()
-                COMBINATION_CLOSE.match(event) -> close()
+                event.code == KeyCode.X -> {
+                    monoSwitch.isSelected = !monoSwitch.isSelected
+                    event.consume()
+                }
+                COMBINATION_OPEN.match(event) -> {
+                    openFileDialog()
+                    event.consume()
+                }
+                COMBINATION_CLOSE.match(event) -> {
+                    close()
+                    event.consume()
+                }
                 COMBINATION_PASTE_FROM_CLIPBOARD.match(event) -> {
                     val clipboard = Clipboard.getSystemClipboard()
                     if (clipboard.hasImage()) {
@@ -177,10 +186,10 @@ class PalettiWindow(private val viewModel: IViewModel) : Stage(), ISaveDialog {
                     } else if (clipboard.hasFiles()) {
                         viewModel.load(clipboard.files.first().absolutePath)
                     }
+                    event.consume()
                 }
                 else -> fragment.onShortcut(event)
             }
-            event.consume()
         } catch (e: Uninitialized) {
             notification.show(e)
             event.consume()
