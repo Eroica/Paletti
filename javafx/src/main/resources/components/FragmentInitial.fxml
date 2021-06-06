@@ -8,7 +8,7 @@
 <fx:root StackPane.Alignment="CENTER" alignment="CENTER" styleClass="droparea" type="VBox"
 			xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
 	<StackPane.margin>
-		<Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+		<Insets left="8.0" right="8.0" top="8.0"/>
 	</StackPane.margin>
 	<Label text="" textFill="#00000033" styleClass="droparea-icon">
 		<font>
