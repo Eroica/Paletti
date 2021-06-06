@@ -5,7 +5,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.layout.Pane?>
 <fx:root type="HBox" alignment="CENTER" maxHeight="36.0" styleClass="window-controls"
-			xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
+			xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
 			onMouseDragged="#onHeaderBarDragged" onMousePressed="#onHeaderBarPressed">
 	<Button maxHeight="36.0" maxWidth="46.0" minHeight="36.0" minWidth="46.0" mnemonicParsing="false"
 			  onAction="#onClose" prefHeight="36.0" prefWidth="46.0" styleClass="close-button" text="">
