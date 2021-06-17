@@ -2,7 +2,7 @@
 	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 24, 0, 0, 0);
 	-fx-background-insets: 24;
 	-fx-padding: 24;
-	-fx-background-radius: 2px;
+	-fx-background-radius: 8px;
 }
 
 .tooltip {
@@ -125,7 +125,7 @@
 	-fx-background-insets: 0, 1px;
 }
 .window-controls .close-button {
-	-fx-background-radius: 0 2px 0 0;
+	-fx-background-radius: 0 8px 0 0, 0 8px 0 0;
 }
 .window-controls .close-button .text {
 	-fx-fill: #000000;
