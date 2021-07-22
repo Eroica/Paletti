@@ -203,12 +203,6 @@
 	-fx-fill: rgba(0, 0, 0, .5);
 }
 
-.resize-icon {
-	-fx-opacity: 0;
-}
-.stage-shadow .resize-icon {
-	-fx-opacity: .2;
-}
 .resize-pane {
 	-fx-background-color: transparent;
 }
