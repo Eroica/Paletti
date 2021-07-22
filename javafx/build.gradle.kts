@@ -6,6 +6,7 @@ plugins {
     id("org.openjfx.javafxplugin") version "0.0.10"
     id("com.github.johnrengelman.shadow") version "7.0.0"
     id("org.beryx.runtime") version "1.12.5"
+    id("com.github.ben-manes.versions") version "0.39.0"
 }
 
 group = "app.paletti.javafx"
@@ -25,7 +26,7 @@ dependencies {
 
     implementation("io.reactivex.rxjava2:rxjava:2.2.21")
     implementation("io.reactivex.rxjava2:rxjavafx:2.2.2")
-    implementation("org.xerial:sqlite-jdbc:3.34.0")
+    implementation("org.xerial:sqlite-jdbc:3.36.0.1")
     implementation("net.harawata:appdirs:1.2.1")
     implementation("org.slf4j:slf4j-simple:1.7.30")
 }
@@ -39,12 +40,6 @@ tasks {
     }
     jpackage {
         finalizedBy("copyDlls")
-    }
-}
-
-tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions {
-        useIR = true
     }
 }
 
