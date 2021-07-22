@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "app.paletti.javafx"
-version = "2.0.1"
+version = "2021.07"
 
 repositories {
     mavenCentral()
@@ -54,6 +54,10 @@ application {
 }
 
 runtime {
+    options.set(listOf("--strip-debug", "--no-header-files", "--no-man-pages"))
+    launcher {
+        noConsole = true
+    }
     jpackage {
         imageName = "Paletti"
         skipInstaller = true
