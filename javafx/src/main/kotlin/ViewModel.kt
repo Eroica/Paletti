@@ -6,6 +6,7 @@ import io.reactivex.rxjavafx.schedulers.JavaFxScheduler
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
+import javafx.application.Platform
 import javafx.beans.InvalidationListener
 import javafx.beans.property.*
 import javafx.embed.swing.SwingFXUtils
@@ -39,9 +40,7 @@ data class PosterizedPix(
     private val databasePath: String
 ) : IPosterizedImage by sqlImage {
     override val path: String
-        get() {
-            return cacheDir.resolve("${sqlImage.id}.png").toString()
-        }
+        get() = cacheDir.resolve("${sqlImage.id}.png").toString()
 
     override val image: Image
         get() {
@@ -66,8 +65,7 @@ class ViewModel(
     override val notification: StringProperty = SimpleStringProperty()
 
     private val _image = BehaviorSubject.create<IPosterizedImage>()
-    override val image: Observable<IPosterizedImage> = _image.subscribeOn(Schedulers.io())
-        .observeOn(JavaFxScheduler.platform())
+    override val image: Observable<IPosterizedImage> = _image
 
     private val _posterize = PublishSubject.create<Unit>()
     private val disposables = CompositeDisposable()
@@ -81,12 +79,14 @@ class ViewModel(
 
     init {
         disposables.add(_posterize.debounce(100, TimeUnit.MILLISECONDS)
-            .subscribeOn(Schedulers.io())
-            .observeOn(JavaFxScheduler.platform())
+            .subscribeOn(Schedulers.computation())
             .subscribe {
                 try {
                     images[1].setParameters(count.get(), isBlackWhite.get()) // TODO Remove duplication
-                    _image.onNext(PosterizedPix(images[1], cacheDir, databasePath))
+                    val pix = PosterizedPix(images[1], cacheDir, databasePath)
+                    Platform.runLater {
+                        _image.onNext(pix)
+                    }
                 } catch (e: LeptonicaError) {
                     notification.value = e.message
                 } catch (e: Uninitialized) {
