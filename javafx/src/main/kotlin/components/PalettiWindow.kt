@@ -82,7 +82,7 @@ class PalettiWindow(private val viewModel: IViewModel) : Stage(), ISaveDialog {
             }
         }, { notification.show(it.message ?: "") }))
         disposables.add(viewModel.image.take(1).subscribe {
-            val fragment = ImageFragment(viewModel, this)
+            val fragment = ImageFragment(viewModel, this, notification)
             fragmentContainer.children.removeAt(0)
             fragmentContainer.children.add(0, fragment)
             this.fragment = fragment

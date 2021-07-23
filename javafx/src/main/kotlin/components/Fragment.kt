@@ -3,7 +3,6 @@ package components
 import IViewModel
 import Uninitialized
 import io.reactivex.disposables.CompositeDisposable
-import javafx.application.Platform
 import javafx.beans.InvalidationListener
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
@@ -19,7 +18,7 @@ import javafx.scene.layout.VBox
 
 interface IFragment {
     fun onShortcut(event: KeyEvent)
-    fun onDestroy()
+    fun onDestroy() = Unit
 }
 
 class InitialFragment : VBox(), IFragment {
@@ -40,8 +39,6 @@ class InitialFragment : VBox(), IFragment {
             }
         }
     }
-
-    override fun onDestroy() {}
 }
 
 private fun fitRectangle(width: Double, height: Double, outerWidth: Double, outerHeight: Double): Rectangle2D {
@@ -64,6 +61,7 @@ private fun fitRectangle(width: Double, height: Double, outerWidth: Double, oute
 class ImageFragment(
     viewModel: IViewModel,
     private val saveDialog: ISaveDialog,
+    private val notification: INotification
 ) : StackPane(), IFragment {
     @FXML
     lateinit var imageView: ImageView
@@ -123,6 +121,7 @@ class ImageFragment(
                 Clipboard.getSystemClipboard().setContent(ClipboardContent().apply {
                     putImage(imageView.image)
                 })
+                notification.show("Copied current image to clipboard.")
                 event.consume()
             }
         }
