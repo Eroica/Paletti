@@ -102,7 +102,11 @@ class ImageFragment(
         this.heightProperty().addListener(resizeListener)
 
         disposables.add(viewModel.image.subscribe {
-            imageView.viewport = fitRectangle(this.width, this.height, it.image.width, it.image.height)
+            if (!cropImageItem.isSelected) {
+                imageView.viewport = Rectangle2D(0.0, 0.0, it.image.width, it.image.height)
+            } else {
+                imageView.viewport = fitRectangle(this.width, this.height, it.image.width, it.image.height)
+            }
             imageView.image = it.image
         })
     }
