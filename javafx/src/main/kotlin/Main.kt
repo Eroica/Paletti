@@ -33,6 +33,11 @@ class Paletti : Application() {
             viewModel.onDestroy()
             database.close()
         }
+        if (parameters.unnamed.isNotEmpty()) {
+            viewModel.count.value = parameters.named.getOrDefault("colors", "6").toInt()
+            viewModel.isBlackWhite.value = parameters.named.getOrDefault("bw", "false").toBoolean()
+            viewModel.load(parameters.unnamed.first())
+        }
         stage.show()
     }
 }
