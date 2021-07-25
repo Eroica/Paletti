@@ -17,98 +17,114 @@
 }
 
 .slider .track {
-	-fx-background-color: #999999;
-	-fx-max-height: 2px;
-	-fx-pref-height: 2px;
-}
-.slider:hover .track {
-	-fx-background-color: #666666;
-}
-.slider:pressed .track {
-	-fx-background-color: #999999;
+	-fx-background-color: #868686;
+	-fx-max-height: 3px;
+	-fx-pref-height: 3px;
 }
 .slider .thumb {
-	-fx-background-color: #429CE3, #0078D7;
-	-fx-background-insets: 0, 0;
+	-fx-background-color: transparent, #e5e5e5, #ffffff, #005A9E;
+	-fx-background-insets: -8px, -6px, -5px, 0;
+	-fx-max-width: 10px;
+	-fx-pref-width: 10px;
+	-fx-max-height: 10px;
+	-fx-pref-height: 10px;
+	-fx-effect: none;
 }
 .slider:focused .thumb {
-	-fx-background-insets: 0, 1;
+	-fx-background-color: #6d9df77f, #e5e5e5, #ffffff, #005A9E;
 }
 .slider:hover .thumb {
-	-fx-background-color: #429CE3;
+	/* Is being changed programmatically */
+}
+.slider:focused:hover .thumb {
+	-fx-background-color: #6d9df77f, #e5e5e5, #ffffff, #005A9E;
 }
 .slider:pressed .thumb {
-	-fx-background-color: #005A9D;
+	/* Is being changed programmatically */
+}
+.slider:focused:pressed .thumb {
+	-fx-background-color: transparent, #e5e5e5, #ffffff, #337AAF;
 }
 
 .check-box .box {
-	-fx-background-color: #767676, #ffffff;
-	-fx-background-insets: -1px, 0;
-	-fx-background-radius: 2px, 2px;
-	-fx-pref-width: 14px;
-	-fx-pref-height: 14px;
+	-fx-background-color: transparent, #858585, #ededed;
+	-fx-background-insets: -3px, -1px, 0;
+	-fx-background-radius: 6px, 4px, 4px;
+	-fx-pref-width: 18px;
+	-fx-pref-height: 18px;
 }
 .check-box .box .mark {
 	-fx-background-color: none;
 	-fx-scale-shape: false;
-	-fx-shape: "M12.151,3.151L5,10.302L1.849,7.151L1,8L5,12L13,4L12.151,3.151Z";
-	-fx-background-insets: 0;
+	-fx-shape: "M2.128,9.499L7.036,14.415L15.824,5.627L14.409,4.213L7.037,11.585L3.543,8.086L2.128,9.499Z";
+	-fx-background-insets: 1px;
 	-fx-padding: 0;
 }
-.check-box:hover .box {
-	-fx-background-color: #333333, #ffffff;
-}
 .check-box:focused .box {
-	-fx-background-color: #429CE3, #ffffff
+	-fx-background-color: #6d9df77f, #858585, #ededed;
+}
+.check-box:hover .box {
+	-fx-background-color: transparent, #838383, #e5e5e5;
+}
+.check-box:focused:hover .box {
+	-fx-background-color: #6d9df77f, #838383, #e5e5e5;
 }
 .check-box:pressed .box {
-	-fx-background-color: #000000, #999999;
+	-fx-background-color: transparent, #b6b6b6, #dcdcdc;
+}
+.check-box:focused:pressed .box {
+	-fx-background-color: transparent, #b6b6b6, #dcdcdc;
 }
 .check-box:selected .box .mark {
 	-fx-background-color: #ffffff;
 	-fx-scale-shape: false;
 }
 .check-box:selected .box {
-	-fx-background-color: #0078D7, #0078D7;
+	-fx-background-color: transparent, #005A9E, #005A9E;
 }
 .check-box:selected:focused .box {
-	-fx-background-color: #429CE3, #0078D7;
+	-fx-background-color: #6d9df77f, #005A9E, #005A9E;
 }
 .check-box:selected:hover .box {
-	-fx-background-color: #429CE3, #429CE3;
+	-fx-background-color: transparent, #196AA7, #196AA7;
+}
+.check-box:selected:focused:hover .box {
+	-fx-background-color: #6d9df77f, #196AA7, #196AA7;
 }
 .check-box:selected:pressed .box {
-	-fx-background-color: #005A9E, #005A9E;
+	-fx-background-color: transparent, #1D6CA8, #3179AF;
+}
+.check-box:selected:focused:pressed .box {
+	-fx-background-color: transparent, #1D6CA8, #3179AF;
+}
+.check-box:selected:pressed .box .mark {
+	-fx-background-color: #B8D1E4;
 }
 
 .context-menu {
-	-fx-background-color: #e8e8e8;
+	-fx-background-color: #e7e7e7;
 	-fx-text-fill: black;
-	-fx-border-radius: 4px;
-	-fx-background-radius: 4px;
-	-fx-border-color: #c8c8c8;
+	-fx-border-radius: 10px;
+	-fx-background-radius: 10px;
+	-fx-border-color: #00000022;
 	-fx-border-width: 1px;
 	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0.0, 0.0, 1.0);
-	-fx-padding: 0.333333em 0 0.333333em 0;
+	-fx-padding: 0.333333em;
 }
 .context-menu .menu-item {
-	-fx-padding: 0.666666em 0.41777em 0.666666em 0.41777em;
+	-fx-font-size: 1.1em;
+	-fx-padding: .5em .6em;
 }
 .context-menu .menu-item .label {
 	-fx-padding: 0em 0.5em 0em 4px;
 }
 .context-menu .menu-item:focused {
-	-fx-background-color: #c6c6c5;
+	-fx-background-color: rgba(0, 0, 0, 0.04);
+	-fx-background-radius: 6px;
 	-fx-focused-mark-color: #000000;
 }
 .context-menu .menu-item:focused > .label {
 	-fx-text-fill: #000000;
-}
-.context-menu .check-menu-item .left-container {
-	-fx-background-color: #ffffff;
-	-fx-border-color: #c8c8c8;
-	-fx-border-width: 1px;
-	-fx-padding: 8px;
 }
 .context-menu .check-menu-item:checked .check {
 	-fx-shape: "M12.151,3.151L5,10.302L1.849,7.151L1,8L5,12L13,4L12.151,3.151Z";
