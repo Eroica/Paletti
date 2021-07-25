@@ -68,8 +68,12 @@ class PalettiWindow(private val viewModel: IViewModel) : Stage(), ISaveDialog {
         initStyle(StageStyle.TRANSPARENT)
         headerBar.stage = this
         slider.valueProperty().bindBidirectional(viewModel.count)
+        slider.applyCss()
+        viewModel.count.addListener { _, _, count ->
+            slider.lookup(".track").style = "-fx-background-color: linear-gradient(to right, #005A9E ${count.toDouble()/32}, #868686 ${count.toDouble()/32});"
+            setColorPalette(count.toInt())
+        }
         monoSwitch.selectedProperty().bindBidirectional(viewModel.isBlackWhite)
-        viewModel.count.addListener { _, _, count -> setColorPalette(count.toInt()) }
         viewModel.notification.addListener { _, _, message -> notification.show(message) }
         while (colorPalette.children.size < viewModel.count.value) {
             colorPalette.children.add(ColorTile())

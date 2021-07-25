@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.Scene?>
 <?import javafx.stage.Stage?>
+<?import views.FluentSlider?>
 <fx:root type="Stage" minHeight="448.0" minWidth="498.0" title="Paletti" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
 	<scene>
 		<Scene fx:id="scene" fill="#00000000" onDragDropped="#onDragDropped" onDragOver="#onDragOver" onKeyPressed="#onKeyPressed" onScroll="#onScroll" stylesheets="@../style.css">
@@ -21,14 +22,14 @@
 								<Tooltip text="Toggle black/white and colored mode"/>
 							</tooltip>
 						</CheckBox>
-						<Slider fx:id="slider" blockIncrement="1.0" max="32.0" min="3.0" value="6.0">
+						<FluentSlider fx:id="slider" blockIncrement="1.0" max="32.0" min="3.0" value="6.0">
 							<HBox.margin>
 								<Insets left="8.0" right="8.0"/>
 							</HBox.margin>
 							<tooltip>
 								<Tooltip text="Adjust size of color palette"/>
 							</tooltip>
-						</Slider>
+						</FluentSlider>
 					</HeaderBar>
 					<StackPane fx:id="fragmentContainer" minHeight="300.0" minWidth="450.0" onMouseClicked="#onDropareaClick" prefHeight="300.0" prefWidth="450.0" style="-fx-cursor: hand;" VBox.vgrow="ALWAYS">
 						<InitialFragment fx:id="fragment"/>
