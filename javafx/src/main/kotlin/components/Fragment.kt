@@ -4,11 +4,14 @@ import IViewModel
 import Uninitialized
 import io.reactivex.disposables.CompositeDisposable
 import javafx.beans.InvalidationListener
+import javafx.beans.value.ChangeListener
+import javafx.beans.value.ObservableValue
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.geometry.Rectangle2D
 import javafx.scene.control.CheckMenuItem
 import javafx.scene.control.ContextMenu
+import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.input.Clipboard
 import javafx.scene.input.ClipboardContent
@@ -60,12 +63,15 @@ private fun fitRectangle(width: Double, height: Double, outerWidth: Double, oute
 
 class ImageFragment(
     viewModel: IViewModel,
+    containerWidth: Double,
+    containerHeight: Double,
     private val saveDialog: ISaveDialog,
     private val notification: INotification
 ) : StackPane(), IFragment {
     @FXML
     lateinit var imageView: ImageView
 
+    private val cropImageItem = CheckMenuItem("Crop and zoom image").apply { isSelected = true }
     private val disposables = CompositeDisposable()
 
     init {
@@ -75,7 +81,6 @@ class ImageFragment(
             load()
         }
 
-        val cropImageItem = CheckMenuItem("Crop and zoom image").apply { isSelected = true }
         val imageContextMenu = ContextMenu().apply { items.add(cropImageItem) }
         imageView.setOnContextMenuRequested {
             imageContextMenu.show(imageView, it.screenX, it.screenY)
@@ -90,6 +95,24 @@ class ImageFragment(
                 }
             }
         })
+        disposables.add(viewModel.image.subscribe {
+            val width = if (this.width == 0.0) containerWidth else this.width
+            val height = if (this.height == 0.0) containerHeight else this.height
+            val image = Image(it.path, width, height, true, true, true)
+            image.progressProperty().addListener(object : ChangeListener<Number> {
+                override fun changed(observable: ObservableValue<out Number>?, oldValue: Number?, newValue: Number?) {
+                    if (newValue?.toDouble() ?: 0.0 >= 1.0) {
+                        if (!cropImageItem.isSelected) {
+                            imageView.viewport = Rectangle2D(0.0, 0.0, image.width, image.height)
+                        } else {
+                            imageView.viewport = fitRectangle(width, height, image.width, image.height)
+                        }
+                        imageView.image = image
+                        image.progressProperty().removeListener(this)
+                    }
+                }
+            })
+        })
 
         val resizeListener = InvalidationListener {
             imageView.image?.let { image ->
@@ -100,15 +123,6 @@ class ImageFragment(
         }
         this.widthProperty().addListener(resizeListener)
         this.heightProperty().addListener(resizeListener)
-
-        disposables.add(viewModel.image.subscribe {
-            if (!cropImageItem.isSelected) {
-                imageView.viewport = Rectangle2D(0.0, 0.0, it.image.width, it.image.height)
-            } else {
-                imageView.viewport = fitRectangle(this.width, this.height, it.image.width, it.image.height)
-            }
-            imageView.image = it.image
-        })
     }
 
     override fun onShortcut(event: KeyEvent) {

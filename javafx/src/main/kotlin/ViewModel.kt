@@ -6,7 +6,6 @@ import io.reactivex.rxjavafx.schedulers.JavaFxScheduler
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
-import javafx.application.Platform
 import javafx.beans.InvalidationListener
 import javafx.beans.property.*
 import javafx.embed.swing.SwingFXUtils
@@ -18,8 +17,7 @@ import java.util.concurrent.TimeUnit
 import javax.imageio.ImageIO
 
 interface IPosterizedImage {
-    val path: String
-    val image: Image
+    val source: String
     val colors: List<Color>
 }
 
@@ -27,7 +25,7 @@ interface IViewModel {
     val count: IntegerProperty
     val isBlackWhite: BooleanProperty
     val notification: StringProperty
-    val image: Observable<IPosterizedImage>
+    val image: Observable<PosterizedPix>
 
     fun load(path: String)
     fun load(image: Image)
@@ -37,22 +35,8 @@ interface IViewModel {
 data class PosterizedPix(
     private val sqlImage: SqlImage,
     private val cacheDir: File,
-    private val databasePath: String
 ) : IPosterizedImage by sqlImage {
-    override val path: String
-        get() = cacheDir.resolve("${sqlImage.id}.png").toString()
-
-    override val image: Image
-        get() {
-            return Image(File(path).toURI().toString())
-        }
-
-    init {
-        val ok = Leptonica.posterize2(sqlImage.id, databasePath)
-        if (ok != Leptonica.OK) {
-            throw LeptonicaError
-        }
-    }
+    val path: String = cacheDir.resolve("${sqlImage.id}.png").toURI().toString()
 }
 
 class ViewModel(
@@ -64,45 +48,42 @@ class ViewModel(
     override val isBlackWhite: BooleanProperty = SimpleBooleanProperty(false)
     override val notification: StringProperty = SimpleStringProperty()
 
-    private val _image = BehaviorSubject.create<IPosterizedImage>()
-    override val image: Observable<IPosterizedImage> = _image
+    private var imagePath: String? = null
 
-    private val _posterize = PublishSubject.create<Unit>()
+    private val _posterize = PublishSubject.create<String>()
+    private val _image = BehaviorSubject.create<PosterizedPix>()
+    override val image: Observable<PosterizedPix> = _image
     private val disposables = CompositeDisposable()
-    private var hasImage = false
 
     private val onChangeListener = InvalidationListener {
-        if (hasImage) {
-            _posterize.onNext(Unit)
+        imagePath?.let {
+            _posterize.onNext(it)
         }
     }
 
     init {
-        disposables.add(_posterize.debounce(100, TimeUnit.MILLISECONDS)
+        this.count.addListener(onChangeListener)
+        this.isBlackWhite.addListener(onChangeListener)
+        this.disposables.add(_posterize.debounce(100, TimeUnit.MILLISECONDS)
             .subscribeOn(Schedulers.computation())
             .subscribe {
                 try {
-                    images[1].setParameters(count.get(), isBlackWhite.get()) // TODO Remove duplication
-                    val pix = PosterizedPix(images[1], cacheDir, databasePath)
-                    Platform.runLater {
-                        _image.onNext(pix)
-                    }
+                    images.delete(1)
+                    images.add(count.get(), isBlackWhite.get(), it)
+                    images[1].setParameters(count.get(), isBlackWhite.get())
+                    Leptonica.posterize2(1, databasePath)
+                    _image.onNext(PosterizedPix(images[1], cacheDir))
                 } catch (e: LeptonicaError) {
                     notification.value = e.message
                 } catch (e: Uninitialized) {
                     notification.value = e.message
                 }
-            }
-        )
-        this.count.addListener(onChangeListener)
-        this.isBlackWhite.addListener(onChangeListener)
+            })
     }
 
     override fun load(path: String) {
-        hasImage = true
-        images.delete(1)
-        images.add(count.get(), isBlackWhite.get(), path)
-        _posterize.onNext(Unit)
+        imagePath = path
+        _posterize.onNext(path)
     }
 
     override fun load(image: Image) {
@@ -116,7 +97,7 @@ class ViewModel(
 
     override fun save(destination: File) {
         disposables.add(Completable.fromAction {
-            File(images[1].path).copyTo(destination, true)
+            cacheDir.resolve("${images[1].id}.png").copyTo(destination, true)
         }
             .subscribeOn(Schedulers.io())
             .observeOn(JavaFxScheduler.platform())
