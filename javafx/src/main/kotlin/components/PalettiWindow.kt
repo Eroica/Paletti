@@ -3,6 +3,9 @@ package components
 import IViewModel
 import Uninitialized
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxjavafx.schedulers.JavaFxScheduler
+import javafx.beans.value.ChangeListener
+import javafx.beans.value.ObservableValue
 import javafx.embed.swing.SwingFXUtils
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
@@ -10,6 +13,7 @@ import javafx.geometry.Rectangle2D
 import javafx.scene.SnapshotParameters
 import javafx.scene.control.CheckBox
 import javafx.scene.control.Slider
+import javafx.scene.image.Image
 import javafx.scene.input.*
 import javafx.scene.layout.HBox
 import javafx.scene.layout.StackPane
@@ -78,20 +82,28 @@ class PalettiWindow(private val viewModel: IViewModel) : Stage(), ISaveDialog {
         while (colorPalette.children.size < viewModel.count.value) {
             colorPalette.children.add(ColorTile())
         }
-        disposables.add(viewModel.image.subscribe({
+        disposables.add(viewModel.image.observeOn(JavaFxScheduler.platform()).subscribe {
             val colors = it.colors
             setColorPalette(colors.size)
             colors.forEachIndexed { index, color ->
                 (colorPalette.children[index] as ColorTile).setColor(color)
             }
-        }, { notification.show(it.message ?: "") }))
+        })
         disposables.add(viewModel.image.take(1).subscribe {
-            val fragment = ImageFragment(viewModel, this, notification)
-            fragmentContainer.children.removeAt(0)
-            fragmentContainer.children.add(0, fragment)
-            this.fragment = fragment
-            fragment.imageView.fitWidthProperty().bind(fragmentContainer.widthProperty())
-            fragment.imageView.fitHeightProperty().bind(fragmentContainer.heightProperty())
+            val image = Image(it.path, fragmentContainer.width, fragmentContainer.height, true, true, true)
+            image.progressProperty().addListener(object : ChangeListener<Number> {
+                override fun changed(observable: ObservableValue<out Number>?, oldValue: Number?, newValue: Number?) {
+                    if (newValue?.toDouble() ?: 0.0 >= 1.0) {
+                        image.progressProperty().removeListener(this)
+                        val fragment = ImageFragment(viewModel, fragmentContainer.width, fragmentContainer.height, this@PalettiWindow, notification)
+                        fragment.imageView.fitWidthProperty().bind(fragmentContainer.widthProperty())
+                        fragment.imageView.fitHeightProperty().bind(fragmentContainer.heightProperty())
+                        fragmentContainer.children.removeAt(0)
+                        fragmentContainer.children.add(0, fragment)
+                        this@PalettiWindow.fragment = fragment
+                    }
+                }
+            })
         })
     }
 

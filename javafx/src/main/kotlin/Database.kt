@@ -1,4 +1,3 @@
-import javafx.scene.image.Image
 import javafx.scene.paint.Color
 import java.io.Closeable
 import java.io.File
@@ -52,16 +51,10 @@ class Database(path: File, cacheDir: File) : Closeable {
 
 data class SqlImage(
     val id: Int,
-    private val getPath: PreparedStatement,
+    private val getSource: PreparedStatement,
     private val getColors: PreparedStatement,
     private val setParameters: PreparedStatement
 ) : IPosterizedImage {
-    override val path: String
-        get() = getPath.apply { setInt(1, id) }.executeQuery().use {
-            it.getString(1)
-        }
-    override val image: Image
-        get() = Image(File(path).toURI().toString())
     override val colors: List<Color>
         get() {
             return ArrayList<Color>().apply {
@@ -72,6 +65,11 @@ data class SqlImage(
                     }
                 }
             }
+        }
+
+    override val source: String
+        get() = getSource.apply { setInt(1, id) }.executeQuery().use {
+            it.getString(1)
         }
 
     fun setParameters(count: Int, isBlackWhite: Boolean) {
