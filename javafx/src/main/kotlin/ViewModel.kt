@@ -1,10 +1,9 @@
 import app.paletti.lib.Leptonica
 import io.reactivex.Completable
-import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observables.ConnectableObservable
 import io.reactivex.rxjavafx.schedulers.JavaFxScheduler
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import javafx.beans.InvalidationListener
 import javafx.beans.property.*
@@ -25,7 +24,7 @@ interface IViewModel {
     val count: IntegerProperty
     val isBlackWhite: BooleanProperty
     val notification: StringProperty
-    val image: Observable<PosterizedPix>
+    val image: ConnectableObservable<PosterizedPix>
 
     fun load(path: String)
     fun load(image: Image)
@@ -51,8 +50,16 @@ class ViewModel(
     private var imagePath: String? = null
 
     private val _posterize = PublishSubject.create<String>()
-    private val _image = BehaviorSubject.create<PosterizedPix>()
-    override val image: Observable<PosterizedPix> = _image
+    override val image = _posterize.debounce(100, TimeUnit.MILLISECONDS)
+        .subscribeOn(Schedulers.computation())
+        .map {
+            images.delete(1)
+            images.add(count.get(), isBlackWhite.get(), it)
+            images[1].setParameters(count.get(), isBlackWhite.get())
+            Leptonica.posterize2(1, databasePath)
+            PosterizedPix(images[1], cacheDir)
+        }
+        .publish()
     private val disposables = CompositeDisposable()
 
     private val onChangeListener = InvalidationListener {
@@ -62,23 +69,9 @@ class ViewModel(
     }
 
     init {
-        this.count.addListener(onChangeListener)
-        this.isBlackWhite.addListener(onChangeListener)
-        this.disposables.add(_posterize.debounce(100, TimeUnit.MILLISECONDS)
-            .subscribeOn(Schedulers.computation())
-            .subscribe {
-                try {
-                    images.delete(1)
-                    images.add(count.get(), isBlackWhite.get(), it)
-                    images[1].setParameters(count.get(), isBlackWhite.get())
-                    Leptonica.posterize2(1, databasePath)
-                    _image.onNext(PosterizedPix(images[1], cacheDir))
-                } catch (e: LeptonicaError) {
-                    notification.value = e.message
-                } catch (e: Uninitialized) {
-                    notification.value = e.message
-                }
-            })
+        this.disposables.add(this.image.connect())
+        this.count.addListener(this.onChangeListener)
+        this.isBlackWhite.addListener(this.onChangeListener)
     }
 
     override fun load(path: String) {
