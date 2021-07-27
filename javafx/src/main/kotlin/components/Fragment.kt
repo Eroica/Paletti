@@ -65,6 +65,7 @@ class ImageFragment(
     viewModel: IViewModel,
     containerWidth: Double,
     containerHeight: Double,
+    initialImage: Image,
     private val saveDialog: ISaveDialog,
     private val notification: INotification
 ) : StackPane(), IFragment {
@@ -80,6 +81,8 @@ class ImageFragment(
             setController(this@ImageFragment)
             load()
         }
+
+        imageView.image = initialImage
 
         val imageContextMenu = ContextMenu().apply { items.add(cropImageItem) }
         imageView.setOnContextMenuRequested {
