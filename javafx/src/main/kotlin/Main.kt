@@ -28,11 +28,13 @@ class Paletti : Application() {
                 stage.scene.root.styleClass.add("paletti-no-focus")
             }
         }
-        stage.setOnCloseRequest {
+        val closeListener = {
             stage.onDestroy()
             viewModel.onDestroy()
             database.close()
         }
+        stage.closeRequest = closeListener
+        stage.setOnCloseRequest { closeListener() }
         if (parameters.unnamed.isNotEmpty()) {
             viewModel.count.value = parameters.named.getOrDefault("colors", "6").toInt()
             viewModel.isBlackWhite.value = parameters.named.getOrDefault("bw", "false").toBoolean()
