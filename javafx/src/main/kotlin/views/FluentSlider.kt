@@ -24,7 +24,7 @@ class FluentSliderSkin(slider: FluentSlider) : SliderSkin(slider) {
 
     init {
         val radiusProperty = SimpleIntegerProperty()
-        thumb.styleProperty().bind(SimpleStringProperty("-fx-background-insets: -8px, -6px, -5px, ")
+        this.thumb.styleProperty().bind(SimpleStringProperty("-fx-background-insets: -8px, -6px, -5px, ")
             .concat(radiusProperty)
             .concat("px;"))
         val scaleMoveIn = Timeline(KeyFrame(Duration.millis(0.0), KeyValue(radiusProperty, 0)),
@@ -35,16 +35,16 @@ class FluentSliderSkin(slider: FluentSlider) : SliderSkin(slider) {
             KeyFrame(Duration.millis(60.0), KeyValue(radiusProperty, 1, Interpolator.EASE_IN)))
         val scaleReleased = Timeline(KeyFrame(Duration.millis(0.0), KeyValue(radiusProperty, 0)),
             KeyFrame(Duration.millis(60.0), KeyValue(radiusProperty, -2, Interpolator.EASE_IN)))
-        thumb.addEventFilter(MouseEvent.MOUSE_ENTERED) {
+        this.thumb.addEventFilter(MouseEvent.MOUSE_ENTERED) {
             scaleMoveIn.play()
         }
-        thumb.addEventFilter(MouseEvent.MOUSE_EXITED) {
+        this.thumb.addEventFilter(MouseEvent.MOUSE_EXITED) {
             scaleMoveOut.play()
         }
-        thumb.addEventFilter(MouseEvent.MOUSE_PRESSED) {
+        this.thumb.addEventFilter(MouseEvent.MOUSE_PRESSED) {
             scalePressed.play()
         }
-        thumb.addEventFilter(MouseEvent.MOUSE_RELEASED) {
+        this.thumb.addEventFilter(MouseEvent.MOUSE_RELEASED) {
             scaleReleased.play()
         }
     }
