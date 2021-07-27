@@ -82,23 +82,23 @@ class ImageFragment(
             load()
         }
 
-        imageView.image = initialImage
+        this.imageView.image = initialImage
 
         val imageContextMenu = ContextMenu().apply { items.add(cropImageItem) }
-        imageView.setOnContextMenuRequested {
-            imageContextMenu.show(imageView, it.screenX, it.screenY)
+        this.imageView.setOnContextMenuRequested {
+            imageContextMenu.show(this.imageView, it.screenX, it.screenY)
         }
 
-        cropImageItem.selectedProperty().addListener(InvalidationListener {
-            imageView.image?.let { image ->
-                if (!cropImageItem.isSelected) {
-                    imageView.viewport = Rectangle2D(0.0, 0.0, image.width, image.height)
+        this.cropImageItem.selectedProperty().addListener(InvalidationListener {
+            this.imageView.image?.let { image ->
+                if (!this.cropImageItem.isSelected) {
+                    this.imageView.viewport = Rectangle2D(0.0, 0.0, image.width, image.height)
                 } else {
-                    imageView.viewport = fitRectangle(this.width, this.height, image.width, image.height)
+                    this.imageView.viewport = fitRectangle(this.width, this.height, image.width, image.height)
                 }
             }
         })
-        disposables.add(viewModel.image.subscribe {
+        this.disposables.add(viewModel.image.subscribe {
             val width = if (this.width == 0.0) containerWidth else this.width
             val height = if (this.height == 0.0) containerHeight else this.height
             val image = Image(it.path, width, height, true, true, true)
@@ -118,9 +118,9 @@ class ImageFragment(
         })
 
         val resizeListener = InvalidationListener {
-            imageView.image?.let { image ->
-                if (cropImageItem.isSelected) {
-                    imageView.viewport = fitRectangle(this@ImageFragment.width, this@ImageFragment.height, image.width, image.height)
+            this.imageView.image?.let { image ->
+                if (this.cropImageItem.isSelected) {
+                    this.imageView.viewport = fitRectangle(this@ImageFragment.width, this@ImageFragment.height, image.width, image.height)
                 }
             }
         }

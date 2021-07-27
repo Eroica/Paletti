@@ -71,28 +71,30 @@ class PalettiWindow(private val viewModel: IViewModel) : Stage(), ISaveDialog {
             setController(this@PalettiWindow)
             load()
         }
-        initStyle(StageStyle.TRANSPARENT)
-        headerBar.stage = this
-        slider.valueProperty().bindBidirectional(viewModel.count)
-        slider.applyCss()
-        viewModel.count.addListener { _, _, count ->
-            slider.lookup(".track").style = "-fx-background-color: linear-gradient(to right, #005A9E ${count.toDouble()/32}, #868686 ${count.toDouble()/32});"
-            setColorPalette(count.toInt())
+        this.initStyle(StageStyle.TRANSPARENT)
+        this.headerBar.stage = this
+        this.slider.valueProperty().bindBidirectional(this.viewModel.count)
+        this.slider.applyCss()
+        this.viewModel.count.addListener { _, _, count ->
+            this.slider.lookup(".track").style = "-fx-background-color: linear-gradient(to right, #005A9E ${count.toDouble()/32}, #868686 ${count.toDouble()/32});"
+            this.setColorPalette(count.toInt())
         }
-        monoSwitch.selectedProperty().bindBidirectional(viewModel.isBlackWhite)
-        viewModel.notification.addListener { _, _, message -> notification.show(message) }
-        while (colorPalette.children.size < viewModel.count.value) {
-            colorPalette.children.add(ColorTile())
+        this.monoSwitch.selectedProperty().bindBidirectional(this.viewModel.isBlackWhite)
+        this.viewModel.notification.addListener { _, _, message -> this.notification.show(message) }
+        while (this.colorPalette.children.size < this.viewModel.count.value) {
+            this.colorPalette.children.add(ColorTile())
         }
-        disposables.add(viewModel.image.observeOn(JavaFxScheduler.platform()).subscribe {
+        this.disposables.add(this.viewModel.image.observeOn(JavaFxScheduler.platform()).subscribe {
             val colors = it.colors
-            setColorPalette(colors.size)
+            this.setColorPalette(colors.size)
             colors.forEachIndexed { index, color ->
-                (colorPalette.children[index] as ColorTile).setColor(color)
+                (this.colorPalette.children[index] as ColorTile).setColor(color)
             }
         })
-        disposables.add(viewModel.image.take(1).subscribe {
-            val image = Image(it.path, fragmentContainer.width, fragmentContainer.height, true, true, true)
+        this.disposables.add(this.viewModel.image.take(1).subscribe {
+            val image = Image(
+                it.path, this.fragmentContainer.width, this.fragmentContainer.height, true, true, true
+            )
             image.progressProperty().addListener(object : ChangeListener<Number> {
                 override fun changed(observable: ObservableValue<out Number>?, oldValue: Number?, newValue: Number?) {
                     if (newValue?.toDouble() ?: 0.0 >= 1.0) {
