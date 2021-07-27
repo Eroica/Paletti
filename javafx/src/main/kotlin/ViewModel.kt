@@ -107,6 +107,8 @@ class ViewModel(
     }
 
     fun onDestroy() {
+        count.removeListener(onChangeListener)
+        isBlackWhite.removeListener(onChangeListener)
         disposables.dispose()
     }
 }

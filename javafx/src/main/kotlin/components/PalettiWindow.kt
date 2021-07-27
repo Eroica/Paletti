@@ -63,6 +63,8 @@ class PalettiWindow(private val viewModel: IViewModel) : Stage(), ISaveDialog {
 
     private val disposables = CompositeDisposable()
 
+    var closeRequest: () -> Unit = {}
+
     init {
         FXMLLoader(javaClass.getResource("PalettiWindow.fxml")).apply {
             setRoot(this@PalettiWindow)
@@ -95,7 +97,7 @@ class PalettiWindow(private val viewModel: IViewModel) : Stage(), ISaveDialog {
                 override fun changed(observable: ObservableValue<out Number>?, oldValue: Number?, newValue: Number?) {
                     if (newValue?.toDouble() ?: 0.0 >= 1.0) {
                         image.progressProperty().removeListener(this)
-                        val fragment = ImageFragment(viewModel, fragmentContainer.width, fragmentContainer.height, this@PalettiWindow, notification)
+                        val fragment = ImageFragment(viewModel, fragmentContainer.width, fragmentContainer.height, image,this@PalettiWindow, notification)
                         fragment.imageView.fitWidthProperty().bind(fragmentContainer.widthProperty())
                         fragment.imageView.fitHeightProperty().bind(fragmentContainer.heightProperty())
                         fragmentContainer.children.removeAt(0)
@@ -132,7 +134,14 @@ class PalettiWindow(private val viewModel: IViewModel) : Stage(), ISaveDialog {
         }
     }
 
+    override fun close() {
+        closeRequest()
+        super.close()
+    }
+
     fun onDestroy() {
+        slider.valueProperty().unbindBidirectional(viewModel.count)
+        monoSwitch.selectedProperty().unbindBidirectional(viewModel.isBlackWhite)
         fragment.onDestroy()
         disposables.dispose()
     }
