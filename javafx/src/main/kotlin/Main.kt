@@ -9,6 +9,7 @@ const val APP_NAME = "Paletti"
 const val DB_NAME = "Paletti.db"
 
 fun main(args: Array<String>) {
+    System.setProperty("prism.lcdtext", "false");
     Application.launch(Paletti::class.java, *args)
 }
 
