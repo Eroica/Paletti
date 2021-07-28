@@ -102,7 +102,8 @@
 }
 
 .context-menu {
-	-fx-background-color: #e7e7e7;
+	-fx-background-color: #e9e9e9;
+	-fx-background-image: url("noise.png");
 	-fx-text-fill: black;
 	-fx-border-radius: 10px;
 	-fx-background-radius: 10px;
@@ -112,19 +113,22 @@
 	-fx-padding: 0.333333em;
 }
 .context-menu .menu-item {
-	-fx-font-size: 1.1em;
-	-fx-padding: .5em .6em;
+	-fx-font-size: 14px;
+	-fx-padding: 5px 8px 4px 8px;
 }
 .context-menu .menu-item .label {
 	-fx-padding: 0em 0.5em 0em 4px;
 }
 .context-menu .menu-item:focused {
-	-fx-background-color: rgba(0, 0, 0, 0.04);
+	-fx-background-color: rgba(0, 0, 0, 0.035);
 	-fx-background-radius: 6px;
 	-fx-focused-mark-color: #000000;
 }
 .context-menu .menu-item:focused > .label {
 	-fx-text-fill: #000000;
+}
+.context-menu .menu-item:pressed {
+	-fx-background-color: rgba(0, 0, 0, 0.02);
 }
 .context-menu .check-menu-item:checked .check {
 	-fx-shape: "M12.151,3.151L5,10.302L1.849,7.151L1,8L5,12L13,4L12.151,3.151Z";
