@@ -83,7 +83,6 @@ class ImageFragment(
         }
 
         this.imageView.image = initialImage
-
         val imageContextMenu = ContextMenu().apply { items.add(cropImageItem) }
         this.imageView.setOnContextMenuRequested {
             imageContextMenu.show(this.imageView, it.screenX, it.screenY)
@@ -104,7 +103,7 @@ class ImageFragment(
             val image = Image(it.path, width, height, true, true, true)
             image.progressProperty().addListener(object : ChangeListener<Number> {
                 override fun changed(observable: ObservableValue<out Number>?, oldValue: Number?, newValue: Number?) {
-                    if (newValue?.toDouble() ?: 0.0 >= 1.0) {
+                    if ((newValue?.toDouble() ?: 0.0) >= 1.0) {
                         if (!cropImageItem.isSelected) {
                             imageView.viewport = Rectangle2D(0.0, 0.0, image.width, image.height)
                         } else {
@@ -140,7 +139,7 @@ class ImageFragment(
             }
             COMBINATION_COPY_TO_CLIPBOARD.match(event) -> {
                 Clipboard.getSystemClipboard().setContent(ClipboardContent().apply {
-                    putImage(imageView.image)
+                    putImage(Image(imageView.image.url))
                 })
                 notification.show("Copied current image to clipboard.")
                 event.consume()
