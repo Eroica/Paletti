@@ -1,10 +1,10 @@
 import app.paletti.lib.Leptonica
-import io.reactivex.Completable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observables.ConnectableObservable
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.observables.ConnectableObservable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subjects.PublishSubject
 import io.reactivex.rxjavafx.schedulers.JavaFxScheduler
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
 import javafx.beans.InvalidationListener
 import javafx.beans.property.*
 import javafx.embed.swing.SwingFXUtils
