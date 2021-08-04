@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     application
     kotlin("jvm") version "1.5.10"
@@ -10,7 +8,7 @@ plugins {
 }
 
 group = "app.paletti.javafx"
-version = "2021.07"
+version = "2021.08"
 
 repositories {
     mavenCentral()
