@@ -97,7 +97,7 @@ class PalettiWindow(private val viewModel: IViewModel) : Stage(), ISaveDialog {
             )
             image.progressProperty().addListener(object : ChangeListener<Number> {
                 override fun changed(observable: ObservableValue<out Number>?, oldValue: Number?, newValue: Number?) {
-                    if (newValue?.toDouble() ?: 0.0 >= 1.0) {
+                    if ((newValue?.toDouble() ?: 0.0) >= 1.0) {
                         image.progressProperty().removeListener(this)
                         val fragment = ImageFragment(viewModel, fragmentContainer.width, fragmentContainer.height, image,this@PalettiWindow, notification)
                         fragment.imageView.fitWidthProperty().bind(fragmentContainer.widthProperty())
