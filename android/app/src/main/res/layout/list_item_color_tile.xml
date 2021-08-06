@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+	xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<data/>
+
+	<View
+		android:layout_width="0dp"
+		android:layout_height="64dp"
+		android:layout_weight="1"
+		android:foreground="?android:attr/selectableItemBackground"/>
+</layout>

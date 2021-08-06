@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<item name="container" type="id"/>
+	<item name="toolbarContainer" type="id"/>
+	<item name="bottomBar" type="id"/>
+	<item name="shadowBg" type="id"/>
+	<item name="palette" type="id"/>
+</resources>
