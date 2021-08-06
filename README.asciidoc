@@ -73,7 +73,7 @@ You are welcome to raise bugs and feature requests here.
 
 ....
 Paletti
-├───android  ; Android version (placeholder)
+├───android  ; Android version
 ├───docs     ; Website
 ├───gtk      ; GTK version written in Vala
 ├───javafx   ; JavaFX version written in Kotlin for Windows
@@ -112,8 +112,10 @@ image::Paletti-2.0.png[Screenshot of Paletti's GTK version]
 
 === Android
 
-The Android version is currently in early development.
-You can download a beta version from the https://github.com/Eroica/Paletti/releases[Releases].
+The Android version is currently in development.
+It is now more or less feature-identical to the desktop versions, and you can easily "`share`" the quantized image and color palette to other apps.
+
+You need to build it from source to get the latest updates.
 
 image::PalettiAndroid-beta.png[Screenshot of Paletti's Android version]
 
