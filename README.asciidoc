@@ -1,9 +1,11 @@
 = Paletti
 :imagesdir: docs/images
 
-Paletti is a color palette generator.
-It segments _(quantizes)_ the image into a desired amount of key colors.
-This can help creating a color palette that closely matches an image.
+Paletti is a small tool to _quantize_ the colors of an image.
+This can be used to simplify the image visually or to extract certain key colors.
+
+The quantization process usually extracts colors that are visually close to the original image, but it is not guaranteed to be exact.
+It is based on a https://en.wikipedia.org/wiki/Median_cut[_Modified median cut quantization_] implemented by http://leptonica.org/:[Leptonica].
 
 image::Paletti.gif[Screenshot of using Paletti]
 
@@ -11,7 +13,7 @@ You can increase/decrease the amount of colors by scrolling up/down or using the
 The switch converts the image to grayscale.
 
 Click on a color in the palette to copy its Hex code into the clipboard.
-You can also export the simplified version or a screenshot of the color palette to use elsewhere.
+You can also export the simplified version or a screenshot of the color palette e.g. to paste it into a drawing program.
 <<Shortcuts,Look at the list of shortcuts below.>>
 
 You can download a version for Windows, an ELF binary (AppImage), and a pre-release for Android from the https://github.com/Eroica/Paletti/releases[Releases].
@@ -19,11 +21,9 @@ See also: https://docs.appimage.org/user-guide/faq.html[What is an AppImage?]
 
 <<Development,Read more about each version below.>>
 
-Paletti's website is https://paletti.app.
 While I probably mostly use Paletti for myself, I develop it publicly in the hope that it is helpful for other people as well.
-
-Nowadays, I mostly work as a 2D/3D artist on Windows, but I have also been using GNU/Linux in the past, so this is why I like to see Paletti on these two systems. Recently, I started developing an Android version as well.
-
+Nowadays, I mostly work as a 2D/3D artist on Windows.
+This is why the Windows version currently gets the most development time.
 You are welcome to raise bugs and feature requests here.
 
 == Shortcuts
@@ -71,33 +71,22 @@ You are welcome to raise bugs and feature requests here.
 
 == Development
 
-There are currently three distinct versions of Paletti:
-
-1. A version written in Kotlin and JavaFX.
-This is targeted to run on Windows.
-2. A version written in Vala and GTK.
-This gets packaged into an AppImage to be run on GNU/Linux.
-3. An Android version (written in Kotlin).
-
-I try to develop each version in tandem, i.e. keeping the same version number, and adding the same features.
-
-**Paletti's current version is 2.0.**
-
 ....
-PALETTI
+Paletti
 ├───android  ; Android version (placeholder)
 ├───docs     ; Website
 ├───gtk      ; GTK version written in Vala
-└───javafx   ; JavaFX version written in Kotlin
+├───javafx   ; JavaFX version written in Kotlin for Windows
+└───lib      ; Simple C++ wrapper used by the javafx and android version
 ....
 
 === Windows
 
 Paletti's Windows version is written in Kotlin with JavaFX.
-It is themed to look like a modern UWP application.
+It is themed to resemble the upcoming WinUI 3/Windows 11 style!
 
 The project is built with Gradle.
-Running Paletti requires Java, but `jpackage` bundles the necessary JRE, so nothing else is needed to run Paletti.
+Running Paletti requires Java, but I'm using `jpackage` to bundle the necessary JRE, so Paletti can be downloaded and ran without installing anything.
 
 Being written in JavaFX, this version should theoretically run on GNU/Linux and macOS as well.
 However, I haven't tested this and don't intend to work on this.
@@ -109,8 +98,10 @@ image::PalettiWindows-2.0.png[Screenshot of Paletti's JavaFX version]
 
 This version is written in Vala using the Meson build system.
 It should fit well into desktop environments using GTK, e.g. GNOME.
-Next to Vala and GTK, you need Leptonica which you can probably install using your distribution's package manager, e.g. `leptonica-devel`.
-The library is abbreviated as `lept`.
+
+To build Paletti, you need Leptonica (next to Vala and GTK).
+You can probably install it your distribution's package manager, e.g. `leptonica-devel`.
+The library is often abbreviated as `lept`.
 
 Create a `build` directory if it doesn't exist yet, then run `meson build`.
 Inside `build/`, you can then run `ninja`.
