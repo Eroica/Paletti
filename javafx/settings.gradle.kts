@@ -1,1 +1,1 @@
-rootProject.name = "Paletti-Windows"
+rootProject.name = "Paletti"
