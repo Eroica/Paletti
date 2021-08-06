@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<data>
+		<import type="androidx.work.WorkInfo.State" alias="State"/>
+		<variable name="fragment" type="app.paletti.android.InitialFragment"/>
+		<variable name="viewModel" type="app.paletti.android.ImageViewModel"/>
+	</data>
+
+	<ViewAnimator
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:inAnimation="@android:anim/fade_in"
+		android:outAnimation="@android:anim/fade_out"
+		app:displayedChild="@{viewModel.workState == State.RUNNING ? 1 : 0}">
+
+		<FrameLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="16dp"
+			android:layout_gravity="center"
+			android:paddingStart="32dp"
+			android:paddingEnd="32dp"
+			android:paddingTop="16dp"
+			android:paddingBottom="16dp"
+			android:background="@drawable/bg_dropzone"
+			android:onClick='@{() -> fragment.selectImageResult.launch("image/*")}'>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center"
+				app:drawableTopCompat="@drawable/ic_baseline_image_48"
+				app:drawableTint="@color/colorAccent"
+				android:drawablePadding="8dp"
+				android:text="@string/label_initial_touch_here"
+				android:textSize="16sp"
+				android:foregroundGravity="center"
+				android:background="?android:attr/selectableItemBackgroundBorderless"/>
+		</FrameLayout>
+
+		<ProgressBar
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"/>
+	</ViewAnimator>
+</layout>

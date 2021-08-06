@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<data>
+		<variable
+			name="fragment"
+			type="app.paletti.android.ImageFragment"/>
+		<variable
+			name="viewModel"
+			type="app.paletti.android.ImageViewModel"/>
+	</data>
+
+	<LinearLayout
+		android:id="@+id/scene_container"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:clipChildren="false"
+		android:clipToPadding="false"
+		android:orientation="vertical">
+
+		<ImageView
+			android:id="@+id/image"
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:layout_weight="1"
+			android:adjustViewBounds="true"
+			android:scaleType="centerCrop"
+			android:foreground="?attr/selectableItemBackground"
+			android:onClick='@{() -> fragment.selectImageResult.launch("image/*")}'
+			android:contentDescription="@string/hint_posterized_image"/>
+
+		<LinearLayout
+			android:id="@id/palette"
+			android:layout_width="match_parent"
+			android:layout_height="64dp"
+			android:orientation="horizontal"
+			android:clipChildren="false"
+			android:clipToPadding="false"
+			app:transitionGroup="@{true}"
+			app:colors="@{viewModel.colors}"/>
+	</LinearLayout>
+</layout>

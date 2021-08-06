@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<transitionSet
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	<slide android:duration="@android:integer/config_longAnimTime" android:slideEdge="bottom" android:interpolator="@android:interpolator/decelerate_quint">
+		<targets>
+			<target android:targetId="@id/palette"/>
+		</targets>
+	</slide>
+</transitionSet>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<transitionSet xmlns:android="http://schemas.android.com/apk/res/android">
+	<slide android:duration="@android:integer/config_mediumAnimTime" android:slideEdge="bottom" android:interpolator="@android:interpolator/decelerate_quint">
+		<targets>
+			<target android:targetId="@id/bottomBar"/>
+			<target android:targetId="@id/shadowBg"/>
+		</targets>
+	</slide>
+
+	<slide android:duration="@android:integer/config_mediumAnimTime" android:slideEdge="top" android:interpolator="@android:interpolator/decelerate_quint">
+		<targets>
+			<target android:targetId="@id/toolbarContainer"/>
+		</targets>
+	</slide>
+</transitionSet>

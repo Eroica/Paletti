@@ -90,7 +90,7 @@ Java_app_paletti_lib_Leptonica_posterize2(
 	catch (exception& e) {
 		return -1;
 	}
-	
+
 	return 0;
 }
 
