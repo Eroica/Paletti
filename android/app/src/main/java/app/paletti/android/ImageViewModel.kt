@@ -10,12 +10,14 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.io.File
+import javax.inject.Inject
 
-class ImageViewModel(
-    private val colorsFile: File,
+@HiltViewModel
+class ImageViewModel @Inject constructor(
+    private val filePaths: FilePaths,
     private val workManager: WorkManager
 ) : ViewModel() {
     val count = ObservableFloat(6f)
@@ -89,7 +91,7 @@ class ImageViewModel(
     private fun readColors() {
         val currentCount = colors.size
         var i = 0
-        colorsFile.forEachLine {
+        filePaths.colors.forEachLine {
             val rgb = it.split(",").map { it.toInt() }
             try {
                 colors[i] = Color.rgb(rgb[0], rgb[1], rgb[2])

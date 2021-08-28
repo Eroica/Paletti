@@ -9,15 +9,17 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.transition.TransitionInflater
 import androidx.work.WorkInfo
 import app.paletti.android.databinding.FragmentMainBinding
 import com.google.android.material.transition.MaterialFadeThrough
-import org.koin.android.viewmodel.ext.android.sharedViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainFragment : Fragment(R.layout.fragment_main) {
     private lateinit var binding: FragmentMainBinding
-    private val viewModel: ImageViewModel by sharedViewModel()
+    private val viewModel: ImageViewModel by activityViewModels()
 
     private val selectImageResult = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let { viewModel.new(it) }

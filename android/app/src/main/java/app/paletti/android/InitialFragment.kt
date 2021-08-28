@@ -9,13 +9,15 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.work.WorkInfo
 import app.paletti.android.databinding.FragmentInitialBinding
-import org.koin.android.viewmodel.ext.android.sharedViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class InitialFragment : Fragment() {
     private lateinit var binding: FragmentInitialBinding
-    private val viewModel: ImageViewModel by sharedViewModel()
+    private val viewModel: ImageViewModel by activityViewModels()
 
     // This field is being called from the XML directly.
     val selectImageResult = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
