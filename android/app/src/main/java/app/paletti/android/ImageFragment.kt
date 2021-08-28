@@ -16,18 +16,20 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.work.WorkInfo
 import app.paletti.android.databinding.FragmentImageBinding
-import org.koin.android.ext.android.inject
-import org.koin.android.viewmodel.ext.android.sharedViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ImageFragment : Fragment() {
     private lateinit var binding: FragmentImageBinding
-    private val viewModel: ImageViewModel by sharedViewModel()
-    private val filePaths: FilePaths by inject()
+    private val viewModel: ImageViewModel by activityViewModels()
+    @Inject lateinit var filePaths: FilePaths
 
     // This field is being called from the XML directly.
     val selectImageResult = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->

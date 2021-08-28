@@ -3,11 +3,12 @@ package app.paletti.android
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
+import androidx.hilt.work.HiltWorker
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import app.paletti.lib.Leptonica
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import java.io.File
 import java.io.IOException
 
@@ -17,12 +18,16 @@ private fun duplicateToBmp(source: File, destination: File) {
     bitmap.recycle()
 }
 
-class CopyWorker(context: Context, params: WorkerParameters) : Worker(context, params), KoinComponent {
+@HiltWorker
+class CopyWorker @AssistedInject constructor(
+    @Assisted context: Context,
+    @Assisted params: WorkerParameters,
+    val filePaths: FilePaths
+) :
+    Worker(context, params) {
     companion object {
         const val URI = "URI"
     }
-
-    private val filePaths: FilePaths by inject()
 
     override fun doWork(): Result {
         return try {
@@ -37,14 +42,17 @@ class CopyWorker(context: Context, params: WorkerParameters) : Worker(context, p
     }
 }
 
-class PosterizeWorker(context: Context, params: WorkerParameters) : Worker(context, params), KoinComponent {
+@HiltWorker
+class PosterizeWorker @AssistedInject constructor(
+    @Assisted context: Context,
+    @Assisted params: WorkerParameters,
+    val filePaths: FilePaths
+) : Worker(context, params) {
     companion object {
         const val WORK_NAME = "posterize"
         const val COUNT = "COUNT"
         const val IS_BLACK_WHITE = "IS_BLACK_WHITE"
     }
-
-    private val filePaths: FilePaths by inject()
 
     override fun doWork(): Result {
         val count = inputData.getInt(COUNT, 6)

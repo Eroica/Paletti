@@ -1,12 +1,19 @@
 package app.paletti.android
 
 import android.app.Application
+import android.content.Context
+import androidx.hilt.work.HiltWorkerFactory
+import androidx.work.Configuration
 import androidx.work.WorkManager
-import org.koin.android.ext.koin.androidContext
-import org.koin.android.viewmodel.dsl.viewModel
-import org.koin.core.context.startKoin
-import org.koin.dsl.module
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.HiltAndroidApp
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import java.io.File
+import javax.inject.Inject
+import javax.inject.Singleton
 
 data class FilePaths(
     val colors: File,
@@ -21,29 +28,40 @@ object ProviderData {
     const val type = "type/image"
 }
 
-val appModule = module {
-    single { WorkManager.getInstance(androidContext()) }
-    single {
-        androidContext().run {
-            FilePaths(
-                cacheDir.resolve("Colors.txt"),
-                cacheDir.resolve("tmp.dat"),
-                cacheDir.resolve("tmp.bmp"),
-                cacheDir.resolve("out.bmp"),
-                cacheDir.resolve("Palette.png")
-            )
-        }
+@Module
+@InstallIn(SingletonComponent::class)
+object AppModule {
+    @Singleton
+    @Provides
+    fun bindFilePaths(@ApplicationContext appContext: Context): FilePaths {
+        return FilePaths(
+            appContext.cacheDir.resolve("Colors.txt"),
+            appContext.cacheDir.resolve("tmp.dat"),
+            appContext.cacheDir.resolve("tmp.bmp"),
+            appContext.cacheDir.resolve("out.bmp"),
+            appContext.cacheDir.resolve("Palette.png")
+        )
     }
-    viewModel { ImageViewModel(get<FilePaths>().colors, get()) }
+
+    @Singleton
+    @Provides
+    fun provideWorker(@ApplicationContext appContext: Context): WorkManager {
+        return WorkManager.getInstance(appContext)
+    }
 }
 
-class App : Application() {
+@HiltAndroidApp
+class App : Application(), Configuration.Provider {
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
+
     override fun onCreate() {
         super.onCreate()
         System.loadLibrary("paletti")
-        startKoin {
-            androidContext(this@App)
-            modules(appModule)
-        }
     }
+
+    override fun getWorkManagerConfiguration() =
+        Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
 }
