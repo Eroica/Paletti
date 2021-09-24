@@ -1,9 +1,9 @@
 plugins {
     application
-    kotlin("jvm") version "1.5.10"
+    kotlin("jvm") version "1.5.31"
     id("org.openjfx.javafxplugin") version "0.0.10"
     id("com.github.johnrengelman.shadow") version "7.0.0"
-    id("org.beryx.runtime") version "1.12.5"
+    id("org.beryx.runtime") version "1.12.6"
     id("com.github.ben-manes.versions") version "0.39.0"
 }
 
@@ -15,16 +15,16 @@ repositories {
 }
 
 javafx {
-    version = "16"
+    version = "17"
     modules("javafx.controls", "javafx.fxml", "javafx.swing")
 }
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("io.reactivex.rxjava3:rxjava:3.1.0")
-    implementation("org.xerial:sqlite-jdbc:3.36.0.1")
+    implementation("io.reactivex.rxjava3:rxjava:3.1.1")
+    implementation("org.xerial:sqlite-jdbc:3.36.0.3")
     implementation("net.harawata:appdirs:1.2.1")
-    implementation("org.slf4j:slf4j-simple:1.7.30")
+    implementation("org.slf4j:slf4j-simple:1.7.32")
 }
 
 tasks {
