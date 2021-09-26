@@ -60,7 +60,7 @@ namespace Leptonica {
 			if (ok != 0) {
 				throw new Exception.FAILURE("Could not get color");
 			}
-			return Paletti.RGB (r, g, b);
+			return new Paletti.RGB (r, g, b);
 		}
 
 		public Paletti.RGB[] colors {
@@ -77,7 +77,7 @@ namespace Leptonica {
 
 				Paletti.RGB[] colors = new Paletti.RGB[count];
 				for (int i=0; i < count; i++) {
-					colors[i] = Paletti.RGB (r[i], g[i], b[i]);
+					colors[i] = new Paletti.RGB (r[i], g[i], b[i]);
 				}
 				return colors;
 			}
@@ -94,13 +94,13 @@ namespace Leptonica {
 	}
 
 	[CCode (cname = "pixMedianCutQuantGeneral")]
-	PIX pixMedianCutQuantGeneral (PIX pix,
-	                              l_int32 ditherflag,
-	                              l_int32 outdepth,
-	                              l_int32 maxcolors,
-	                              l_int32 sigbits = 0,
-	                              l_int32 maxsub = 0,
-	                              l_int32 checkbw = 0);
+	PIX? pixMedianCutQuantGeneral (PIX pix,
+	                               l_int32 ditherflag,
+	                               l_int32 outdepth,
+	                               l_int32 maxcolors,
+	                               l_int32 sigbits = 0,
+	                               l_int32 maxsub = 0,
+	                               l_int32 checkbw = 0);
 
 	[CCode (cname = "pixQuantizeIfFewColors")]
 	int pixQuantizeIfFewColors (PIX pix,
@@ -110,14 +110,17 @@ namespace Leptonica {
 	                            out PIX ppixd);
 
 	[CCode (cname = "pixConvertRGBToLuminance")]
-	PIX pixConvertRGBToLuminance (PIX pix);
+	PIX? pixConvertRGBToLuminance (PIX pix);
+
+	[CCode (cname = "pixConvert8To32")]
+	PIX? pixConvert8To32 (PIX pix);
 
 	[CCode (cname = "pixAddGrayColormap8")]
 	int pixAddGrayColormap8 (PIX pix);
 
 	[CCode (cname = "pixAddMinimalGrayColormap8")]
-	PIX pixAddMinimalGrayColormap8 (PIX pix);
+	PIX? pixAddMinimalGrayColormap8 (PIX pix);
 
 	[CCode (cname = "pixRemoveColormap")]
-	PIX pixRemoveColormap (PIX pix, int type = 1);
+	PIX? pixRemoveColormap (PIX pix, int type = 1);
 }
