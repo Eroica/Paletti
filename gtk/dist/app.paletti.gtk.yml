@@ -1,0 +1,18 @@
+app-id: app.paletti.gtk
+runtime: org.gnome.Platform
+runtime-version: '40'
+sdk: org.gnome.Sdk
+command: Paletti
+modules:
+  - name: lept
+    buildsystem: autotools
+    sources:
+      - type: archive
+        url: https://github.com/DanBloomberg/leptonica/releases/download/1.82.0/leptonica-1.82.0.tar.gz
+        sha256: 155302ee914668c27b6fe3ca9ff2da63b245f6d62f3061c8f27563774b8ae2d6
+  - name: Paletti
+    buildsystem: meson
+    sources:
+      - type: dir
+        path: ..
+

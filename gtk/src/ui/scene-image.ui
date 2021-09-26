@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+	<template class="PalettiImageScene" parent="GtkBox">
+		<property name="visible">True</property>
+		<property name="can-focus">False</property>
+		<property name="hexpand">True</property>
+		<property name="vexpand">True</property>
+		<property name="orientation">vertical</property>
+		<child>
+			<object class="GtkPicture" id="image">
+				<property name="can-focus">False</property>
+				<property name="hexpand">True</property>
+				<property name="vexpand">True</property>
+				<property name="halign">GTK_ALIGN_FILL</property>
+				<property name="valign">GTK_ALIGN_FILL</property>
+				<property name="keep-aspect-ratio">True</property>
+				<property name="can-shrink">True</property>
+			</object>
+		</child>
+		<style>
+			<class name="posterized-scene"/>
+		</style>
+	</template>
+</interface>

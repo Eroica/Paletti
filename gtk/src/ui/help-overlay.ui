@@ -48,20 +48,6 @@
 								<property name="title" translatable="yes" context="shortcut window">Save current image</property>
 							</object>
 						</child>
-						<child>
-							<object class="GtkShortcutsShortcut">
-								<property name="visible">1</property>
-								<property name="accelerator">&lt;Primary&gt;c</property>
-								<property name="title" translatable="yes" context="shortcut window">Put current image into clipboard</property>
-						</object>
-						</child>
-						<child>
-							<object class="GtkShortcutsShortcut">
-								<property name="visible">1</property>
-								<property name="accelerator">&lt;Primary&gt;e</property>
-								<property name="title" translatable="yes" context="shortcut window">Save current color palette as PNG</property>
-							</object>
-						</child>
 					</object>
 				</child>
 				<child>

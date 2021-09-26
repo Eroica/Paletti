@@ -44,17 +44,17 @@ You are welcome to raise bugs and feature requests here.
 
 |Copy current image into clipboard
 |`Ctrl+C`
-|`Ctrl+C`
+|
 |
 
 |Export current color palette
 |`Ctrl+E`
-|`Ctrl+E`
+|
 |
 
 |Increase/decrease color palette size
 |Mouse wheel up/down
-|Mouse wheel up/down
+|
 |
 
 |Toggle between black/white and colored segmentation

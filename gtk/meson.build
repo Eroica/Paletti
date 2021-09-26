@@ -1,24 +1,23 @@
-project('Paletti', ['c', 'vala'],
-        version: '2.0',
-        meson_version: '>= 0.29.0',
-        default_options: ['warning_level=2'])
+project('Paletti', 'vala', 'c')
 
-vapi_dir = meson.current_source_dir() + '/vapi'
+vapi_dir = meson.current_source_dir() / 'vapi'
+add_project_arguments(['--vapidir', vapi_dir, '--enable-experimental-non-null'], language: 'vala')
 
 dependencies = [
-    dependency('glib-2.0', version: '>=2.48'),
+    dependency('glib-2.0'),
     dependency('gobject-2.0'),
-    dependency('gtk+-3.0', version: '>=3.18'),
+    dependency('gtk4'),
     dependency('lept')
 ]
 
 sources = files('src/main.vala',
+                'src/model.vala',
+                'src/leptonica.vala',
+                'src/color.vala',
                 'src/window.vala',
                 'src/scene.vala',
                 'src/dialog.vala',
-                'src/notification.vala',
-                'src/pix.vala',
-                'src/color.vala')
+                'src/notification.vala')
 
 sources += import('gnome').compile_resources(
     'paletti-resources',
@@ -27,6 +26,4 @@ sources += import('gnome').compile_resources(
     c_name: 'paletti'
 )
 
-executable('Paletti', sources, dependencies: dependencies, install : true,
-           vala_args: ['--vapidir=../vapi', '--gresources=../src/paletti.gresource.xml'])
-
+executable('Paletti', sources, dependencies: dependencies, install : true)

@@ -2,25 +2,16 @@ using Gdk;
 using Gtk;
 
 namespace Paletti {
-	[GtkTemplate (ui = "/com/moebots/Paletti/ui/scene-initial.ui")]
-	public class InitialScene : EventBox, IScene, LinkBehavior {
-		[GtkChild]
-		private Box dropzone;
+	public interface IScene : Object {
+		public abstract void on_shortcut (uint keyval, uint keycode, ModifierType state);
+	}
 
-		private IControl controller;
-		private INavigation navigation;
+	[GtkTemplate (ui = "/app/paletti/gtk/ui/scene-initial.ui")]
+	public class InitialScene : Box, IScene {
 		private INotification notification;
-		private ulong adjust_palette_signal;
 
-		public InitialScene (INotification notification,
-		                     INavigation navigation, IControl controller,
-		                     bool is_first_run) {
-			this.controller = controller;
-			this.navigation = navigation;
+		public InitialScene (INotification notification, bool is_first_run) {
 			this.notification = notification;
-			adjust_palette_signal = controller.get_colors_range ().value_changed.connect (() => {
-				controller.color_palette.adjust_tiles_to ((int) controller.get_colors_range ().value);
-			});
 			if (is_first_run) {
 				this.notification.display (
 					"Press <b>Ctrl+?</b> for a list of keyboard shortcuts.",
@@ -29,191 +20,69 @@ namespace Paletti {
 			}
 		}
 
-		public void on_load (string filename) throws Leptonica.Exception {
-			var pix = new Leptonica.PIX.from_filename (filename);
-			if (pix == null) {
-				throw new Leptonica.Exception.UNSUPPORTED ("Could not read this image.");
+		public void on_shortcut (uint keyval, uint keycode, ModifierType state) {
+			if ((keyval == Key.s && (state & ModifierType.CONTROL_MASK) > 0)
+				|| (keyval == Key.c && (state & ModifierType.CONTROL_MASK) > 0)
+				|| (keyval == Key.e && (state & ModifierType.CONTROL_MASK) > 0)) {
+				notification.display ("First load an image into Paletti.");
 			}
-			var scene = new PosterizeScene (pix, notification, controller);
-			scene.posterize (controller.get_mono_switch ().state);
-			controller.get_colors_range ().disconnect (adjust_palette_signal);
-			navigation.next (scene);
-		}
-
-		public void on_shortcut (EventKey event) {
-			if ((event.keyval == Key.s && event.state == ModifierType.CONTROL_MASK)
-				|| (event.keyval == Key.c && event.state == ModifierType.CONTROL_MASK)
-				|| (event.keyval == Key.e && event.state == ModifierType.CONTROL_MASK)) {
-			notification.display ("First load an image into Paletti.");
-			} else if (event.keyval == Key.v && event.state == ModifierType.CONTROL_MASK) {
-				Clipboard.get_default (Display.get_default ()).request_image ((clipboard, pixbuf) => {
-					var paletti_cache_dir = Path.build_filename (
-						Environment.get_user_cache_dir (),
-						"Paletti"
-					);
-					DirUtils.create_with_parents (paletti_cache_dir, 755);
-					var dest_path = Path.build_filename (paletti_cache_dir, @"cache.png");
-					pixbuf.save (dest_path, "png");
-					on_load (dest_path);
-				});
-			}
-		}
-
-		[GtkCallback]
-		private bool on_enter_dropzone (EventCrossing event) {
-			dropzone.set_state_flags (StateFlags.PRELIGHT, false);
-			cursor_to_pointer ();
-			return true;
-		}
-
-		[GtkCallback]
-		private bool on_leave_dropzone (EventCrossing event) {
-			dropzone.unset_state_flags (StateFlags.PRELIGHT);
-			cursor_to_default ();
-			return true;
 		}
 	}
 
-	[GtkTemplate (ui = "/com/moebots/Paletti/ui/scene-posterize.ui")]
-	public class PosterizeScene : EventBox, IScene, LinkBehavior {
+	[GtkTemplate (ui = "/app/paletti/gtk/ui/scene-image.ui")]
+	public class ImageScene : Box, IScene {
 		[GtkChild]
-		private Image image;
+		private unowned Picture image;
 
-		public Leptonica.PIX src;
-		private int64 time;
-		private IControl controller;
-		private CachedPix cached_pix;
+		private IControl control;
 		private INotification notification;
+		private ViewModel view_model;
 
-		public PosterizeScene (Leptonica.PIX src, INotification notification,
-		                       IControl controller) {
-			this.src = src.clone ();
+		public ImageScene (IControl control, INotification notification, ViewModel view_model) {
+			this.control = control;
 			this.notification = notification;
-			this.controller = controller;
-			this.show_all ();
-
-			controller.get_colors_range ().value_changed.connect (() => {
-				this.posterize (controller.get_mono_switch ().state);
-			});
-			controller.get_mono_switch ().state_set.connect ((is_black_white) => {
-				this.posterize (is_black_white);
-				return false;
-			});
+			this.view_model = view_model;
+			this.view_model.notify["pix"].connect(() => on_load_image ());
 		}
 
-		public void on_load (string filename) throws Leptonica.Exception {
-			var tmp = new Leptonica.PIX.from_filename (filename);
-			if (tmp == null) {
-				throw new Leptonica.Exception.UNSUPPORTED ("Could not read this image.");
-			}
-			src = tmp.clone ();
-			posterize (controller.get_mono_switch ().state);
-		}
-
-		public void on_shortcut (EventKey event) {
-			if (event.keyval == Key.s && event.state == ModifierType.CONTROL_MASK) {
-				var dialog = new SaveFileDialog (notification, cached_pix);
-				dialog.show ();
-			} else if (event.keyval == Key.c && event.state == ModifierType.CONTROL_MASK) {
-				Clipboard.get_for_display (
-					get_window ().get_display (), Gdk.SELECTION_CLIPBOARD
-				).set_image (image.pixbuf);
-			} else if (event.keyval == Key.e && event.state == ModifierType.CONTROL_MASK) {
-				controller.color_palette.export ();
-			} else if (event.keyval == Key.v && event.state == ModifierType.CONTROL_MASK) {
-				Clipboard.get_default (Display.get_default ()).request_image ((clipboard, pixbuf) => {
-					var paletti_cache_dir = Path.build_filename (
-						Environment.get_user_cache_dir (),
-						"Paletti"
-					);
-					DirUtils.create_with_parents (paletti_cache_dir, 755);
-					var dest_path = Path.build_filename (paletti_cache_dir, @"cache.png");
-					pixbuf.save (dest_path, "png");
-					on_load (dest_path);
-				});
+		public void on_shortcut (uint keyval, uint keycode, ModifierType state) {
+			if (keyval == Key.s && (state & ModifierType.CONTROL_MASK) > 0) {
+				control.on_save_dialog ();
+			} else if (keyval == Key.c && (state & ModifierType.CONTROL_MASK) > 0) {
+				var paint_val = Value (typeof (Texture));
+				paint_val.set_object (image.paintable);
+				get_clipboard ().set_value (paint_val);
 			}
 		}
 
-		public void posterize (bool is_black_white) {
-			// Sliding the color slider rapidly will make many calls to this
-			// method. To improve performance, do not call posterize on every
-			// tick. It is only called if at least 100 milliseconds have passed
-			// between each call.
-			time = get_monotonic_time ();
-			Timeout.add (100, () => {
-				var delta = get_monotonic_time ();
-				// Difference in MICROseconds
-				if (delta - time >= 100000) {
-					debounced_posterize.begin (is_black_white);
-				}
-				return false;
-			});
+		private void on_load_image () {
+			load_image.begin ();
 		}
 
-		private async void debounced_posterize (bool is_black_white) {
-			var result = new Thread<bool> (null, () => {
-				try {
-					lock (cached_pix) {
-						if (is_black_white) {
-							cached_pix = new CachedPix (new BlackWhitePix (
-								new PosterizedPix (src, (int) controller.get_colors_range ().value)
-							));
-						} else {
-							cached_pix = new CachedPix (new PosterizedPix (
-								src, (int) controller.get_colors_range ().value)
-							);
-						}
-					}
-				} catch {
-					return false;
-				}
-				Idle.add (debounced_posterize.callback);
-				return true;
-			});
-			yield;
+		public async void load_image () {
+			try {
+				var parent = (!) get_parent ();
+				var width = parent.get_allocated_width ();
+				var height = parent.get_allocated_height ();
+				unowned var pix = ((!) view_model.pix);
 
-			if (!result.join ()) {
-				notification.display ("Could not run quantization on this image.");
-			} else {
-				try {
-					var tmp = yield new Pixbuf.from_stream_async (
-						File.new_for_path (cached_pix.path).read (), null
-					);
-					var target_width = (double) image.get_allocated_width ();
-					var target_height = (double) image.get_allocated_height ();
-					if (target_width / target_height >= 1) {
-						target_height = target_width/cached_pix.width * cached_pix.height;
-					} else {
-						target_width = target_height/cached_pix.height * cached_pix.width;
-					}
-					var dest = new Pixbuf (Colorspace.RGB, false, 8, image.get_allocated_width (), image.get_allocated_height ());
-					tmp.scale (
-						dest, 0, 0, image.get_allocated_width (), image.get_allocated_height (),
-						-(int) (target_width - image.get_allocated_width ()) / 2,
-						-(int) (target_height - image.get_allocated_height ()) / 2,
-						target_width/cached_pix.width, target_height/cached_pix.height,
-						InterpType.BILINEAR
-					);
-					image.pixbuf = dest;
-					controller.color_palette.colors = cached_pix.colors;
-				} catch (Error e) {
-					notification.display (e.message);
-				}
+				var tmp = yield new Pixbuf.from_stream_async (
+					File.new_for_path (pix.path).read (), null
+				);
+
+				var dest = new Pixbuf (Colorspace.RGB, false, 8, width, height);
+				tmp.scale (
+					dest,
+					0, 0,
+					width, height,
+					0, 0,
+					(float) width/pix.width, (float) height/pix.height,
+					InterpType.BILINEAR
+				);
+				image.set_pixbuf (dest);
+			} catch (Error e) {
+				notification.display (e.message);
 			}
-		}
-
-		[GtkCallback]
-		private bool on_enter_image (EventCrossing event) {
-			image.set_state_flags (StateFlags.PRELIGHT, false);
-			cursor_to_pointer ();
-			return true;
-		}
-
-		[GtkCallback]
-		private bool on_leave_image (EventCrossing event) {
-			image.unset_state_flags (StateFlags.PRELIGHT);
-			cursor_to_default ();
-			return true;
 		}
 	}
 }
