@@ -6,6 +6,7 @@
 		<file>ui/scene-image.ui</file>
 		<file>ui/notification.ui</file>
 		<file>ui/color_tile.ui</file>
+		<file>ui/color_tile_placeholder.ui</file>
 		<file>resources/style.css</file>
 		<file>resources/app.paletti.gtk.png</file>
 		<file>resources/dropzone.svg</file>

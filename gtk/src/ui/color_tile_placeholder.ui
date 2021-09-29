@@ -1,0 +1,17 @@
+<interface>
+	<template class="GtkListItem">
+		<property name="child">
+			<object class="GtkPicture">
+				<property name="width_request">32</property>
+				<binding name="paintable">
+					<lookup name="paint" type="PalettiRGB">
+						<lookup name="item">GtkListItem</lookup>
+					</lookup>
+				</binding>
+				<style>
+					<class name="palette-tile"/>
+				</style>
+			</object>
+		</property>
+	</template>
+</interface>
