@@ -194,6 +194,14 @@ class PalettiWindow(private val viewModel: IViewModel) : Stage(), ISaveDialog {
     fun onKeyPressed(event: KeyEvent) {
         try {
             when {
+                event.code == KeyCode.UP -> {
+                    slider.value++
+                    event.consume()
+                }
+                event.code == KeyCode.DOWN -> {
+                    slider.value--
+                    event.consume()
+                }
                 event.code == KeyCode.X -> {
                     monoSwitch.isSelected = !monoSwitch.isSelected
                     event.consume()

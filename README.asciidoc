@@ -53,8 +53,9 @@ You are welcome to raise bugs and feature requests here.
 |
 
 |Increase/decrease color palette size
-|Mouse wheel up/down
-|
+|Mouse wheel up/down +
+Keyboard `Up`/`Down`
+|Keyboard `Up`/`Down`
 |
 
 |Toggle between black/white and colored segmentation
