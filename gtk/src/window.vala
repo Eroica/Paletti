@@ -32,7 +32,8 @@ namespace Paletti {
 		private GLib.ListStore store = new GLib.ListStore (typeof (RGB));
 
 		public Window (Gtk.Application app, ViewModel view_model, bool is_first_run) {
-			Object (application: app);
+			Object (application: app, title: "Paletti");
+			X11.Display.set_program_class((!) Display.get_default (), "Paletti");
 			this.view_model = view_model;
 
 			this.notification = new Notification ();
@@ -183,7 +184,6 @@ namespace Paletti {
 			this.scene = scene;
 			this.stack.set_visible_child_name ("Image");
 			scene.load_image.begin ();
-			colors_list.factory = new BuilderListItemFactory.from_resource (null, "/app/paletti/gtk/ui/color_tile.ui");
 			view_model.notify["pix"].disconnect (on_change_image);
 			view_model.notify["count"].disconnect (on_change_count);
 		}
