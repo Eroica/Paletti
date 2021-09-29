@@ -6,6 +6,9 @@
 		<property name="value">6</property>
 		<property name="step_increment">1</property>
 	</object>
+	<object class="GdkCursor" id="pointer_cursor">
+		<property name="name">pointer</property>
+	</object>
 	<template class="PalettiWindow" parent="GtkApplicationWindow">
 		<property name="width_request">500</property>
 		<property name="height_request">450</property>
@@ -50,6 +53,7 @@
 						<child>
 							<object class="GtkStack" id="stack">
 								<property name="transition-type">crossfade</property>
+								<property name="cursor">pointer_cursor</property>
 								<child>
 									<object class="GtkGestureClick">
 										<signal name="released" handler="on_droparea_click"></signal>
