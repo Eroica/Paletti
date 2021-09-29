@@ -1,13 +1,12 @@
-APP_BIN_DIR=AppDir/usr/bin
-APP_DESKTOP_DIR=AppDir/usr/share/applications
-APP_ICON_DIR=AppDir/usr/share/icons/hicolor/256x256/apps
-APP_SYMBOLIC_DIR=AppDir/usr/share/icons/hicolor/symbolic/apps
+APP_DIR=AppDir
+APP_BIN_DIR=${APP_DIR}/usr/bin
+APP_DESKTOP_DIR=${APP_DIR}/usr/share/applications
 
 .PHONY: appimage flatpak
 
 appimage: Paletti-x86_64.AppImage
 
-Paletti-x86_64.AppImage: linuxdeploy-x86_64.AppImage ${APP_BIN_DIR}/Paletti ${APP_DESKTOP_DIR}/app.paletti.gtk.desktop ${APP_ICON_DIR}/app.paletti.gtk.png ${APP_SYMBOLIC_DIR}/app.paletti.gtk-symbolic.svg
+Paletti-x86_64.AppImage: linuxdeploy-x86_64.AppImage ${APP_BIN_DIR}/Paletti ${APP_DESKTOP_DIR}/app.paletti.gtk.desktop
 	./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
 
 ../build/Paletti:
@@ -15,18 +14,12 @@ Paletti-x86_64.AppImage: linuxdeploy-x86_64.AppImage ${APP_BIN_DIR}/Paletti ${AP
 
 ${APP_BIN_DIR}/Paletti: ../build/Paletti
 	mkdir -p ${APP_BIN_DIR}
+	mkdir -p ${APP_DIR}/usr/share/icons
+	cp -R hicolor ${APP_DIR}/usr/share/icons
 	cp $< $@
 
 ${APP_DESKTOP_DIR}/app.paletti.gtk.desktop: app.paletti.gtk.desktop
 	mkdir -p ${APP_DESKTOP_DIR}
-	cp $< $@
-
-${APP_ICON_DIR}/app.paletti.gtk.png: app.paletti.gtk.png
-	mkdir -p ${APP_ICON_DIR}
-	cp $< $@
-
-${APP_SYMBOLIC_DIR}/app.paletti.gtk-symbolic.svg: app.paletti.gtk-symbolic.svg
-	mkdir -p ${APP_SYMBOLIC_DIR}
 	cp $< $@
 
 linuxdeploy-x86_64.AppImage:
