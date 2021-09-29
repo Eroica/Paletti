@@ -54,7 +54,7 @@ namespace Paletti {
 			});
 			this.stack.add_controller (drop_target);
 
-			this.colors_list.factory = new BuilderListItemFactory.from_resource (null, "/app/paletti/gtk/ui/color_tile.ui");
+			this.colors_list.factory = new BuilderListItemFactory.from_resource (null, "/app/paletti/gtk/ui/color_tile_placeholder.ui");
 			this.colors_list.model = new NoSelection (store);
 			this.colors_list.activate.connect ((position) => {
 				if (this.view_model.pix != null) {
@@ -183,6 +183,7 @@ namespace Paletti {
 			this.scene = scene;
 			this.stack.set_visible_child_name ("Image");
 			scene.load_image.begin ();
+			colors_list.factory = new BuilderListItemFactory.from_resource (null, "/app/paletti/gtk/ui/color_tile.ui");
 			view_model.notify["pix"].disconnect (on_change_image);
 			view_model.notify["count"].disconnect (on_change_count);
 		}
