@@ -23,6 +23,7 @@ interface IPosterizedImage {
 interface IViewModel {
     val count: IntegerProperty
     val isBlackWhite: BooleanProperty
+    val isRestoreImage: BooleanProperty
     val notification: StringProperty
     val image: ConnectableObservable<PosterizedPix>
 
@@ -39,12 +40,14 @@ data class PosterizedPix(
 }
 
 class ViewModel(
+    private val id: Int,
     private val images: SqlImages,
     private val databasePath: String,
     private val cacheDir: File
 ) : IViewModel {
     override val count: IntegerProperty = SimpleIntegerProperty(6)
     override val isBlackWhite: BooleanProperty = SimpleBooleanProperty(false)
+    override val isRestoreImage: BooleanProperty = SimpleBooleanProperty(false)
     override val notification: StringProperty = SimpleStringProperty()
 
     private var imagePath: String? = null
@@ -53,11 +56,11 @@ class ViewModel(
     override val image = _posterize.debounce(100, TimeUnit.MILLISECONDS)
         .subscribeOn(Schedulers.computation())
         .map {
-            images.delete(1)
-            images.add(count.get(), isBlackWhite.get(), it)
-            images[1].setParameters(count.get(), isBlackWhite.get())
-            Leptonica.posterize2(1, databasePath)
-            PosterizedPix(images[1], cacheDir)
+            images.delete(id)
+            images.add(id, count.get(), isBlackWhite.get(), it)
+            images[id].setParameters(count.get(), isBlackWhite.get())
+            Leptonica.posterize2(id, databasePath)
+            PosterizedPix(images[id], cacheDir)
         }
         .publish()
     private val disposables = CompositeDisposable()
@@ -90,7 +93,7 @@ class ViewModel(
 
     override fun save(destination: File) {
         disposables.add(Completable.fromAction {
-            cacheDir.resolve("${images[1].id}.png").copyTo(destination, true)
+            cacheDir.resolve("${images[id].id}.png").copyTo(destination, true)
         }
             .subscribeOn(Schedulers.io())
             .observeOn(JavaFxScheduler.platform())
@@ -100,6 +103,9 @@ class ViewModel(
     }
 
     fun onDestroy() {
+        if (!isRestoreImage.get()) {
+            images.delete(id)
+        }
         count.removeListener(onChangeListener)
         isBlackWhite.removeListener(onChangeListener)
         disposables.dispose()

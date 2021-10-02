@@ -19,22 +19,26 @@ class Database(path: File, cacheDir: File) : Closeable {
             )
             addBatch(
                 """CREATE TABLE IF NOT EXISTS color (
-                id INTEGER PRIMARY KEY,
-                rgb INTEGER NOT NULL,
-                image_id INTEGER NOT NULL,
-                FOREIGN KEY (image_id) REFERENCES image (id)
-            );"""
+                    id INTEGER PRIMARY KEY,
+                    rgb INTEGER NOT NULL,
+                    image_id INTEGER NOT NULL,
+                    FOREIGN KEY (image_id) REFERENCES image (id)
+                );"""
             )
             addBatch(
                 """CREATE TABLE IF NOT EXISTS environment (
-                name VARCHAR PRIMARY KEY,
-                value VARCHAR NOT NULL,
-                UNIQUE (name)
-            );"""
+                    name VARCHAR PRIMARY KEY,
+                    value VARCHAR NOT NULL,
+                    UNIQUE (name)
+                );"""
             )
             addBatch(
                 """INSERT OR IGNORE INTO environment (name, value)
-            VALUES ("cache", "$cacheDir")"""
+                VALUES ("cache", "$cacheDir");"""
+            )
+            addBatch(
+                """INSERT OR IGNORE INTO environment (name, value)
+                VALUES ("is_restore_image", 0);"""
             )
             executeBatch()
         }
@@ -47,13 +51,31 @@ class Database(path: File, cacheDir: File) : Closeable {
     fun statement(sql: String): PreparedStatement {
         return db.prepareStatement(sql)
     }
+
+    var isRestoreImage: Boolean
+        get() = db.createStatement()
+            .executeQuery("""SELECT `value` FROM environment WHERE name="is_restore_image";""")
+            .use { it.getBoolean(1) }
+        set(value) {
+            db.prepareStatement("""UPDATE environment SET `value`=? WHERE name="is_restore_image"""").apply {
+                setBoolean(1, value)
+            }.executeUpdate()
+        }
+
+    fun monotonicId(): Int {
+        return db.createStatement().executeQuery("""SELECT max(id) FROM image;""").use {
+            it.getInt(1)
+        }
+    }
 }
 
 data class SqlImage(
     val id: Int,
     private val getSource: PreparedStatement,
     private val getColors: PreparedStatement,
-    private val setParameters: PreparedStatement
+    private val setParameters: PreparedStatement,
+    private val getCount: PreparedStatement,
+    private val getIsBlackWhite: PreparedStatement
 ) : IPosterizedImage {
     override val colors: List<Color>
         get() {
@@ -72,6 +94,16 @@ data class SqlImage(
             it.getString(1)
         }
 
+    val count: Int
+        get() = getCount.apply { setInt(1, id) }.executeQuery().use {
+            it.getInt(1)
+        }
+
+    val isBlackWhite: Boolean
+        get() = getIsBlackWhite.apply { setInt(1, id) }.executeQuery().use {
+            it.getBoolean(1)
+        }
+
     fun setParameters(count: Int, isBlackWhite: Boolean) {
         setParameters.apply {
             setInt(1, count)
@@ -82,21 +114,25 @@ data class SqlImage(
 }
 
 class SqlImages(database: Database) {
-    private val GET_PATH = database.statement("""UPDATE image SET count=?, is_black_white=? WHERE id=?""")
+    private val SET_PARAMETERS = database.statement("""UPDATE image SET count=?, is_black_white=? WHERE id=?""")
     private val GET_COLORS = database.statement("""SELECT rgb FROM color WHERE image_id=?""")
     private val GET_SOURCE = database.statement("""SELECT source FROM image WHERE id=?""")
-    private val ADD_IMAGE = database.statement("""INSERT INTO image (count, is_black_white, source) VALUES (?, ?, ?)""")
+    private val ADD_IMAGE =
+        database.statement("""INSERT INTO image (id, count, is_black_white, source) VALUES (?, ?, ?, ?)""")
     private val DELETE_IMAGE = database.statement("""DELETE FROM image WHERE id=?""")
+    private val GET_COUNT = database.statement("""SELECT count FROM image WHERE id=?""")
+    private val GET_IS_BLACK_WHITE = database.statement("""SELECT is_black_white FROM image WHERE id=?""")
 
     operator fun get(imageId: Int): SqlImage {
-        return SqlImage(imageId, GET_SOURCE, GET_COLORS, GET_PATH)
+        return SqlImage(imageId, GET_SOURCE, GET_COLORS, SET_PARAMETERS, GET_COUNT, GET_IS_BLACK_WHITE)
     }
 
-    fun add(count: Int, isBlackWhite: Boolean, source: String): Int {
+    fun add(id: Int, count: Int, isBlackWhite: Boolean, source: String): Int {
         ADD_IMAGE.apply {
-            setInt(1, count)
-            setInt(2, if (isBlackWhite) 1 else 0)
-            setString(3, source)
+            setInt(1, id)
+            setInt(2, count)
+            setInt(3, if (isBlackWhite) 1 else 0)
+            setString(4, source)
         }.execute()
         return ADD_IMAGE.generatedKeys.getInt(1)
     }
