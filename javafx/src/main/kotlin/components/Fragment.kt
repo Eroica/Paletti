@@ -73,6 +73,9 @@ class ImageFragment(
     lateinit var imageView: ImageView
 
     private val cropImageItem = CheckMenuItem("Crop and zoom image").apply { isSelected = true }
+    private val restoreImageItem = CheckMenuItem("Restore last opened image").apply {
+        selectedProperty().bindBidirectional(viewModel.isRestoreImage)
+    }
     private val disposables = CompositeDisposable()
 
     init {
@@ -83,7 +86,10 @@ class ImageFragment(
         }
 
         this.imageView.image = initialImage
-        val imageContextMenu = ContextMenu().apply { items.add(cropImageItem) }
+        val imageContextMenu = ContextMenu().apply {
+            items.add(cropImageItem)
+            items.add(restoreImageItem)
+        }
         this.imageView.setOnContextMenuRequested {
             imageContextMenu.show(this.imageView, it.screenX, it.screenY)
         }
