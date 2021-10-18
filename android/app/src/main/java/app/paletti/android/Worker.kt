@@ -23,8 +23,7 @@ class CopyWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted params: WorkerParameters,
     val filePaths: FilePaths
-) :
-    Worker(context, params) {
+) : Worker(context, params) {
     companion object {
         const val URI = "URI"
     }
