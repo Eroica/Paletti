@@ -8,7 +8,7 @@
 # Site settings
 title: Paletti
 # description: > # this means to ignore newlines until "baseurl:"
-description: Extract color palettes from images, built for artists and designers.
+description: A color quantization tool built for artists and designers.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://paletti.app" # the base hostname & protocol for your site
 author: Eroica
