@@ -1,16 +1,22 @@
 body, input, select, textarea {
-	font-family: "Clear Sans", sans-serif;
-	font-size: 17px;
+	font-family: "ClearSansScreen-Bk", sans-serif;
+	font-size: 16px;
 	font-weight: 400;
 	line-height: 1.8;
 	color: #526173;
 	hyphens: auto;
 }
 
+em, i {
+	font-family: "ClearSansScreen-BkIt", sans-serif;
+	font-style: normal;
+}
+
 h1, h2, h3, h4, h5, h6,
 strong, b, .text--strong {
+	font-family: "ClearSansScreen-Md", sans-serif;
 	color: #000;
-	font-weight: 600;
+	font-weight: 500;
 }
 
 kbd {

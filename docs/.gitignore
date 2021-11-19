@@ -2,5 +2,6 @@ _site/
 bower_components/
 .sass-cache/
 .jekyll-cache/
+webFonts/
 
 **/.DS_Store
