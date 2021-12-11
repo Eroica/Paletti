@@ -28,11 +28,14 @@ dependencies {
 }
 
 tasks {
+    compileJava {
+        targetCompatibility = JavaVersion.VERSION_17.toString()
+    }
     compileKotlin {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = JavaVersion.VERSION_17.toString()
     }
     compileTestKotlin {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = JavaVersion.VERSION_17.toString()
     }
     jpackage {
         finalizedBy("copyDlls")
