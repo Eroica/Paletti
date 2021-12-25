@@ -14,7 +14,7 @@
 <fx:root type="Stage" minHeight="448.0" minWidth="498.0" title="Paletti" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
 	<scene>
 		<Scene fx:id="scene" fill="#00000000" onDragDropped="#onDragDropped" onDragOver="#onDragOver" onKeyPressed="#onKeyPressed" onScroll="#onScroll" stylesheets="@../style.css">
-			<StackPane styleClass="stage-shadow" style="-fx-background-color: #f7f7f7">
+			<StackPane styleClass="stage-shadow">
 				<VBox>
 					<HeaderBar fx:id="headerBar" VBox.vgrow="NEVER">
 						<CheckBox fx:id="monoSwitch" mnemonicParsing="false" text="Black/White">

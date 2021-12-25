@@ -1,8 +1,9 @@
 .stage-shadow {
 	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 36, 0, 0, 0);
-	-fx-background-insets: 24;
-	-fx-padding: 24;
-	-fx-background-radius: 8px;
+	-fx-padding: 24px;
+	-fx-background-radius: 8px, 6px;
+	-fx-background-color: #b4b4b4, #f7f7f7;
+	-fx-background-insets: 24px, 25px;
 }
 .paletti-no-focus.stage-shadow {
 	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 12, 0, 0, 0);
@@ -138,6 +139,9 @@
 	-fx-background-insets: 0;
 }
 
+.window-controls {
+	-fx-padding: 1px;
+}
 .window-controls .button {
 	-fx-border-radius: 0 0 0 0;
 	-fx-background-color: #429CE3, #f7f7f7;
