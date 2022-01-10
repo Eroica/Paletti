@@ -1,8 +1,14 @@
-import components.PalettiWindow
+import app.paletti.lib.Windows
+import components.IWindow
+import components.PalettiActivity
 import javafx.application.Application
 import javafx.beans.InvalidationListener
+import javafx.scene.Scene
 import javafx.scene.image.Image
+import javafx.scene.layout.Background
+import javafx.scene.paint.Color
 import javafx.stage.Stage
+import javafx.stage.StageStyle
 import net.harawata.appdirs.AppDirsFactory
 import java.io.File
 import java.sql.SQLException
@@ -11,7 +17,8 @@ const val APP_NAME = "Paletti"
 const val DB_NAME = "Paletti.db"
 
 fun main(args: Array<String>) {
-    System.setProperty("prism.lcdtext", "false");
+    System.loadLibrary("Paletti")
+    System.setProperty("prism.lcdtext", "false")
     Application.launch(Paletti::class.java, *args)
 }
 
@@ -31,31 +38,54 @@ class Paletti : Application() {
         viewModel.isRestoreImage.addListener(InvalidationListener {
             database.isRestoreImage = viewModel.isRestoreImage.get()
         })
-        val stage = PalettiWindow(viewModel)
-        stage.icons += Image(javaClass.getResourceAsStream("icons/256.png"))
-        stage.focusedProperty().addListener { _, _, hasFocus ->
-            if (hasFocus) {
-                stage.scene.root.styleClass.remove("paletti-no-focus")
+
+        val activity = PalettiActivity(viewModel, object : IWindow {
+            override fun close() {
+                primaryStage.close()
+            }
+
+            override fun stage(): Stage {
+                return primaryStage
+            }
+        })
+        activity.background = Background.EMPTY
+
+        val scene = Scene(activity)
+        scene.fill = Color.TRANSPARENT
+        scene.stylesheets += "style.css"
+
+        primaryStage.initStyle(StageStyle.UNIFIED)
+        primaryStage.minWidth = 500.0
+        primaryStage.minHeight = 450.0
+        primaryStage.scene = scene
+        primaryStage.icons += Image(javaClass.getResourceAsStream("icons/256.png"))
+        primaryStage.maximizedProperty().addListener { _, _, isMaximized ->
+            if (isMaximized) {
+                primaryStage.scene.root.styleClass.add("paletti-is-maximized")
             } else {
-                stage.scene.root.styleClass.add("paletti-no-focus")
+                primaryStage.scene.root.styleClass.remove("paletti-is-maximized")
             }
         }
-        val closeListener = {
-            stage.onDestroy()
+        primaryStage.focusedProperty().addListener { _, _, hasFocus ->
+            if (hasFocus) {
+                primaryStage.scene.root.styleClass.remove("paletti-no-focus")
+            } else {
+                primaryStage.scene.root.styleClass.add("paletti-no-focus")
+            }
+        }
+        primaryStage.setOnCloseRequest {
+            activity.onDestroy()
             viewModel.onDestroy()
             database.close()
         }
-        stage.closeRequest = closeListener
-        stage.setOnCloseRequest { closeListener() }
 
         if (database.isRestoreImage) {
             try {
-            viewModel.count.set(images[viewModelId].count)
-            viewModel.isBlackWhite.set(images[viewModelId].isBlackWhite)
-            viewModel.isRestoreImage.set(true)
-            viewModel.load(images[viewModelId].source)
+                viewModel.count.set(images[viewModelId].count)
+                viewModel.isBlackWhite.set(images[viewModelId].isBlackWhite)
+                viewModel.isRestoreImage.set(true)
+                viewModel.load(images[viewModelId].source)
             } catch (e: SQLException) {
-                viewModel.notification.set("Could not restore last image")
                 database.isRestoreImage = false
             }
         } else {
@@ -66,6 +96,11 @@ class Paletti : Application() {
             }
         }
 
-        stage.show()
+        primaryStage.show()
+        val stageTitle = primaryStage.title
+        val targetTitle: String = "_JFX" + System.currentTimeMillis() % 1000
+        primaryStage.title = targetTitle
+        Windows.subclass(targetTitle)
+        primaryStage.title = stageTitle
     }
 }

@@ -16,15 +16,15 @@ import javafx.scene.image.ImageView
 import javafx.scene.input.Clipboard
 import javafx.scene.input.ClipboardContent
 import javafx.scene.input.KeyEvent
+import javafx.scene.layout.BorderPane
 import javafx.scene.layout.StackPane
-import javafx.scene.layout.VBox
 
 interface IFragment {
     fun onShortcut(event: KeyEvent)
     fun onDestroy() = Unit
 }
 
-class InitialFragment : VBox(), IFragment {
+class InitialFragment : BorderPane(), IFragment {
     init {
         FXMLLoader(javaClass.getResource("FragmentInitial.fxml")).apply {
             setRoot(this@InitialFragment)
@@ -72,10 +72,6 @@ class ImageFragment(
     @FXML
     lateinit var imageView: ImageView
 
-    private val cropImageItem = CheckMenuItem("Crop and zoom image").apply { isSelected = true }
-    private val restoreImageItem = CheckMenuItem("Restore last opened image").apply {
-        selectedProperty().bindBidirectional(viewModel.isRestoreImage)
-    }
     private val disposables = CompositeDisposable()
 
     init {
@@ -86,17 +82,9 @@ class ImageFragment(
         }
 
         this.imageView.image = initialImage
-        val imageContextMenu = ContextMenu().apply {
-            items.add(cropImageItem)
-            items.add(restoreImageItem)
-        }
-        this.imageView.setOnContextMenuRequested {
-            imageContextMenu.show(this.imageView, it.screenX, it.screenY)
-        }
-
-        this.cropImageItem.selectedProperty().addListener(InvalidationListener {
+        viewModel.isCropImage.addListener(InvalidationListener {
             this.imageView.image?.let { image ->
-                if (!this.cropImageItem.isSelected) {
+                if (!viewModel.isCropImage.value) {
                     this.imageView.viewport = Rectangle2D(0.0, 0.0, image.width, image.height)
                 } else {
                     this.imageView.viewport = fitRectangle(this.width, this.height, image.width, image.height)
@@ -110,7 +98,7 @@ class ImageFragment(
             image.progressProperty().addListener(object : ChangeListener<Number> {
                 override fun changed(observable: ObservableValue<out Number>?, oldValue: Number?, newValue: Number?) {
                     if ((newValue?.toDouble() ?: 0.0) >= 1.0) {
-                        if (!cropImageItem.isSelected) {
+                        if (!viewModel.isCropImage.value) {
                             imageView.viewport = Rectangle2D(0.0, 0.0, image.width, image.height)
                         } else {
                             imageView.viewport = fitRectangle(width, height, image.width, image.height)
@@ -124,7 +112,7 @@ class ImageFragment(
 
         val resizeListener = InvalidationListener {
             this.imageView.image?.let { image ->
-                if (this.cropImageItem.isSelected) {
+                if (viewModel.isCropImage.value) {
                     this.imageView.viewport = fitRectangle(this@ImageFragment.width, this@ImageFragment.height, image.width, image.height)
                 }
             }
