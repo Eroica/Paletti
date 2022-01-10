@@ -1,12 +1,17 @@
 import app.paletti.lib.Leptonica
 import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.observables.ConnectableObservable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import io.reactivex.rxjava3.subjects.PublishSubject
 import io.reactivex.rxjavafx.schedulers.JavaFxScheduler
 import javafx.beans.InvalidationListener
-import javafx.beans.property.*
+import javafx.beans.property.BooleanProperty
+import javafx.beans.property.IntegerProperty
+import javafx.beans.property.SimpleBooleanProperty
+import javafx.beans.property.SimpleIntegerProperty
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.image.Image
 import javafx.scene.paint.Color
@@ -23,8 +28,9 @@ interface IPosterizedImage {
 interface IViewModel {
     val count: IntegerProperty
     val isBlackWhite: BooleanProperty
+    val isCropImage: BooleanProperty
     val isRestoreImage: BooleanProperty
-    val notification: StringProperty
+    val notification: Observable<String>
     val image: ConnectableObservable<PosterizedPix>
 
     fun load(path: String)
@@ -47,8 +53,9 @@ class ViewModel(
 ) : IViewModel {
     override val count: IntegerProperty = SimpleIntegerProperty(6)
     override val isBlackWhite: BooleanProperty = SimpleBooleanProperty(false)
+    override val isCropImage: BooleanProperty = SimpleBooleanProperty(true)
     override val isRestoreImage: BooleanProperty = SimpleBooleanProperty(false)
-    override val notification: StringProperty = SimpleStringProperty()
+    override val notification: BehaviorSubject<String> = BehaviorSubject.create()
 
     private var imagePath: String? = null
 
@@ -59,9 +66,11 @@ class ViewModel(
             images.delete(id)
             images.add(id, count.get(), isBlackWhite.get(), it)
             images[id].setParameters(count.get(), isBlackWhite.get())
-            Leptonica.posterize2(id, databasePath)
+            if (Leptonica.posterize2(id, databasePath) != Leptonica.OK) throw LeptonicaError
             PosterizedPix(images[id], cacheDir)
         }
+        .observeOn(JavaFxScheduler.platform())
+        .doOnError { it.message?.let { message -> notification.onNext(message) } }
         .publish()
     private val disposables = CompositeDisposable()
 
@@ -98,7 +107,7 @@ class ViewModel(
             .subscribeOn(Schedulers.io())
             .observeOn(JavaFxScheduler.platform())
             .subscribe {
-                notification.value = "Saved image to ${Paths.get(destination.toURI())}"
+                notification.onNext("Saved image to ${Paths.get(destination.toURI())}")
             })
     }
 
