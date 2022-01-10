@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "app.paletti.javafx"
-version = "2021.12"
+version = "2022.01"
 
 repositories {
     mavenCentral()
@@ -62,7 +62,7 @@ runtime {
         skipInstaller = true
         imageOptions = listOf(
             "--icon", "src/main/resources/Paletti.ico",
-            "--copyright", "2021",
+            "--copyright", "2022",
 			"--vendor", "Paletti"
         )
     }
