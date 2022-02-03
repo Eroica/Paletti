@@ -35,7 +35,7 @@ class ColorTile(private var color: String? = null) : VBox() {
     }
 
     @FXML
-    fun onPress(event: MouseEvent) {
+    private fun onPress(event: MouseEvent) {
         if (color != null) {
             ScaleTransition(Duration.seconds(0.1), this).apply {
                 toX = 0.9
@@ -48,7 +48,7 @@ class ColorTile(private var color: String? = null) : VBox() {
     }
 
     @FXML
-    fun onRelease(event: MouseEvent) {
+    private fun onRelease(event: MouseEvent) {
         if (color != null) {
             ScaleTransition(Duration.seconds(0.1), this).apply {
                 toX = 1.0

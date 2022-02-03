@@ -85,7 +85,6 @@ class PalettiActivity(private val viewModel: IViewModel, private val window: IWi
             load()
         }
         this.slider.valueProperty().bindBidirectional(this.viewModel.count)
-        this.slider.applyCss()
         this.viewModel.count.addListener { _, _, count ->
             this.slider.lookup(".track").style =
                 "-fx-background-color: linear-gradient(to right, #005A9E ${count.toDouble() / 32}, #868686 ${count.toDouble() / 32});"

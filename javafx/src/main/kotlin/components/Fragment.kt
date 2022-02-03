@@ -113,7 +113,7 @@ class ImageFragment(
         val resizeListener = InvalidationListener {
             this.imageView.image?.let { image ->
                 if (viewModel.isCropImage.value) {
-                    this.imageView.viewport = fitRectangle(this@ImageFragment.width, this@ImageFragment.height, image.width, image.height)
+                    this.imageView.viewport = fitRectangle(this.width, this.height, image.width, image.height)
                 }
             }
         }

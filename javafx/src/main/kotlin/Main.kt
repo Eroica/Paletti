@@ -48,7 +48,6 @@ class Paletti : Application() {
                 return primaryStage
             }
         })
-        activity.background = Background.EMPTY
 
         val scene = Scene(activity)
         scene.fill = Color.TRANSPARENT

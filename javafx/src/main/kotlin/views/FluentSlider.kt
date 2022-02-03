@@ -24,17 +24,27 @@ class FluentSliderSkin(slider: FluentSlider) : SliderSkin(slider) {
 
     init {
         val radiusProperty = SimpleIntegerProperty()
-        this.thumb.styleProperty().bind(SimpleStringProperty("-fx-background-insets: -8px, -6px, -5px, ")
-            .concat(radiusProperty)
-            .concat("px;"))
-        val scaleMoveIn = Timeline(KeyFrame(Duration.millis(0.0), KeyValue(radiusProperty, 0)),
-            KeyFrame(Duration.millis(100.0), KeyValue(radiusProperty, -2, Interpolator.EASE_IN)))
-        val scaleMoveOut = Timeline(KeyFrame(Duration.millis(0.0), KeyValue(radiusProperty, -2)),
-            KeyFrame(Duration.millis(100.0), KeyValue(radiusProperty, 0, Interpolator.EASE_OUT)))
-        val scalePressed = Timeline(KeyFrame(Duration.millis(0.0), KeyValue(radiusProperty, 0)),
-            KeyFrame(Duration.millis(60.0), KeyValue(radiusProperty, 1, Interpolator.EASE_IN)))
-        val scaleReleased = Timeline(KeyFrame(Duration.millis(0.0), KeyValue(radiusProperty, 0)),
-            KeyFrame(Duration.millis(60.0), KeyValue(radiusProperty, -2, Interpolator.EASE_IN)))
+        this.thumb.styleProperty().bind(
+            SimpleStringProperty("-fx-background-insets: -8px, -6px, -5px, ")
+                .concat(radiusProperty)
+                .concat("px;")
+        )
+        val scaleMoveIn = Timeline(
+            KeyFrame(Duration.millis(0.0), KeyValue(radiusProperty, 0)),
+            KeyFrame(Duration.millis(100.0), KeyValue(radiusProperty, -2, Interpolator.EASE_IN))
+        )
+        val scaleMoveOut = Timeline(
+            KeyFrame(Duration.millis(0.0), KeyValue(radiusProperty, -2)),
+            KeyFrame(Duration.millis(100.0), KeyValue(radiusProperty, 0, Interpolator.EASE_OUT))
+        )
+        val scalePressed = Timeline(
+            KeyFrame(Duration.millis(0.0), KeyValue(radiusProperty, 0)),
+            KeyFrame(Duration.millis(60.0), KeyValue(radiusProperty, 1, Interpolator.EASE_IN))
+        )
+        val scaleReleased = Timeline(
+            KeyFrame(Duration.millis(0.0), KeyValue(radiusProperty, 0)),
+            KeyFrame(Duration.millis(60.0), KeyValue(radiusProperty, -2, Interpolator.EASE_IN))
+        )
         this.thumb.addEventFilter(MouseEvent.MOUSE_ENTERED) {
             scaleMoveIn.play()
         }
