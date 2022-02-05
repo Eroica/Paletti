@@ -26,18 +26,12 @@
 			</CheckBox>
 			<Pane HBox.hgrow="ALWAYS"/>
 			<ToggleButton mnemonicParsing="false" onAction="#onAlwaysOnTop" prefHeight="29.0" prefWidth="46.0" text="" styleClass="top-button">
-				<font>
-					<Font name="Segoe Fluent Icons" size="16.0"/>
-				</font>
 				<tooltip>
 					<FluentTooltip text="Always display on top"/>
 				</tooltip>
 			</ToggleButton>
 			<Pane styleClass="header-border"/>
 			<Button fx:id="optionsButton" text="" onAction="#onOptionsClick">
-				<font>
-					<Font name="Segoe Fluent Icons" size="16.0"/>
-				</font>
 				<tooltip>
 					<FluentTooltip text="Settings and more"/>
 				</tooltip>

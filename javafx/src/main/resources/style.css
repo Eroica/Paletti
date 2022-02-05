@@ -5,9 +5,9 @@
 	-fx-border-color: rgba(0, 0, 0, 0.1);
 	-fx-border-radius: 4px;
 	-fx-text-fill: #000000;
-	-fx-padding: 6px 10px 7px 10px;
-	-fx-font-size: 12px;
+	-fx-padding: 0.5em 0.833333em 0.583333em 0.833333em;
 	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 8, 0, 0, 2);
+	-fx-font-size: 1em;
 }
 
 .slider .track {
@@ -107,11 +107,11 @@
 	-fx-padding: 0.333333em;
 }
 .context-menu .menu-item {
-	-fx-font-size: 14px;
-	-fx-padding: 5px 8px 4px 8px;
+	-fx-font-size: 1.166em;
+	-fx-padding: 0.416667em 0.666667em 0.333333em 0.666667em;
 }
 .context-menu .menu-item .label {
-	-fx-padding: 0em 0.5em 0em 4px;
+	-fx-padding: 0 0.5em 0em 0.333333em;
 }
 .context-menu .menu-item:focused {
 	-fx-background-color: rgba(0, 0, 0, 0.04);
@@ -130,7 +130,7 @@
 }
 
 .header-bar {
-	-fx-padding: 8px 6px 7px 6px;
+	-fx-padding: 0.666667em 0.5em 0.583333em 0.5em;
 	-fx-border-color: #E4DEDD;
 	-fx-border-width: 0 0 1px 0;
 }
@@ -145,6 +145,11 @@
 	-fx-border-color: transparent;
 	-fx-border-width: 2px;
 	-fx-border-insets: -3px -3px -3px -3px;
+}
+.header-bar .button > .text,
+.header-bar .toggle-button > .text {
+	-fx-font-size: 1.333em;
+	-fx-font-family: "Segoe Fluent Icons";
 }
 .header-bar .button:focused,
 .header-bar .toggle-button:focused {
@@ -163,7 +168,7 @@
 	-fx-background-color: #F2EBE9;
 }
 .header-bar .button:focused:pressed,
-.header-bar .toggle-button:focused:pressed{
+.header-bar .toggle-button:focused:pressed {
 	-fx-border-color: transparent;
 	-fx-background-color: #F2EBE9;
 }
@@ -228,9 +233,9 @@
 }
 
 .mono-toggle {
-	-fx-padding: 0 0 0 16px;
+	-fx-padding: 0 0 0 1.333em;
 }
 
 .color-slider {
-	-fx-padding: 0 0 0 8px;
+	-fx-padding: 0 0 0 0.666667em;
 }
