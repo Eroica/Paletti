@@ -6,7 +6,7 @@
 	-fx-border-radius: 4px;
 	-fx-text-fill: #000000;
 	-fx-padding: 6px 10px 7px 10px;
-	-fx-font-size: 11px;
+	-fx-font-size: 12px;
 	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 8, 0, 0, 2);
 }
 
