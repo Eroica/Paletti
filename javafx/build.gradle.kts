@@ -4,11 +4,11 @@ plugins {
     id("org.openjfx.javafxplugin") version "0.0.11"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("org.beryx.runtime") version "1.12.7"
-    id("com.github.ben-manes.versions") version "0.41.0"
+    id("com.github.ben-manes.versions") version "0.42.0"
 }
 
 group = "app.paletti.javafx"
-version = "2022.01"
+version = "2022.02"
 
 repositories {
     mavenCentral()
@@ -24,7 +24,7 @@ dependencies {
     implementation("io.reactivex.rxjava3:rxjava:3.1.3")
     implementation("org.xerial:sqlite-jdbc:3.36.0.3")
     implementation("net.harawata:appdirs:1.2.1")
-    implementation("org.slf4j:slf4j-simple:1.7.32")
+    implementation("org.slf4j:slf4j-simple:1.7.35")
 }
 
 tasks {
@@ -43,7 +43,7 @@ tasks {
 }
 
 tasks.register<Copy>("copyDlls") {
-    from("/libs")
+    from(".")
     include("*.dll")
     into(file(layout.buildDirectory.dir("jpackage/Paletti")))
 }
