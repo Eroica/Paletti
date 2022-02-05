@@ -4,12 +4,19 @@
 #include <fstream>
 #include <string>
 
+#include <dwmapi.h>
+#include <jni.h>
+#include <Windows.h>
+#include <windowsx.h>
+
 #define APPNAME "Paletti"
 
 using std::exception;
 using std::filesystem::path;
 using std::string;
 using namespace sqlite;
+
+std::string targetWndName = "";
 
 const char* DB_STATEMENTS[] = {
 	"SELECT value FROM environment WHERE name=?;",
@@ -153,4 +160,58 @@ Java_app_paletti_lib_Leptonica_posterize(
 	pixDestroy(&pixc);
 	pixDestroy(&pixs);
 	return 0;
+}
+
+void subclassWindow(HWND hWnd) {
+	int trueValue = 0x01;
+	int falseValue = 0x00;
+
+	DwmSetWindowAttribute(hWnd, 20, &falseValue, sizeof(int));
+	DwmSetWindowAttribute(hWnd, 1029, &trueValue, sizeof(int));
+
+	SetWindowPos(hWnd, NULL, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOOWNERZORDER);
+}
+
+BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam)
+{
+	char String[255];
+
+	if (!hWnd)
+		return TRUE; // Not a window
+	if (!IsWindowVisible(hWnd))
+		return TRUE; // Not visible
+	if (!SendMessage(hWnd, WM_GETTEXT, sizeof(String), (LPARAM)String))
+		return TRUE; // No window title
+
+	char pszClassName[64];
+	GetClassName(hWnd, pszClassName, 64);
+	if (_stricmp(pszClassName, "shell_traywnd") && _stricmp(pszClassName, "progman")) {
+		char windowTitle[64];
+		GetWindowText(hWnd, windowTitle, 64);
+		if (!targetWndName.compare(windowTitle)) {
+			subclassWindow(hWnd);
+		}
+	}
+
+	return 1;
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_app_paletti_lib_Windows_subclass(
+	JNIEnv * env,
+	jobject,
+	jstring title) {
+	const jchar* nativeString = env->GetStringChars(title, 0);
+	char chars[256];
+
+	for (int i = 0; i < 256; ++i) {
+		const jchar c = nativeString[i];
+		if (c == 0) break;
+		chars[i] = c;
+	}
+
+	std::string string(chars);
+	targetWndName = string;
+
+	EnumWindows(EnumWindowsProc, 0);
 }
