@@ -1,6 +1,6 @@
 plugins {
     application
-    kotlin("jvm") version "1.6.10"
+    kotlin("jvm") version "1.6.21"
     id("org.openjfx.javafxplugin") version "0.0.12"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("org.beryx.runtime") version "1.12.7"
@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "app.paletti.javafx"
-version = "2022.03"
+version = "2022.04"
 
 repositories {
     mavenCentral()
