@@ -1,6 +1,6 @@
 plugins {
     application
-    kotlin("jvm") version "1.6.0"
+    kotlin("jvm") version "1.6.10"
     id("org.openjfx.javafxplugin") version "0.0.10"
     id("com.github.johnrengelman.shadow") version "7.1.0"
     id("org.beryx.runtime") version "1.12.7"
@@ -21,7 +21,7 @@ javafx {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("io.reactivex.rxjava3:rxjava:3.1.2")
+    implementation("io.reactivex.rxjava3:rxjava:3.1.3")
     implementation("org.xerial:sqlite-jdbc:3.36.0.3")
     implementation("net.harawata:appdirs:1.2.1")
     implementation("org.slf4j:slf4j-simple:1.7.32")
