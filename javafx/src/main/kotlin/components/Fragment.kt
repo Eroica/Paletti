@@ -9,8 +9,6 @@ import javafx.beans.value.ObservableValue
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.geometry.Rectangle2D
-import javafx.scene.control.CheckMenuItem
-import javafx.scene.control.ContextMenu
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.input.Clipboard
