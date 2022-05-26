@@ -13,10 +13,7 @@ import javafx.fxml.FXMLLoader
 import javafx.geometry.Rectangle2D
 import javafx.geometry.Side
 import javafx.scene.SnapshotParameters
-import javafx.scene.control.Button
-import javafx.scene.control.CheckBox
-import javafx.scene.control.CheckMenuItem
-import javafx.scene.control.Slider
+import javafx.scene.control.*
 import javafx.scene.image.Image
 import javafx.scene.input.*
 import javafx.scene.layout.HBox
@@ -73,8 +70,11 @@ class PalettiActivity(private val viewModel: IViewModel, private val window: IWi
     private val restoreImageItem = CheckMenuItem("Restore last opened image").apply {
         selectedProperty().bindBidirectional(viewModel.isRestoreImage)
     }
+    private val aboutMenuItem = MenuItem("About …").apply {
+        setOnAction { AboutDialog(window).show() }
+    }
 
-    private val optionsMenu = FluentMenu(cropImageItem, restoreImageItem)
+    private val optionsMenu = FluentMenu(cropImageItem, restoreImageItem, SeparatorMenuItem(), aboutMenuItem)
 
     private val disposables = CompositeDisposable()
 

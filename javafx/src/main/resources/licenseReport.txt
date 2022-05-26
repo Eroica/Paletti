@@ -1,0 +1,63 @@
+Notice for packages
+
+
+IntelliJ IDEA Annotations (13.0) - The Apache Software License, Version 2.0
+A set of annotations used for code inspection support and code documentation.
+http://www.jetbrains.org
+
+Java AppDirs (1.2.1) - The Apache License, Version 2.0
+Returns paths to platform dependent special directories.
+https://github.com/harawata/appdirs
+
+Java Native Access (5.6.0) - LGPL, version 2.1,Apache License v2.0
+Java Native Access
+https://github.com/java-native-access/jna
+
+Java Native Access Platform (5.6.0) - LGPL, version 2.1,Apache License v2.0
+Java Native Access Platform
+https://github.com/java-native-access/jna
+
+javafx-base (18) - GPLv2+CE
+
+javafx-controls (18) - GPLv2+CE
+
+javafx-fxml (18) - GPLv2+CE
+
+javafx-graphics (18) - GPLv2+CE
+
+javafx-swing (18) - GPLv2+CE
+
+Kotlin Stdlib (1.6.21) - The Apache License, Version 2.0
+Kotlin Standard Library for JVM
+https://kotlinlang.org/
+
+Kotlin Stdlib Common (1.6.21) - The Apache License, Version 2.0
+Kotlin Common Standard Library
+https://kotlinlang.org/
+
+Kotlin Stdlib Jdk7 (1.6.21) - The Apache License, Version 2.0
+Kotlin Standard Library JDK 7 extension
+https://kotlinlang.org/
+
+Kotlin Stdlib Jdk8 (1.6.21) - The Apache License, Version 2.0
+Kotlin Standard Library JDK 8 extension
+https://kotlinlang.org/
+
+reactive-streams (1.0.3) - CC0
+A Protocol for Asynchronous Non-Blocking Data Sequence
+http://www.reactive-streams.org/
+
+RxJava (3.1.4) - The Apache Software License, Version 2.0
+Reactive Extensions for Java
+https://github.com/ReactiveX/RxJava
+
+SLF4J API Module (1.7.35) - MIT License
+The slf4j API
+http://www.slf4j.org
+
+SLF4J Simple Binding (1.7.35) - MIT License
+SLF4J Simple binding
+http://www.slf4j.org
+
+SQLite JDBC (3.36.0.3) - The Apache Software License, Version 2.0
+SQLite JDBC library
