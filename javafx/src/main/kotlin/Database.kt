@@ -117,8 +117,7 @@ class SqlImages(database: Database) {
     private val SET_PARAMETERS = database.statement("""UPDATE image SET count=?, is_black_white=? WHERE id=?""")
     private val GET_COLORS = database.statement("""SELECT rgb FROM color WHERE image_id=?""")
     private val GET_SOURCE = database.statement("""SELECT source FROM image WHERE id=?""")
-    private val ADD_IMAGE =
-        database.statement("""INSERT INTO image (id, count, is_black_white, source) VALUES (?, ?, ?, ?)""")
+    private val ADD_IMAGE = database.statement("""INSERT INTO image (id, count, is_black_white, source) VALUES (?, ?, ?, ?)""")
     private val DELETE_IMAGE = database.statement("""DELETE FROM image WHERE id=?""")
     private val GET_COUNT = database.statement("""SELECT count FROM image WHERE id=?""")
     private val GET_IS_BLACK_WHITE = database.statement("""SELECT is_black_white FROM image WHERE id=?""")
