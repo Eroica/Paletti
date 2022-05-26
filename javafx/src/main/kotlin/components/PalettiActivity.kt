@@ -86,8 +86,7 @@ class PalettiActivity(private val viewModel: IViewModel, private val window: IWi
         }
         this.slider.valueProperty().bindBidirectional(this.viewModel.count)
         this.viewModel.count.addListener { _, _, count ->
-            this.slider.lookup(".track").style =
-                "-fx-background-color: linear-gradient(to right, #005A9E ${count.toDouble() / 32}, #868686 ${count.toDouble() / 32});"
+            this.slider.lookup(".track").style = "-fx-background-color: linear-gradient(to right, #005A9E ${count.toDouble() / 32}, #868686 ${count.toDouble() / 32});"
             this.setColorPalette(count.toInt())
         }
         this.monoSwitch.selectedProperty().bindBidirectional(this.viewModel.isBlackWhite)
@@ -101,9 +100,7 @@ class PalettiActivity(private val viewModel: IViewModel, private val window: IWi
                 (this.colorPalette.children[index] as ColorTile).setColor(color)
             }
         })
-        this.disposables.add(this.viewModel.notification.subscribe {
-            notification.show(it)
-        })
+        this.disposables.add(this.viewModel.notification.subscribe { notification.show(it) })
         this.disposables.add(this.viewModel.image.take(1).subscribe {
             val image = Image(
                 it.path, this.fragmentContainer.width, this.fragmentContainer.height, true, true, true
