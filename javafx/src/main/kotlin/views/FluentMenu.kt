@@ -4,8 +4,6 @@ import javafx.animation.Interpolator
 import javafx.animation.TranslateTransition
 import javafx.scene.control.ContextMenu
 import javafx.scene.control.MenuItem
-import javafx.scene.control.Skin
-import javafx.scene.control.skin.ContextMenuSkin
 import javafx.util.Duration
 
 class FluentMenu(vararg items: MenuItem) : ContextMenu(*items) {

@@ -84,11 +84,9 @@ class PalettiActivity(private val viewModel: IViewModel, private val window: IWi
             setController(this@PalettiActivity)
             load()
         }
+
         this.slider.valueProperty().bindBidirectional(this.viewModel.count)
-        this.viewModel.count.addListener { _, _, count ->
-            this.slider.lookup(".track").style = "-fx-background-color: linear-gradient(to right, #005A9E ${count.toDouble() / 32}, #868686 ${count.toDouble() / 32});"
-            this.setColorPalette(count.toInt())
-        }
+        this.viewModel.count.addListener { _, _, count -> this.setColorPalette(count.toInt()) }
         this.monoSwitch.selectedProperty().bindBidirectional(this.viewModel.isBlackWhite)
         while (this.colorPalette.children.size < this.viewModel.count.value) {
             this.colorPalette.children.add(ColorTile())

@@ -21,6 +21,7 @@ class FluentSlider : Slider() {
 
 class FluentSliderSkin(slider: FluentSlider) : SliderSkin(slider) {
     private val thumb = skinnable.lookup(".thumb") as StackPane
+    private val track = skinnable.lookup(".track") as StackPane
 
     init {
         val radiusProperty = SimpleIntegerProperty()
@@ -29,6 +30,15 @@ class FluentSliderSkin(slider: FluentSlider) : SliderSkin(slider) {
                 .concat(radiusProperty)
                 .concat("px;")
         )
+
+        this.track.styleProperty().bind(
+            SimpleStringProperty("-fx-background-color: linear-gradient(to right, #005A9E ")
+                .concat(skinnable.valueProperty().divide(skinnable.max))
+                .concat(", #868686 ")
+                .concat(skinnable.valueProperty().divide(skinnable.max))
+                .concat(");")
+        )
+
         val scaleMoveIn = Timeline(
             KeyFrame(Duration.millis(0.0), KeyValue(radiusProperty, 0)),
             KeyFrame(Duration.millis(100.0), KeyValue(radiusProperty, -2, Interpolator.EASE_IN))
