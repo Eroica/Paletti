@@ -104,14 +104,10 @@
 	-fx-border-color: #00000022;
 	-fx-border-width: 1px;
 	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0.0, 0.0, 1.0);
-	-fx-padding: 0.333333em;
 }
 .context-menu .menu-item {
 	-fx-font-size: 1.166em;
 	-fx-padding: 0.416667em 0.666667em 0.333333em 0.666667em;
-}
-.context-menu .menu-item .label {
-	-fx-padding: 0 0.5em 0em 0.333333em;
 }
 .context-menu .menu-item:focused {
 	-fx-background-color: rgba(0, 0, 0, 0.04);
@@ -127,6 +123,94 @@
 .context-menu .check-menu-item:checked .check {
 	-fx-shape: "M4.335,7.037L1.53,4.232L1,4.762L4.335,8.098L11,1.433L10.47,0.902L4.335,7.037Z";
 	-fx-background-insets: 0;
+}
+.context-menu .separator .line {
+	-fx-border-color: rgba(0, 0, 0, 0.04) transparent transparent transparent, transparent transparent transparent transparent;
+}
+
+/* Multi-line textarea. Mostly remove borders */
+.text-area {
+	-fx-background-color: null, null;
+}
+.text-area > .scroll-pane {
+	-fx-background-color: #e5e5e5, #fbfbfb;
+	-fx-background-radius: 5px, 4px;
+	-fx-background-insets: 0, 1;
+}
+.text-area:hover  > .scroll-pane {
+	-fx-background-color: #e5e5e5, #f6f6f6;
+}
+.text-area:focused  > .scroll-pane {
+	-fx-background-color: #e5e5e5, #ffffff;
+}
+.text-area > .scroll-pane > .viewport {
+	-fx-background-color: null;
+}
+.text-area > .scroll-pane > .scroll-bar:horizontal {
+	-fx-background-radius: 0 0 0 0;
+}
+.text-area > .scroll-pane > .scroll-bar:vertical {
+	-fx-background-radius: 0 0 0 0;
+}
+.text-area > .scroll-pane > .corner {
+	-fx-background-radius: 0 0 0 0;
+}
+.text-area .content {
+	-fx-padding: 10px;
+	-fx-cursor: text;
+	-fx-background-color: null, null;
+	-fx-background-radius: 15px, 15px;
+}
+
+/* Styling of scrollbars, mostly remove gradients. Modifiy arrow shape. */
+.scroll-bar:horizontal {
+	-fx-background-color: transparent, transparent;
+}
+.scroll-bar:vertical {
+	-fx-background-color: transparent, transparent;
+}
+.scroll-bar:horizontal .track-background,
+.scroll-bar:vertical .track-background {
+	-fx-background-color: transparent, #f7f7f7;
+	-fx-background-insets: 0;
+	-fx-background-radius: 10px;
+}
+.scroll-bar > .thumb {
+	-fx-background-color: transparent, transparent, #898989;
+	-fx-background-insets: 2, 3, 0 4 0 4;
+	-fx-background-radius: 3, 2, 5;
+}
+.scroll-bar:horizontal > .thumb {
+	-fx-background-color: transparent, transparent, #898989;
+	-fx-background-insets: 2, 3, 4 0 4 0;
+	-fx-background-radius: 3, 2, 5;
+}
+.scroll-bar > .increment-button,
+.scroll-bar > .decrement-button {
+	-fx-background-color: transparent, transparent, transparent;
+	-fx-color: transparent;
+	-fx-padding: 4px;
+}
+.scroll-bar:horizontal > .decrement-button > .decrement-arrow,
+.scroll-bar:horizontal > .increment-button > .increment-arrow {
+	-fx-padding: 3px 2px 3px 2px;
+	-fx-effect: null;
+}
+.scroll-bar:horizontal > .decrement-button > .decrement-arrow {
+	-fx-shape: "M2.1,1.201C2.229,1.029 2.454,0.958 2.658,1.026C2.862,1.094 3,1.286 3,1.501C3,2.93 3,5.07 3,6.499C3,6.714 2.862,6.906 2.658,6.974C2.454,7.042 2.229,6.971 2.1,6.799C1.45,5.931 0.619,4.823 0.227,4.3C0.094,4.122 0.094,3.878 0.227,3.7C0.619,3.177 1.45,2.069 2.1,1.201Z";
+}
+.scroll-bar:horizontal > .increment-button > .increment-arrow {
+	-fx-shape: "M0.9,1.201C0.771,1.029 0.546,0.958 0.342,1.026C0.138,1.094 0,1.286 0,1.501C0,2.93 0,5.07 0,6.499C0,6.714 0.138,6.906 0.342,6.974C0.546,7.042 0.771,6.971 0.9,6.799C1.55,5.931 2.381,4.823 2.773,4.3C2.906,4.122 2.906,3.878 2.773,3.7C2.381,3.177 1.55,2.069 0.9,1.201Z";
+}
+.scroll-bar:vertical > .decrement-button > .decrement-arrow {
+	-fx-padding: 2px 3px 2px 3px;
+	-fx-shape: "M6.799,2.098C6.971,2.227 7.042,2.452 6.974,2.656C6.906,2.86 6.714,2.998 6.499,2.998C5.07,2.998 2.93,2.998 1.501,2.998C1.286,2.998 1.094,2.86 1.026,2.656C0.958,2.452 1.029,2.227 1.201,2.098C2.069,1.448 3.177,0.617 3.7,0.225C3.878,0.092 4.122,0.092 4.3,0.225C4.823,0.617 5.931,1.448 6.799,2.098Z";
+	-fx-effect: null;
+}
+.scroll-bar:vertical > .increment-button > .increment-arrow {
+	-fx-padding: 2px 3px 2px 3px;
+	-fx-shape: "M6.799,0.9C6.971,0.771 7.042,0.546 6.974,0.342C6.906,0.138 6.714,0 6.499,0C5.07,0 2.93,0 1.501,0C1.286,0 1.094,0.138 1.026,0.342C0.958,0.546 1.029,0.771 1.201,0.9C2.069,1.55 3.177,2.381 3.7,2.773C3.878,2.906 4.122,2.906 4.3,2.773C4.823,2.381 5.931,1.55 6.799,0.9Z";
+	-fx-effect: null;
 }
 
 .header-bar {

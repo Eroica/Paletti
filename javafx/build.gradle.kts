@@ -5,6 +5,8 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("org.beryx.runtime") version "1.12.7"
     id("com.github.ben-manes.versions") version "0.42.0"
+    id("com.jaredsburrows.license")
+    id("com.github.gmazzo.buildconfig") version "3.0.3"
 }
 
 group = "app.paletti.javafx"
@@ -46,6 +48,16 @@ tasks.register<Copy>("copyDlls") {
     from(".")
     include("*.dll")
     into(file(layout.buildDirectory.dir("jpackage/Paletti")))
+}
+
+buildConfig {
+    useKotlinOutput()
+    packageName("app.paletti")
+
+    buildConfigField("String", "APP_NAME", "\"${project.name}\"")
+    buildConfigField("String", "APP_VERSION", "\"${project.version}\"")
+    buildConfigField("String", "APP_COPYRIGHT", "\"Copyright © 2022\"")
+    buildConfigField("String", "APP_LICENSE", "\"${project.name} (c) 2022 Eroica\"")
 }
 
 application {

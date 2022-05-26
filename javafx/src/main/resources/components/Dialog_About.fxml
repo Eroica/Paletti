@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.Scene?>
+<?import javafx.stage.Stage?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.geometry.Insets?>
+<fx:root type="Stage" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" title="About Paletti">
+	<scene>
+		<Scene>
+			<HBox spacing="16.0" minWidth="750.0" minHeight="500.0">
+				<children>
+					<VBox alignment="TOP_CENTER" spacing="4.0">
+						<children>
+							<ImageView preserveRatio="true" fitWidth="128.0" fitHeight="128.0">
+								<image>
+									<Image url="@/icons/256.png"/>
+								</image>
+							</ImageView>
+							<Label text="$APP_NAME">
+								<font>
+									<Font name="Segoe UI Semibold" size="18.0" />
+								</font>
+								<VBox.margin>
+									<Insets top="16.0" />
+								</VBox.margin>
+							</Label>
+							<Label text="${'Version ' + APP_VERSION}">
+								<font>
+									<Font size="14.0" />
+								</font>
+							</Label>
+							<Hyperlink text="https://paletti.app" />
+							<Pane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+							<Label text="$APP_COPYRIGHT" />
+						</children>
+					</VBox>
+					<TextArea editable="false" text="$LICENSE_REPORT" wrapText="true" HBox.hgrow="ALWAYS" />
+				</children>
+				<padding>
+					<Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+				</padding>
+			</HBox>
+		</Scene>
+	</scene>
+</fx:root>
