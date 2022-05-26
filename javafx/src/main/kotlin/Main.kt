@@ -95,11 +95,9 @@ class Paletti : Application() {
             }
         }
 
+        primaryStage.title = "${System.currentTimeMillis() % 1000}_JFX"
         primaryStage.show()
-        val stageTitle = primaryStage.title
-        val targetTitle: String = "_JFX" + System.currentTimeMillis() % 1000
-        primaryStage.title = targetTitle
-        Windows.subclass(targetTitle)
-        primaryStage.title = stageTitle
+        Windows.subclass(primaryStage.title)
+        primaryStage.title = ""
     }
 }

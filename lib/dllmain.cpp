@@ -176,12 +176,9 @@ BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam)
 {
 	char String[255];
 
-	if (!hWnd)
-		return TRUE; // Not a window
-	if (!IsWindowVisible(hWnd))
-		return TRUE; // Not visible
-	if (!SendMessage(hWnd, WM_GETTEXT, sizeof(String), (LPARAM)String))
-		return TRUE; // No window title
+	if (!hWnd || !IsWindowVisible(hWnd) || !SendMessage(hWnd, WM_GETTEXT, sizeof(String), (LPARAM)String)) {
+		return TRUE;
+	}
 
 	char pszClassName[64];
 	GetClassName(hWnd, pszClassName, 64);
@@ -190,6 +187,7 @@ BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam)
 		GetWindowText(hWnd, windowTitle, 64);
 		if (!targetWndName.compare(windowTitle)) {
 			subclassWindow(hWnd);
+			return FALSE;
 		}
 	}
 
