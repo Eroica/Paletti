@@ -6,7 +6,6 @@ import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.stage.Modality
 import javafx.stage.Stage
-import java.io.File
 
 abstract class BaseDialog(window: IWindow) : Stage() {
     init {
@@ -23,6 +22,19 @@ abstract class BaseDialog(window: IWindow) : Stage() {
 }
 
 class AboutDialog(window: IWindow) : BaseDialog(window) {
+    private val licenseBuilder: StringBuilder by lazy {
+        val licenseBuilder = StringBuilder()
+        listOf(
+            javaClass.classLoader.getResourceAsStream("LICENSE"),
+            javaClass.classLoader.getResourceAsStream("leptonica.txt"),
+            javaClass.classLoader.getResourceAsStream("licenseReport.txt")
+        ).forEach {
+            licenseBuilder.append(it.bufferedReader().use { it.readText() })
+            licenseBuilder.append("\n\n")
+        }
+        licenseBuilder
+    }
+
     init {
         FXMLLoader(javaClass.getResource("Dialog_About.fxml"), null).apply {
             setRoot(this@AboutDialog)
@@ -32,11 +44,7 @@ class AboutDialog(window: IWindow) : BaseDialog(window) {
             namespace["APP_COPYRIGHT"] = BuildConfig.APP_COPYRIGHT
             namespace["LICENSE_REPORT"] = """${BuildConfig.APP_LICENSE}
 
-${File(javaClass.classLoader.getResource("LICENSE").toURI()).readText()}
-
-${File(javaClass.classLoader.getResource("leptonica.txt").toURI()).readText()}
-
-${File(javaClass.classLoader.getResource("licenseReport.txt").toURI()).readText()}"""
+$licenseBuilder"""
             load()
         }
 
