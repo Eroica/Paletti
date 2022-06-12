@@ -27,27 +27,27 @@ javafx-graphics (18) - GPLv2+CE
 
 javafx-swing (18) - GPLv2+CE
 
-Kotlin Stdlib (1.6.21) - The Apache License, Version 2.0
+Kotlin Stdlib (1.7.0) - The Apache License, Version 2.0
 Kotlin Standard Library for JVM
 https://kotlinlang.org/
 
-Kotlin Stdlib Common (1.6.21) - The Apache License, Version 2.0
+Kotlin Stdlib Common (1.7.0) - The Apache License, Version 2.0
 Kotlin Common Standard Library
 https://kotlinlang.org/
 
-Kotlin Stdlib Jdk7 (1.6.21) - The Apache License, Version 2.0
+Kotlin Stdlib Jdk7 (1.7.0) - The Apache License, Version 2.0
 Kotlin Standard Library JDK 7 extension
 https://kotlinlang.org/
 
-Kotlin Stdlib Jdk8 (1.6.21) - The Apache License, Version 2.0
+Kotlin Stdlib Jdk8 (1.7.0) - The Apache License, Version 2.0
 Kotlin Standard Library JDK 8 extension
 https://kotlinlang.org/
 
-reactive-streams (1.0.3) - CC0
+reactive-streams (1.0.4) - MIT-0
 A Protocol for Asynchronous Non-Blocking Data Sequence
 http://www.reactive-streams.org/
 
-RxJava (3.1.4) - The Apache Software License, Version 2.0
+RxJava (3.1.5) - The Apache Software License, Version 2.0
 Reactive Extensions for Java
 https://github.com/ReactiveX/RxJava
 

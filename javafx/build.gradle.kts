@@ -1,6 +1,6 @@
 plugins {
     application
-    kotlin("jvm") version "1.6.21"
+    kotlin("jvm") version "1.7.0"
     id("org.openjfx.javafxplugin") version "0.0.13"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("org.beryx.runtime") version "1.12.7"
@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "app.paletti.javafx"
-version = "2022.05"
+version = "2022.06"
 
 repositories {
     mavenCentral()
@@ -23,7 +23,7 @@ javafx {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("io.reactivex.rxjava3:rxjava:3.1.4")
+    implementation("io.reactivex.rxjava3:rxjava:3.1.5")
     implementation("org.xerial:sqlite-jdbc:3.36.0.3")
     implementation("net.harawata:appdirs:1.2.1")
     implementation("org.slf4j:slf4j-simple:1.7.35")
@@ -75,7 +75,7 @@ runtime {
         imageOptions = listOf(
             "--icon", "src/main/resources/Paletti.ico",
             "--copyright", "2022",
-			"--vendor", "Paletti"
+			"--vendor", "GROUNDCTRL"
         )
     }
 }
