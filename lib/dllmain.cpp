@@ -199,17 +199,15 @@ Java_app_paletti_lib_Windows_subclass(
 	JNIEnv * env,
 	jobject,
 	jstring title) {
-	const jchar* nativeString = env->GetStringChars(title, 0);
-	char chars[256];
+	jboolean isCopy;
+	const char* convertedValue = (env)->GetStringUTFChars(title, &isCopy);
+	std::string str = convertedValue;
 
-	for (int i = 0; i < 256; ++i) {
-		const jchar c = nativeString[i];
-		if (c == 0) break;
-		chars[i] = c;
-	}
-
-	std::string string(chars);
-	targetWndName = string;
+	targetWndName = str;
 
 	EnumWindows(EnumWindowsProc, 0);
+
+	if (isCopy == JNI_TRUE) {
+		env->ReleaseStringUTFChars(title, convertedValue);
+	}
 }
