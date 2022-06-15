@@ -78,6 +78,8 @@ class PalettiActivity(private val viewModel: IViewModel, private val window: IWi
 
     private val disposables = CompositeDisposable()
 
+    private var isScrollTrackpad = false
+
     init {
         FXMLLoader(javaClass.getResource("PalettiActivity.fxml")).apply {
             setRoot(this@PalettiActivity)
@@ -178,11 +180,24 @@ class PalettiActivity(private val viewModel: IViewModel, private val window: IWi
     }
 
     fun onScroll(event: ScrollEvent) {
-        if (event.deltaY > 0) {
-            slider.value++
-        } else {
-            slider.value--
+        if (!isScrollTrackpad && !event.isInertia) {
+            if (event.deltaY > 0) {
+                slider.value++
+            } else {
+                slider.value--
+            }
         }
+        event.consume()
+    }
+
+    fun onScrollStarted(event: ScrollEvent) {
+        isScrollTrackpad = true
+        event.consume()
+    }
+
+    fun onScrollFinished(event: ScrollEvent) {
+        isScrollTrackpad = false
+        event.consume()
     }
 
     fun onAlwaysOnTop(event: ActionEvent) {
