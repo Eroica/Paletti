@@ -1,3 +1,7 @@
+.root {
+	-fx-accent: #0067c0;
+}
+
 .tooltip {
 	-fx-background-color: #FAF7F5;
 	-fx-background-image: url("noise.png");
