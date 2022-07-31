@@ -27,7 +27,8 @@ class AboutDialog(window: IWindow) : BaseDialog(window) {
         listOf(
             javaClass.classLoader.getResourceAsStream("LICENSE"),
             javaClass.classLoader.getResourceAsStream("leptonica.txt"),
-            javaClass.classLoader.getResourceAsStream("licenseReport.txt")
+            javaClass.classLoader.getResourceAsStream("licenseReport.txt"),
+            javaClass.classLoader.getResourceAsStream("apache.txt"),
         ).forEach {
             licenseBuilder.append(it.bufferedReader().use { it.readText() })
             licenseBuilder.append("\n\n")
