@@ -6,11 +6,11 @@ plugins {
     id("org.beryx.runtime") version "1.12.7"
     id("com.github.ben-manes.versions") version "0.42.0"
     id("com.jaredsburrows.license")
-    id("com.github.gmazzo.buildconfig") version "3.0.3"
+    id("com.github.gmazzo.buildconfig") version "3.1.0"
 }
 
 group = "app.paletti.javafx"
-version = "2022.06"
+version = "2022.08"
 
 repositories {
     mavenCentral()
@@ -65,7 +65,7 @@ application {
 }
 
 runtime {
-    options.set(listOf("--strip-debug", "--no-header-files", "--no-man-pages"))
+    options.set(listOf("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"))
     launcher {
         noConsole = true
     }
