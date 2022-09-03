@@ -37,7 +37,7 @@
 									<Font size="14.0" />
 								</font>
 							</Label>
-							<Hyperlink text="https://paletti.app" />
+							<Hyperlink text="https://paletti.app" onAction="#onWebsiteClick" />
 							<Pane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
 							<Label text="$APP_COPYRIGHT" />
 						</children>

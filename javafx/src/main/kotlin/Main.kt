@@ -14,6 +14,7 @@ import java.sql.SQLException
 
 const val APP_NAME = "Paletti"
 const val DB_NAME = "Paletti.db"
+const val APP_WEBSITE = "https://paletti.app"
 
 fun main(args: Array<String>) {
     System.loadLibrary("Paletti")
@@ -22,7 +23,12 @@ fun main(args: Array<String>) {
 }
 
 class Paletti : Application() {
+    companion object {
+        lateinit var App: Application
+    }
+
     override fun start(primaryStage: Stage) {
+        Paletti.App = this
         val cacheDir = File(AppDirsFactory.getInstance().getUserCacheDir(APP_NAME, null, null))
         cacheDir.mkdirs()
         val database = Database(cacheDir.resolve(DB_NAME), cacheDir)
