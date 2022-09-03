@@ -1,6 +1,9 @@
 package components
 
+import APP_WEBSITE
 import app.paletti.BuildConfig
+import javafx.event.ActionEvent
+import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
@@ -50,5 +53,11 @@ $licenseBuilder"""
         }
 
         scene?.stylesheets?.add("style.css")
+    }
+
+    @FXML
+    private fun onWebsiteClick(event: ActionEvent) {
+        Paletti.App.hostServices.showDocument(APP_WEBSITE)
+        event.consume()
     }
 }
