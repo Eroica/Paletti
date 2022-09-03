@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "app.paletti.javafx"
-version = "2022.08"
+version = "2022.09"
 
 repositories {
     mavenCentral()
@@ -24,9 +24,9 @@ javafx {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("io.reactivex.rxjava3:rxjava:3.1.5")
-    implementation("org.xerial:sqlite-jdbc:3.36.0.3")
+    implementation("org.xerial:sqlite-jdbc:3.39.2.1")
     implementation("net.harawata:appdirs:1.2.1")
-    implementation("org.slf4j:slf4j-simple:1.7.35")
+    implementation("org.slf4j:slf4j-simple:2.0.0")
 }
 
 tasks {
