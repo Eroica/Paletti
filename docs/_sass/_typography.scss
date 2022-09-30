@@ -1,22 +1,20 @@
 body, input, select, textarea {
-	font-family: "ClearSansScreen-Bk", sans-serif;
+    font-family: "Segoe UI", sans-serif;
 	font-size: 16px;
 	font-weight: 400;
 	line-height: 1.8;
-	color: #526173;
+	color: #292929;
 	hyphens: auto;
 }
 
 em, i {
-	font-family: "ClearSansScreen-BkIt", sans-serif;
-	font-style: normal;
+	font-style: italic;
 }
 
 h1, h2, h3, h4, h5, h6,
 strong, b, .text--strong {
-	font-family: "ClearSansScreen-Md", sans-serif;
 	color: #000;
-	font-weight: 500;
+	font-weight: 600;
 }
 
 kbd {
