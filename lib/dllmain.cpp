@@ -65,8 +65,7 @@ Java_app_paletti_lib_Leptonica_posterize2(
 			pixc = pixMedianCutQuantGeneral(tmp2, 0, 8, max_count, 0, 0, 0);
 			pixDestroy(&tmp2);
 			pixDestroy(&tmp);
-		}
-		else {
+		} else {
 			pixc = pixMedianCutQuantGeneral(pixs, 0, 8, max_count, 0, 0, 0);
 		}
 		if (pixc == nullptr) {
@@ -165,11 +164,14 @@ Java_app_paletti_lib_Leptonica_posterize(
 void subclassWindow(HWND hWnd) {
 	int trueValue = 0x01;
 	int falseValue = 0x00;
+	int micaValue = 0x38;
+	int windowValue = 0x2;
 
-	DwmSetWindowAttribute(hWnd, 20, &falseValue, sizeof(int));
-	DwmSetWindowAttribute(hWnd, 1029, &trueValue, sizeof(int));
+	auto ok = DwmSetWindowAttribute(hWnd, 38, &windowValue, sizeof(int));
 
-	SetWindowPos(hWnd, NULL, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOOWNERZORDER);
+	if (!SUCCEEDED(ok)) {
+		DwmSetWindowAttribute(hWnd, 1029, &trueValue, sizeof(int));
+	}
 }
 
 BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam)
