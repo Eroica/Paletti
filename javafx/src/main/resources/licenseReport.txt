@@ -17,29 +17,29 @@ Java Native Access Platform (5.6.0) - LGPL, version 2.1,Apache License v2.0
 Java Native Access Platform
 https://github.com/java-native-access/jna
 
-javafx-base (18) - GPLv2+CE
+javafx-base (19) - GPLv2+CE
 
-javafx-controls (18) - GPLv2+CE
+javafx-controls (19) - GPLv2+CE
 
-javafx-fxml (18) - GPLv2+CE
+javafx-fxml (19) - GPLv2+CE
 
-javafx-graphics (18) - GPLv2+CE
+javafx-graphics (19) - GPLv2+CE
 
-javafx-swing (18) - GPLv2+CE
+javafx-swing (19) - GPLv2+CE
 
-Kotlin Stdlib (1.7.0) - The Apache License, Version 2.0
+Kotlin Stdlib (1.7.20) - The Apache License, Version 2.0
 Kotlin Standard Library for JVM
 https://kotlinlang.org/
 
-Kotlin Stdlib Common (1.7.0) - The Apache License, Version 2.0
+Kotlin Stdlib Common (1.7.20) - The Apache License, Version 2.0
 Kotlin Common Standard Library
 https://kotlinlang.org/
 
-Kotlin Stdlib Jdk7 (1.7.0) - The Apache License, Version 2.0
+Kotlin Stdlib Jdk7 (1.7.20) - The Apache License, Version 2.0
 Kotlin Standard Library JDK 7 extension
 https://kotlinlang.org/
 
-Kotlin Stdlib Jdk8 (1.7.0) - The Apache License, Version 2.0
+Kotlin Stdlib Jdk8 (1.7.20) - The Apache License, Version 2.0
 Kotlin Standard Library JDK 8 extension
 https://kotlinlang.org/
 
@@ -51,14 +51,14 @@ RxJava (3.1.5) - The Apache Software License, Version 2.0
 Reactive Extensions for Java
 https://github.com/ReactiveX/RxJava
 
-SLF4J API Module (2.0.0) - MIT License
+SLF4J API Module (2.0.3) - MIT License
 The slf4j API
 http://www.slf4j.org
 
-SLF4J Simple Binding (2.0.0) - MIT License
+SLF4J Simple Binding (2.0.3) - MIT License
 SLF4J Simple binding
 http://www.slf4j.org
 
-SQLite JDBC (3.39.2.1) - The Apache Software License, Version 2.0
+SQLite JDBC (3.39.3.0) - The Apache Software License, Version 2.0
 SQLite JDBC library
 https://github.com/xerial/sqlite-jdbc
