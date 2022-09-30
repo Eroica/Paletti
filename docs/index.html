@@ -3,26 +3,25 @@ layout: default
 ---
 
 <article class="colored-links" data-vbox>
-	<h1 class="_text-center text--xlarge">Paletti <time class="text--pale text--small">August 01, 2022</time></h1>
+	<h1 class="_text-center text--xlarge">Paletti <time class="text--pale text--small">October 01, 2022</time></h1>
 
 	<p>Paletti simplifies an image visually by reducing the amount of colors. This way you can create a color palette that, for example, matches an artwork. Turning on Paletti’s grayscale mode (<kbd>x</kbd>) lets you easily check the shapes and values of an image. You can then export the colors or the simplified image to somewhere else.</p>
 
-	<p>I hope it is helpful for artists, designers, and other people working with colors.</p>
+    <p>I hope it is helpful for artists, designers, and other people working with colors.</p>
 
 	<p>You are welcome to raise issues or feature requests in <a href="https://github.com/Eroica/Paletti">Paletti’s GitHub repository</a>.</p>
-
-	<div>
-		<p class="_text-center">{% include feather/alert-triangle.svg %}</p>
-
-		<p>Please note that Paletti’s GTK version was recently updated to GTK4, but is still a work-in-progress.</p>
-	</div>
 </article>
 
 <ul class="actions">
-	<li><a href="{{ site.data.urls.javafx }}" class="button -with-icon windows">{% include icons/windows-brands.svg %} Download for Windows (.exe)</a></li>
+	<li><a href="{{ site.data.urls.javafx }}" class="button -with-icon default">{% include icons/windows-brands.svg %} Download for Windows (.exe)</a></li>
 	<li><a href="{{ site.data.urls.gtk }}" class="button -with-icon">{% include icons/Gnomelogo-footprint.svg %} Download ELF binary (.AppImage)</a></li>
 	<li><a href="{{ site.data.urls.android }}" class="button -with-icon android">{% include icons/android-brands.svg %} Download for Android &beta; (.apk)</a></li>
 </ul>
+
+<div class="info-bar warning">
+    {% include feather/alert-triangle.svg %}
+    <p>Please note that Paletti’s GTK version was recently updated to GTK4, but is still a work-in-progress.</p>
+</div>
 
 <div class="_overflow-x">
 	<table id="Shortcuts" class="shortcuts text--small">
@@ -97,3 +96,6 @@ layout: default
 		</tr>
 	</table>
 </div>
+
+<p class="colored-links">Paletti is written in Kotlin and JavaFX, however, I tried very much to make it look like a modern Windows 11 application. If you like Paletti, you can also take a look at my other projects at <a href="https://groundctrl.earth">GROUNDCTRL</a>.</p>
+

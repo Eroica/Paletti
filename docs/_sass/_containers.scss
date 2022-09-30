@@ -3,7 +3,7 @@ main {
 }
 
 aside {
-	background-color: #EEEEEE;
+	background-color: #f3f3f3;
 	padding: 25px;
 }
 
@@ -18,12 +18,12 @@ aside {
 		width: 50%;
 		height: 100%;
 		left: 50%;
-		padding: 200px 50px 25px 25px;
+		padding: 50px 50px 25px 25px;
 	}
 
 	main {
 		width: 50%;
-		padding: 100px 25px 50px 50px;
+		padding: 100px 50px 50px 50px;
 
 		> div {
 			margin-left: auto;
@@ -46,11 +46,10 @@ table.shortcuts {
 	}
 
 	td:first-of-type {
-		font-family: "ClearSansScreen-Md", sans-serif;
 		text-align: right;
 		padding-right: 1em;
 		color: #2D3741;
-		font-weight: 500;
+		font-weight: 600;
 	}
 
 	tr + tr td {
@@ -101,4 +100,26 @@ table.shortcuts {
 			transform: translateX(-100%);
 		}
 	}
+}
+
+.info-bar {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+    padding: .5em 1em;
+    border: 1px solid #e5e5e5;
+    background: #f4f4f4;
+
+    svg {
+        margin-right: 1em;
+    }
+
+    &.warning {
+        background: #fff4ce;
+
+        svg {
+            color: #9d5d00;
+        }
+    }
 }
