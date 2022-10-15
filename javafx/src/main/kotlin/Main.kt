@@ -100,9 +100,8 @@ class Paletti : Application() {
             }
         }
 
-        primaryStage.title = "${System.currentTimeMillis() % 1000}_JFX"
+        primaryStage.title = "Paletti"
         primaryStage.show()
         Windows.subclass(primaryStage.title)
-        primaryStage.title = ""
     }
 }
