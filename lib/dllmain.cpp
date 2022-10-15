@@ -9,14 +9,12 @@
 #include <Windows.h>
 #include <windowsx.h>
 
-#define APPNAME "Paletti"
-
 using std::exception;
 using std::filesystem::path;
 using std::string;
 using namespace sqlite;
 
-std::string targetWndName = "";
+string targetWndName = "Paletti";
 
 const char* DB_STATEMENTS[] = {
 	"SELECT value FROM environment WHERE name=?;",
@@ -65,7 +63,8 @@ Java_app_paletti_lib_Leptonica_posterize2(
 			pixc = pixMedianCutQuantGeneral(tmp2, 0, 8, max_count, 0, 0, 0);
 			pixDestroy(&tmp2);
 			pixDestroy(&tmp);
-		} else {
+		}
+		else {
 			pixc = pixMedianCutQuantGeneral(pixs, 0, 8, max_count, 0, 0, 0);
 		}
 		if (pixc == nullptr) {
@@ -107,13 +106,13 @@ Java_app_paletti_lib_Leptonica_posterize(
 	jint max_count,
 	jboolean is_black_white,
 	jobjectArray file_paths) {
-	std::string native_paths[3];
+	string native_paths[3];
 	int len = env->GetArrayLength(file_paths);
 	for (int i = 0; i < len; i++) {
 		jstring jstr = (jstring)(env->GetObjectArrayElement(file_paths, i));
 		const jsize strLen = env->GetStringUTFLength(jstr);
 		const char* charBuffer = env->GetStringUTFChars(jstr, (jboolean*)0);
-		std::string str(charBuffer, strLen);
+		string str(charBuffer, strLen);
 		native_paths[i] = str;
 		env->ReleaseStringUTFChars(jstr, charBuffer);
 		env->DeleteLocalRef(jstr);
@@ -203,8 +202,7 @@ Java_app_paletti_lib_Windows_subclass(
 	jstring title) {
 	jboolean isCopy;
 	const char* convertedValue = (env)->GetStringUTFChars(title, &isCopy);
-	std::string str = convertedValue;
-
+	string str = convertedValue;
 	targetWndName = str;
 
 	EnumWindows(EnumWindowsProc, 0);
