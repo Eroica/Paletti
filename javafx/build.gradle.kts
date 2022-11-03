@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "app.paletti.javafx"
-version = "2022.10"
+version = "2022.11"
 
 repositories {
     mavenCentral()
