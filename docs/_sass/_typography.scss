@@ -1,39 +1,36 @@
 body, input, select, textarea {
-    font-family: "Segoe UI", sans-serif;
-	font-size: 16px;
+	font-family: "ClearSansScreen-Bk", "Segoe UI", sans-serif;
 	font-weight: 400;
-	line-height: 1.8;
-	color: #292929;
+	line-height: 1.7;
+	color: $font-color-dark;
 	hyphens: auto;
+
+	&.-dark {color: #f6f6f6; }
 }
+
+strong, b, .text--strong {
+	font-family: "ClearSansScreen-Md", sans-serif;
+	font-weight: 400;
+}
+.-dark strong, .-dark b, .-dark .text--strong {color: white; }
 
 em, i {
-	font-style: italic;
+	font-family: "ClearSansScreen-BkIt", sans-serif;
+	font-style: normal;
 }
 
-h1, h2, h3, h4, h5, h6,
-strong, b, .text--strong {
-	color: #000;
-	font-weight: 600;
+h1, h2, h3, h4, h5, h6 {
+	font-family: "ClearSansScreen-Md", sans-serif;
+	font-weight: 400;
+	color: #484848;
 }
+h1 {
+	font-size: 2rem;
 
-kbd {
-	padding: 4px 8px;
-	background-color: #fff;
-	border-radius: 5px;
-	border: 2px solid #DEE1E4;
-	font-size: 13px;
-}
-
-del, .text--pale {color: $font-color-pale; }
-.text--xlarge {font-size: 2.0rem; }
-.text--large {font-size: 1.2rem; }
-.text--small {font-size: .9rem; }
-.text--xsmall {font-size: 14px; }
-
-.monospace, kbd, code, .code {
-	font-family: "Cascadia Mono", "Consolas", "Inconsolata", monospace;
-	letter-spacing: 0;
+	& + p {
+		font-size: 1.2rem;
+		margin-top: 1em !important;
+	}
 }
 
 a {
@@ -55,7 +52,7 @@ ul.actions {
 
 	.button, button {
 		width: 100%;
-	display: block;
+		display: block;
 	}
 
 	@include breakpoint($sm) {
@@ -65,4 +62,9 @@ ul.actions {
 			display: inline-block;
 		}
 	}
+}
+
+ol {
+	list-style: decimal;
+	margin-left: 2em;
 }

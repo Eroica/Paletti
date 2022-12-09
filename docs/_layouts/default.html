@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 
-{% include head.html %}
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>{{ site.title }} — A color quantization tool for artists and designers</title>
+	<meta name="description" content="{{ site.description }}">
+
+	<link rel="canonical" href="{{ page.url | replace:'index.html','' | relative_url | prepend: site.url }}">
+
+	<style>
+		{% capture include_to_scssify %}
+			{% include main.scss %}
+		{% endcapture %}
+		{{ include_to_scssify | scssify }}
+	</style>
+</head>
 
 <body class="is-loading no-js">
-	{% include header.html %}
-
-	<main class="container" data-vbox="-medium">
-		<div data-vbox="Page">
-			{{ content }}
-
-			{% include footer.html %}
-		</div>
+	<main class="container _center" data-vbox="Page">
+		{{ content }}
 	</main>
 </body>
 </html>
