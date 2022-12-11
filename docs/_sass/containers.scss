@@ -2,22 +2,19 @@
 	max-width: 800px;
 }
 
-nav, header > *:not(figure), footer, section {
+header, article > *:not(figure), footer, section {
 	padding-left: 25px;
 	padding-right: 25px;
 }
 
-nav {
+header {
 	padding-top: 25px;
-	text-align: center;
-
-	.version {
-		float: left;
-	}
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
 
 	@include breakpoint(600px) {
 		padding-top: 50px;
-		text-align: right;
 	}
 }
 
