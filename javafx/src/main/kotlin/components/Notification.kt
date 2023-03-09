@@ -1,10 +1,7 @@
 package components
 
 import IMessage
-import javafx.animation.Interpolator
-import javafx.animation.PauseTransition
-import javafx.animation.SequentialTransition
-import javafx.animation.TranslateTransition
+import javafx.animation.*
 import javafx.fxml.FXMLLoader
 import javafx.scene.control.Label
 import javafx.scene.layout.StackPane
@@ -33,24 +30,37 @@ class Notification : StackPane(), INotification {
         show(message.toString())
     }
 
+    private val slideUp = TranslateTransition(ANIM_DURATION).apply {
+        toY = 0.0
+        interpolator = EASING
+    }
+
+    private val slideDown = TranslateTransition(ANIM_DURATION).apply {
+        interpolator = EASING
+    }
+
+    private val pause = PauseTransition(Duration.seconds(2.0))
+
     override fun show(message: String) {
         if (!isRunning) {
             isRunning = true
             val label = FXMLLoader.load<Label>(javaClass.getResource("Notification_TypeError.fxml"))
             label.text = message
-            label.translateY = height / 12
+            label.translateYProperty().bind(label.heightProperty().add(4.0))
+
             children.add(label)
+            applyCss()
+            layout()
+            label.translateYProperty().unbind()
+            slideUp.node = label
+            slideDown.node = label
+            slideDown.toY = label.height + 4.0
 
-            val slideUp = TranslateTransition(ANIM_DURATION, label)
-            slideUp.byY = -height / 12
-            slideUp.interpolator = EASING
-            val slideDown = TranslateTransition(ANIM_DURATION, label)
-            slideDown.byY = height / 6
-            slideDown.interpolator = EASING
-
-            SequentialTransition(slideUp, PauseTransition(Duration.seconds(2.0)), slideDown).apply {
+            SequentialTransition(slideUp, pause, slideDown).apply {
                 setOnFinished {
                     this@Notification.children.remove(label)
+                    slideUp.node = null
+                    slideDown.node = null
                     isRunning = false
                 }
                 play()
