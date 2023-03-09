@@ -8,6 +8,8 @@ import javafx.scene.image.Image
 import javafx.scene.paint.Color
 import javafx.stage.Stage
 import javafx.stage.StageStyle
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import net.harawata.appdirs.AppDirsFactory
 import java.io.File
 import java.sql.SQLException
@@ -31,10 +33,15 @@ class Paletti : Application() {
         lateinit var App: Application
     }
 
-    override fun start(primaryStage: Stage) {
+    private val cacheDir = File(AppDirsFactory.getInstance().getUserCacheDir(APP_NAME, null, null))
+
+    override fun init() {
+        super.init()
         Paletti.App = this
-        val cacheDir = File(AppDirsFactory.getInstance().getUserCacheDir(APP_NAME, null, null))
         cacheDir.mkdirs()
+    }
+
+    override fun start(primaryStage: Stage) {
         val database = Database(cacheDir.resolve(DB_NAME), cacheDir)
         val images = SqlImages(database)
 
@@ -43,10 +50,24 @@ class Paletti : Application() {
             viewModelId++
         }
 
-        val viewModel = ViewModel(viewModelId, images, cacheDir.resolve(DB_NAME).toString(), cacheDir)
-        viewModel.isRestoreImage.addListener(InvalidationListener {
-            database.isRestoreImage = viewModel.isRestoreImage.get()
-        })
+        val viewModel = ViewModel(viewModelId, images, cacheDir.resolve(DB_NAME).toString(), cacheDir, Dispatchers.IO)
+
+        if (database.isRestoreImage) {
+            try {
+                viewModel.setCount(images[viewModelId].count)
+                viewModel.setIsBlackWhite(images[viewModelId].isBlackWhite)
+                viewModel.setIsRestoreImage(true)
+                runBlocking { viewModel.load(images[viewModelId].source) }
+            } catch (e: SQLException) {
+                database.isRestoreImage = false
+            }
+        } else {
+            if (parameters.unnamed.isNotEmpty()) {
+                viewModel.setCount(parameters.named.getOrDefault("colors", "6").toInt())
+                viewModel.setIsBlackWhite(parameters.named.getOrDefault("bw", "false").toBoolean())
+                runBlocking { viewModel.load(parameters.unnamed.first()) }
+            }
+        }
 
         val activity = PalettiActivity(viewModel, object : IWindow {
             override fun close() {
@@ -83,26 +104,13 @@ class Paletti : Application() {
         }
         primaryStage.setOnCloseRequest {
             activity.onDestroy()
-            viewModel.onDestroy()
+            viewModel.onCleared()
             database.close()
         }
 
-        if (database.isRestoreImage) {
-            try {
-                viewModel.count.set(images[viewModelId].count)
-                viewModel.isBlackWhite.set(images[viewModelId].isBlackWhite)
-                viewModel.isRestoreImage.set(true)
-                viewModel.load(images[viewModelId].source)
-            } catch (e: SQLException) {
-                database.isRestoreImage = false
-            }
-        } else {
-            if (parameters.unnamed.isNotEmpty()) {
-                viewModel.count.value = parameters.named.getOrDefault("colors", "6").toInt()
-                viewModel.isBlackWhite.value = parameters.named.getOrDefault("bw", "false").toBoolean()
-                viewModel.load(parameters.unnamed.first())
-            }
-        }
+        viewModel.isRestoreImageProperty().addListener(InvalidationListener {
+            database.isRestoreImage = viewModel.getIsRestoreImage()
+        })
 
         primaryStage.title = "Paletti"
         primaryStage.show()

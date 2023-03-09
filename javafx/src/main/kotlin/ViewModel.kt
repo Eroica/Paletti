@@ -1,23 +1,16 @@
 import app.paletti.lib.Leptonica
-import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.observables.ConnectableObservable
-import io.reactivex.rxjava3.schedulers.Schedulers
-import io.reactivex.rxjava3.subjects.BehaviorSubject
-import io.reactivex.rxjava3.subjects.PublishSubject
-import io.reactivex.rxjavafx.schedulers.JavaFxScheduler
 import javafx.beans.InvalidationListener
-import javafx.beans.property.BooleanProperty
-import javafx.beans.property.IntegerProperty
+import javafx.beans.property.ReadOnlyObjectProperty
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleIntegerProperty
+import javafx.beans.property.SimpleObjectProperty
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.image.Image
 import javafx.scene.paint.Color
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.*
 import java.io.File
-import java.nio.file.Paths
-import java.util.concurrent.TimeUnit
 import javax.imageio.ImageIO
 
 interface IPosterizedImage {
@@ -25,22 +18,9 @@ interface IPosterizedImage {
     val colors: List<Color>
 }
 
-interface IViewModel {
-    val count: IntegerProperty
-    val isBlackWhite: BooleanProperty
-    val isCropImage: BooleanProperty
-    val isRestoreImage: BooleanProperty
-    val notification: Observable<String>
-    val image: ConnectableObservable<PosterizedPix>
-
-    fun load(path: String)
-    fun load(image: Image)
-    fun save(destination: File)
-}
-
-data class PosterizedPix(
+class PosterizedPix(
     private val sqlImage: SqlImage,
-    private val cacheDir: File,
+    cacheDir: File,
 ) : IPosterizedImage by sqlImage {
     val path: String = cacheDir.resolve("${sqlImage.id}.png").toURI().toString()
 }
@@ -49,74 +29,85 @@ class ViewModel(
     private val id: Int,
     private val images: SqlImages,
     private val databasePath: String,
-    private val cacheDir: File
-) : IViewModel {
-    override val count: IntegerProperty = SimpleIntegerProperty(6)
-    override val isBlackWhite: BooleanProperty = SimpleBooleanProperty(false)
-    override val isCropImage: BooleanProperty = SimpleBooleanProperty(true)
-    override val isRestoreImage: BooleanProperty = SimpleBooleanProperty(false)
-    override val notification: BehaviorSubject<String> = BehaviorSubject.create()
+    private val cacheDir: File,
+    dispatcher: CoroutineDispatcher
+) {
+    private val context = CoroutineScope(dispatcher + SupervisorJob())
+
+    private val count = SimpleIntegerProperty(6)
+    fun getCount() = count.get()
+    fun setCount(value: Int) {
+        count.set(value)
+    }
+    fun countProperty() = count
+
+    private val isBlackWhite = SimpleBooleanProperty(false)
+    fun getIsBlackWhite() = isBlackWhite.get()
+    fun setIsBlackWhite(value: Boolean) {
+        isBlackWhite.set(value)
+    }
+    fun isBlackWhiteProperty() = isBlackWhite
+
+    private val isCropImage = SimpleBooleanProperty(true)
+    fun getIsCropImage() = isCropImage.get()
+    fun isCropImageProperty() = isCropImage
+
+    private val isRestoreImage = SimpleBooleanProperty(false)
+    fun getIsRestoreImage() = isRestoreImage.get()
+    fun setIsRestoreImage(value: Boolean) {
+        isRestoreImage.set(value)
+    }
+    fun isRestoreImageProperty() = isRestoreImage
+
+    private val image = SimpleObjectProperty<PosterizedPix?>(null)
+    fun getImage() = image.get()
+    fun imageProperty(): ReadOnlyObjectProperty<PosterizedPix?> = image
 
     private var imagePath: String? = null
-
-    private val _posterize = PublishSubject.create<String>()
-    override val image = _posterize.debounce(100, TimeUnit.MILLISECONDS)
-        .subscribeOn(Schedulers.computation())
-        .map {
-            images.delete(id)
-            images.add(id, count.get(), isBlackWhite.get(), it)
-            images[id].setParameters(count.get(), isBlackWhite.get())
-            if (Leptonica.posterize2(id, databasePath) != Leptonica.OK) throw LeptonicaError
-            PosterizedPix(images[id], cacheDir)
-        }
-        .observeOn(JavaFxScheduler.platform())
-        .doOnError { it.message?.let { message -> notification.onNext(message) } }
-        .publish()
-    private val disposables = CompositeDisposable()
+    private val _posterize = MutableSharedFlow<String?>(0, 1, BufferOverflow.DROP_OLDEST)
 
     private val onChangeListener = InvalidationListener {
-        imagePath?.let {
-            _posterize.onNext(it)
-        }
+        imagePath?.let { _posterize.tryEmit(it) }
     }
 
     init {
-        this.disposables.add(this.image.connect())
-        this.count.addListener(this.onChangeListener)
-        this.isBlackWhite.addListener(this.onChangeListener)
+        count.addListener(onChangeListener)
+        isBlackWhite.addListener(onChangeListener)
+        _posterize.filterNotNull()
+            .debounce(400)
+            .onEach { image.set(posterize(it)) }
+            .launchIn(context)
     }
 
-    override fun load(path: String) {
+    suspend fun load(path: String) = coroutineScope {
         imagePath = path
-        _posterize.onNext(path)
+        image.set(posterize(path))
     }
 
-    override fun load(image: Image) {
-        disposables.add(Completable.fromAction {
-            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", cacheDir.resolve("tmp.png"))
-        }
-            .subscribeOn(Schedulers.io())
-            .observeOn(JavaFxScheduler.platform())
-            .subscribe { load(cacheDir.resolve("tmp.png").toString()) })
+    suspend fun load(image: Image) = coroutineScope {
+        ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", cacheDir.resolve("tmp.png"))
+        load(cacheDir.resolve("tmp.png").toString())
     }
 
-    override fun save(destination: File) {
-        disposables.add(Completable.fromAction {
-            cacheDir.resolve("${images[id].id}.png").copyTo(destination, true)
-        }
-            .subscribeOn(Schedulers.io())
-            .observeOn(JavaFxScheduler.platform())
-            .subscribe {
-                notification.onNext("Saved image to ${Paths.get(destination.toURI())}")
-            })
+    suspend fun save(destination: File) = coroutineScope {
+        cacheDir.resolve("${images[id].id}.png").copyTo(destination, true)
+        return@coroutineScope
     }
 
-    fun onDestroy() {
-        if (!isRestoreImage.get()) {
+    fun onCleared() {
+        if (!getIsRestoreImage()) {
             images.delete(id)
         }
+        context.cancel()
         count.removeListener(onChangeListener)
         isBlackWhite.removeListener(onChangeListener)
-        disposables.dispose()
+    }
+
+    private suspend fun posterize(path: String) = coroutineScope {
+        images.delete(id)
+        images.add(id, count.get(), isBlackWhite.get(), path)
+        images[id].setParameters(count.get(), isBlackWhite.get())
+        if (Leptonica.posterize2(id, databasePath) != Leptonica.OK) throw LeptonicaError
+        PosterizedPix(images[id], cacheDir)
     }
 }

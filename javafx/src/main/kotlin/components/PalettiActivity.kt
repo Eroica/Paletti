@@ -1,9 +1,8 @@
 package components
 
-import IViewModel
 import Uninitialized
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjavafx.schedulers.JavaFxScheduler
+import ViewModel
+import javafx.application.Platform
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
 import javafx.embed.swing.SwingFXUtils
@@ -20,6 +19,12 @@ import javafx.scene.layout.HBox
 import javafx.scene.layout.StackPane
 import javafx.stage.FileChooser
 import javafx.stage.Stage
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.javafx.asFlow
 import views.FluentMenu
 import java.io.IOException
 import java.nio.file.Paths
@@ -42,7 +47,10 @@ val COMBINATION_EXPORT_PALETTE = KeyCodeCombination(KeyCode.E, KeyCodeCombinatio
 val COMBINATION_COPY_TO_CLIPBOARD = KeyCodeCombination(KeyCode.C, KeyCodeCombination.SHORTCUT_DOWN)
 val COMBINATION_PASTE_FROM_CLIPBOARD = KeyCodeCombination(KeyCode.V, KeyCodeCombination.SHORTCUT_DOWN)
 
-class PalettiActivity(private val viewModel: IViewModel, private val window: IWindow) : StackPane(), ISaveDialog {
+class PalettiActivity(
+    private val viewModel: ViewModel,
+    private val window: IWindow
+) : StackPane(), ISaveDialog {
     @FXML
     private lateinit var optionsButton: Button
 
@@ -64,20 +72,23 @@ class PalettiActivity(private val viewModel: IViewModel, private val window: IWi
     @FXML
     private lateinit var colorPalette: HBox
 
+    private val context = CoroutineScope(Dispatchers.IO + SupervisorJob() + CoroutineExceptionHandler { _, throwable ->
+        throwable.message?.let {
+            Platform.runLater { notification.show(it) }
+        }
+    })
+
     private val cropImageItem = CheckMenuItem("Crop and zoom image").apply {
-        selectedProperty().bindBidirectional(viewModel.isCropImage)
+        selectedProperty().bindBidirectional(viewModel.isCropImageProperty())
     }
     private val restoreImageItem = CheckMenuItem("Restore last opened image").apply {
-        selectedProperty().bindBidirectional(viewModel.isRestoreImage)
+        selectedProperty().bindBidirectional(viewModel.isRestoreImageProperty())
     }
     private val aboutMenuItem = MenuItem("About …").apply {
         setOnAction { AboutDialog(window).show() }
     }
 
     private val optionsMenu = FluentMenu(cropImageItem, restoreImageItem, SeparatorMenuItem(), aboutMenuItem)
-
-    private val disposables = CompositeDisposable()
-
     private var isScrollTrackpad = false
 
     init {
@@ -87,51 +98,74 @@ class PalettiActivity(private val viewModel: IViewModel, private val window: IWi
             load()
         }
 
-        this.slider.valueProperty().bindBidirectional(this.viewModel.count)
-        this.viewModel.count.addListener { _, _, count -> this.setColorPalette(count.toInt()) }
-        this.monoSwitch.selectedProperty().bindBidirectional(this.viewModel.isBlackWhite)
-        while (this.colorPalette.children.size < this.viewModel.count.value) {
-            this.colorPalette.children.add(ColorTile())
+        slider.valueProperty().bindBidirectional(viewModel.countProperty())
+        viewModel.countProperty().addListener { _, _, count -> setColorPalette(count.toInt()) }
+        monoSwitch.selectedProperty().bindBidirectional(viewModel.isBlackWhiteProperty())
+
+        /* Adds the initial number of color tiles in the lower palette */
+        while (this.colorPalette.children.size < viewModel.getCount()) {
+            colorPalette.children.add(ColorTile())
         }
-        this.disposables.add(this.viewModel.image.observeOn(JavaFxScheduler.platform()).subscribe {
-            val colors = it.colors
-            this.setColorPalette(colors.size)
-            colors.forEachIndexed { index, color ->
-                (this.colorPalette.children[index] as ColorTile).setColor(color)
-            }
-        })
-        this.disposables.add(this.viewModel.notification.subscribe { notification.show(it) })
-        this.disposables.add(this.viewModel.image.take(1).subscribe {
-            val image = Image(
-                it.path, this.fragmentContainer.width, this.fragmentContainer.height, true, true, true
-            )
-            image.progressProperty().addListener(object : ChangeListener<Number> {
-                override fun changed(observable: ObservableValue<out Number>?, oldValue: Number?, newValue: Number?) {
-                    if ((newValue?.toDouble() ?: 0.0) >= 1.0) {
-                        image.progressProperty().removeListener(this)
-                        val fragment = ImageFragment(
-                            viewModel,
-                            fragmentContainer.width,
-                            fragmentContainer.height,
-                            image,
-                            this@PalettiActivity,
-                            notification
-                        )
-                        fragment.imageView.fitWidthProperty().bind(fragmentContainer.widthProperty())
-                        fragment.imageView.fitHeightProperty().bind(fragmentContainer.heightProperty())
-                        fragmentContainer.children.removeAt(0)
-                        fragmentContainer.children.add(0, fragment)
-                        this@PalettiActivity.fragment = fragment
+
+        viewModel.imageProperty()
+            .asFlow()
+            .filterNotNull()
+            .onEach {
+                val colors = it.colors
+                withContext(Dispatchers.Main) {
+                    setColorPalette(colors.size)
+                    colors.forEachIndexed { index, color ->
+                        (colorPalette.children[index] as ColorTile).setColor(color)
                     }
                 }
-            })
-        })
+            }
+            .launchIn(context)
+
+        viewModel.imageProperty()
+            .asFlow()
+            .filterNotNull()
+            .take(1)
+            .onEach {
+                val image = Image(
+                    it.path, this.fragmentContainer.width, this.fragmentContainer.height, true, true, true
+                )
+                image.progressProperty().addListener(object : ChangeListener<Number> {
+                    override fun changed(
+                        observable: ObservableValue<out Number>?,
+                        oldValue: Number?,
+                        newValue: Number?
+                    ) {
+                        if ((newValue?.toDouble() ?: 0.0) >= 1.0) {
+                            image.progressProperty().removeListener(this)
+                            val fragment = ImageFragment(
+                                viewModel,
+                                fragmentContainer.width,
+                                fragmentContainer.height,
+                                image,
+                                this@PalettiActivity,
+                                notification
+                            )
+                            fragment.imageView.fitWidthProperty().bind(fragmentContainer.widthProperty())
+                            fragment.imageView.fitHeightProperty().bind(fragmentContainer.heightProperty())
+
+                            Platform.runLater {
+                                fragmentContainer.children.removeAt(0)
+                                fragmentContainer.children.add(0, fragment)
+                                this@PalettiActivity.fragment = fragment
+                            }
+                        }
+                    }
+                })
+            }
+            .launchIn(context)
     }
 
     override fun saveImage() {
         val fileChooser = FileChooser()
         fileChooser.extensionFilters.add(FileChooser.ExtensionFilter("PNG Image", "*.png"))
-        fileChooser.showSaveDialog(window.stage())?.let { viewModel.save(it) }
+        fileChooser.showSaveDialog(window.stage())?.let {
+            context.launch { viewModel.save(it) }
+        }
     }
 
     override fun savePalette() {
@@ -154,10 +188,10 @@ class PalettiActivity(private val viewModel: IViewModel, private val window: IWi
     }
 
     fun onDestroy() {
-        slider.valueProperty().unbindBidirectional(viewModel.count)
-        monoSwitch.selectedProperty().unbindBidirectional(viewModel.isBlackWhite)
+        slider.valueProperty().unbindBidirectional(viewModel.countProperty())
+        monoSwitch.selectedProperty().unbindBidirectional(viewModel.isBlackWhiteProperty())
         fragment.onDestroy()
-        disposables.dispose()
+        context.cancel()
     }
 
     fun onDropareaClick(event: MouseEvent) {
@@ -175,7 +209,8 @@ class PalettiActivity(private val viewModel: IViewModel, private val window: IWi
     }
 
     fun onDragDropped(event: DragEvent) {
-        viewModel.load(event.dragboard.files.first().absolutePath)
+        val path = event.dragboard.files.first().absolutePath
+        context.launch { viewModel.load(path) }
         event.consume()
     }
 
@@ -225,31 +260,40 @@ class PalettiActivity(private val viewModel: IViewModel, private val window: IWi
                     slider.value++
                     event.consume()
                 }
+
                 event.code == KeyCode.DOWN -> {
                     slider.value--
                     event.consume()
                 }
+
                 event.code == KeyCode.X -> {
                     monoSwitch.isSelected = !monoSwitch.isSelected
                     event.consume()
                 }
+
                 COMBINATION_OPEN.match(event) -> {
                     openFileDialog()
                     event.consume()
                 }
+
                 COMBINATION_CLOSE.match(event) -> {
                     window.close()
                     event.consume()
                 }
+
                 COMBINATION_PASTE_FROM_CLIPBOARD.match(event) -> {
                     val clipboard = Clipboard.getSystemClipboard()
+
                     if (clipboard.hasImage()) {
-                        viewModel.load(clipboard.image)
+                        val image = clipboard.image
+                        context.launch { viewModel.load(image) }
                     } else if (clipboard.hasFiles()) {
-                        viewModel.load(clipboard.files.first().absolutePath)
+                        val path = clipboard.files.first().absolutePath
+                        context.launch { viewModel.load(path) }
                     }
                     event.consume()
                 }
+
                 else -> fragment.onShortcut(event)
             }
         } catch (e: Uninitialized) {
@@ -273,7 +317,7 @@ class PalettiActivity(private val viewModel: IViewModel, private val window: IWi
         val fileChooser = FileChooser()
         fileChooser.title = "Select an image"
         fileChooser.showOpenDialog(window.stage())?.let {
-            viewModel.load(it.absolutePath)
+            context.launch { viewModel.load(it.absolutePath) }
         }
     }
 }
