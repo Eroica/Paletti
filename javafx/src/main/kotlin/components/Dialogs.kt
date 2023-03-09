@@ -1,6 +1,7 @@
 package components
 
 import APP_WEBSITE
+import Paletti
 import app.paletti.BuildConfig
 import javafx.event.ActionEvent
 import javafx.fxml.FXML

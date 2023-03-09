@@ -1,6 +1,6 @@
 plugins {
     application
-    kotlin("jvm") version "1.7.20"
+    kotlin("jvm") version "1.8.10"
     id("org.openjfx.javafxplugin") version "0.0.13"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("org.beryx.runtime") version "1.12.7"
@@ -23,21 +23,22 @@ javafx {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("io.reactivex.rxjava3:rxjava:3.1.5")
-    implementation("org.xerial:sqlite-jdbc:3.39.3.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.6.4")
+    implementation("org.xerial:sqlite-jdbc:3.41.0.0")
     implementation("net.harawata:appdirs:1.2.1")
     implementation("org.slf4j:slf4j-simple:2.0.3")
 }
 
 tasks {
     compileJava {
-        targetCompatibility = JavaVersion.VERSION_18.toString()
+        targetCompatibility = JavaVersion.VERSION_19.toString()
     }
     compileKotlin {
-        kotlinOptions.jvmTarget = JavaVersion.VERSION_18.toString()
+        kotlinOptions.jvmTarget = JavaVersion.VERSION_19.toString()
     }
     compileTestKotlin {
-        kotlinOptions.jvmTarget = JavaVersion.VERSION_18.toString()
+        kotlinOptions.jvmTarget = JavaVersion.VERSION_19.toString()
     }
     jpackage {
         finalizedBy("copyDlls")
