@@ -2,9 +2,9 @@ plugins {
     application
     kotlin("jvm") version "1.8.10"
     id("org.openjfx.javafxplugin") version "0.0.13"
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("com.github.johnrengelman.shadow") version "8.1.0"
     id("org.beryx.runtime") version "1.12.7"
-    id("com.github.ben-manes.versions") version "0.43.0"
+    id("com.github.ben-manes.versions") version "0.46.0"
     id("com.jaredsburrows.license")
     id("com.github.gmazzo.buildconfig") version "3.1.0"
 }
@@ -27,7 +27,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.6.4")
     implementation("org.xerial:sqlite-jdbc:3.41.0.0")
     implementation("net.harawata:appdirs:1.2.1")
-    implementation("org.slf4j:slf4j-simple:2.0.3")
+    implementation("org.slf4j:slf4j-simple:2.0.6")
 }
 
 tasks {
