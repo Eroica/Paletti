@@ -5,7 +5,7 @@ Paletti is a small tool to _quantize_ the colors of an image.
 This can be used to simplify the image visually or to extract certain key colors.
 
 The quantization process usually extracts colors that are visually close to the original image, but it is not guaranteed to be exact.
-It is based on a https://en.wikipedia.org/wiki/Median_cut[_Modified median cut quantization_] implemented by http://leptonica.org/:[Leptonica].
+It is based on a https://en.wikipedia.org/wiki/Median_cut[_Modified median cut quantization_] implemented by http://leptonica.org/[Leptonica].
 
 image::Paletti.gif[Screenshot of using Paletti]
 
