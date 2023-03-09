@@ -147,7 +147,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>C:\Users\Eroica\.jdks\openjdk-18.0.2.1\include\win32;C:\Users\Eroica\.jdks\openjdk-18.0.2.1\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Eroica\.jdks\openjdk-19.0.1\include\win32;C:\Users\Eroica\.jdks\openjdk-19.0.1\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
