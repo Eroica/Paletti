@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<fx:root alignment="CENTER" onMousePressed="#onPress" onMouseReleased="#onRelease" onMouseClicked="#onClick" prefHeight="48.0" prefWidth="48.0" style="-fx-background-color: #f0f0f0; -fx-border-color: #00000022; -fx-background-insets: 0; -fx-border-width: 1; -fx-border-radius: 4px; -fx-background-radius: 4px;" styleClass="color-tile" type="VBox" HBox.hgrow="ALWAYS" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root alignment="CENTER" onMousePressed="#onPress" onMouseReleased="#onRelease" onMouseClicked="#onClick" prefHeight="48.0" prefWidth="48.0" style="-fx-background-color: #f0f0f0; -fx-border-color: #00000022; -fx-background-insets: 0; -fx-border-width: 1; -fx-border-radius: 4px; -fx-background-radius: 4px;" styleClass="color-tile" type="VBox" HBox.hgrow="ALWAYS" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
 	<children>
 		<Label ellipsisString="" text="">
 			<font>
