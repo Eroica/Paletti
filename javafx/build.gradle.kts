@@ -57,8 +57,8 @@ buildConfig {
 
     buildConfigField("String", "APP_NAME", "\"${project.name}\"")
     buildConfigField("String", "APP_VERSION", "\"${project.version}\"")
-    buildConfigField("String", "APP_COPYRIGHT", "\"Copyright © 2022\"")
-    buildConfigField("String", "APP_LICENSE", "\"${project.name} (c) 2022 Eroica\"")
+    buildConfigField("String", "APP_COPYRIGHT", "\"Copyright © 2023\"")
+    buildConfigField("String", "APP_LICENSE", "\"${project.name} (c) 2023 Eroica\"")
 }
 
 application {
@@ -75,7 +75,7 @@ runtime {
         skipInstaller = true
         imageOptions = listOf(
             "--icon", "src/main/resources/Paletti.ico",
-            "--copyright", "2022",
+            "--copyright", "2023",
 			"--vendor", "GROUNDCTRL"
         )
     }
