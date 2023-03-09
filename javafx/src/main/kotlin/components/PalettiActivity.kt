@@ -78,12 +78,8 @@ class PalettiActivity(
         }
     })
 
-    private val cropImageItem = CheckMenuItem("Crop and zoom image").apply {
-        selectedProperty().bindBidirectional(viewModel.isCropImageProperty())
-    }
-    private val restoreImageItem = CheckMenuItem("Restore last opened image").apply {
-        selectedProperty().bindBidirectional(viewModel.isRestoreImageProperty())
-    }
+    private val cropImageItem = CheckMenuItem("Crop and zoom image")
+    private val restoreImageItem = CheckMenuItem("Restore last opened image")
     private val aboutMenuItem = MenuItem("About …").apply {
         setOnAction { AboutDialog(window).show() }
     }
@@ -101,6 +97,8 @@ class PalettiActivity(
         slider.valueProperty().bindBidirectional(viewModel.countProperty())
         viewModel.countProperty().addListener { _, _, count -> setColorPalette(count.toInt()) }
         monoSwitch.selectedProperty().bindBidirectional(viewModel.isBlackWhiteProperty())
+        cropImageItem.selectedProperty().bindBidirectional(viewModel.isCropImageProperty())
+        restoreImageItem.selectedProperty().bindBidirectional(viewModel.isRestoreImageProperty())
 
         /* Adds the initial number of color tiles in the lower palette */
         while (this.colorPalette.children.size < viewModel.getCount()) {
@@ -190,6 +188,8 @@ class PalettiActivity(
     fun onDestroy() {
         slider.valueProperty().unbindBidirectional(viewModel.countProperty())
         monoSwitch.selectedProperty().unbindBidirectional(viewModel.isBlackWhiteProperty())
+        cropImageItem.selectedProperty().unbindBidirectional(viewModel.isCropImageProperty())
+        restoreImageItem.selectedProperty().unbindBidirectional(viewModel.isRestoreImageProperty())
         fragment.onDestroy()
         context.cancel()
     }
