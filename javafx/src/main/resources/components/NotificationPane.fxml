@@ -3,7 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.shape.Rectangle?>
-<fx:root fx:id="stackPane" type="StackPane" mouseTransparent="true" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" StackPane.Alignment="BOTTOM_CENTER" alignment="BOTTOM_CENTER">
+<fx:root fx:id="stackPane" type="StackPane" mouseTransparent="true" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" alignment="BOTTOM_CENTER">
 	<clip>
 		<Rectangle width="${stackPane.width}" height="${stackPane.height}"/>
 	</clip>
