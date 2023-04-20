@@ -21,10 +21,12 @@ const val APP_WEBSITE = "https://paletti.app"
 fun main(args: Array<String>) {
     System.loadLibrary("Paletti")
     System.setProperty("prism.lcdtext", "false")
+
     if (!Windows.isAMDGPU()) {
         System.setProperty("prism.forceUploadingPainter", "true")
         System.setProperty("javafx.animation.fullspeed", "true")
     }
+
     Application.launch(Paletti::class.java, *args)
 }
 
@@ -39,6 +41,7 @@ class Paletti : Application() {
         super.init()
         Paletti.App = this
         cacheDir.mkdirs()
+        setUserAgentStylesheet("/Fluent.css")
     }
 
     override fun start(primaryStage: Stage) {
