@@ -9,6 +9,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ToggleButton?>
 <?import views.FluentTooltip?>
+<?import javafx.scene.control.Separator?>
 <fx:root type="StackPane" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" onDragDropped="#onDragDropped" onDragOver="#onDragOver" onKeyPressed="#onKeyPressed" onScroll="#onScroll" onScrollStarted="#onScrollStarted" onScrollFinished="#onScrollFinished" style="-fx-background-color: transparent">
 	<VBox>
 		<HBox fx:id="headerBar" styleClass="header-bar" alignment="CENTER">
@@ -28,7 +29,9 @@
 					<FluentTooltip text="Always display on top"/>
 				</tooltip>
 			</ToggleButton>
-			<Pane styleClass="header-border"/>
+
+			<Separator orientation="VERTICAL"/>
+
 			<Button fx:id="optionsButton" text="" onAction="#onOptionsClick">
 				<tooltip>
 					<FluentTooltip text="Settings and more"/>

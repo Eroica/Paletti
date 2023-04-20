@@ -24,15 +24,14 @@ class FluentSliderSkin(slider: FluentSlider) : SliderSkin(slider) {
     private val track = skinnable.lookup(".track") as StackPane
 
     init {
-        val radiusProperty = SimpleIntegerProperty()
-        this.thumb.styleProperty().bind(
-            SimpleStringProperty("-fx-background-insets: -8px, -6px, -5px, ")
+        val radiusProperty = SimpleIntegerProperty(6)
+        thumb.styleProperty().bind(
+            SimpleStringProperty("-fx-background-insets: -2, 0, 1,")
                 .concat(radiusProperty)
-                .concat("px;")
         )
 
-        this.track.styleProperty().bind(
-            SimpleStringProperty("-fx-background-color: linear-gradient(to right, #005A9E ")
+        track.styleProperty().bind(
+            SimpleStringProperty("-fx-background-color: linear-gradient(to right, #0e6aba ")
                 .concat(skinnable.valueProperty().divide(skinnable.max))
                 .concat(", #868686 ")
                 .concat(skinnable.valueProperty().divide(skinnable.max))
@@ -40,32 +39,24 @@ class FluentSliderSkin(slider: FluentSlider) : SliderSkin(slider) {
         )
 
         val scaleMoveIn = Timeline(
-            KeyFrame(Duration.millis(0.0), KeyValue(radiusProperty, 0)),
-            KeyFrame(Duration.millis(100.0), KeyValue(radiusProperty, -2, Interpolator.EASE_IN))
+            KeyFrame(Duration.millis(0.0), KeyValue(radiusProperty, 6)),
+            KeyFrame(Duration.millis(100.0), KeyValue(radiusProperty, 4, Interpolator.EASE_IN))
         )
         val scaleMoveOut = Timeline(
-            KeyFrame(Duration.millis(0.0), KeyValue(radiusProperty, -2)),
-            KeyFrame(Duration.millis(100.0), KeyValue(radiusProperty, 0, Interpolator.EASE_OUT))
+            KeyFrame(Duration.millis(0.0), KeyValue(radiusProperty, 4)),
+            KeyFrame(Duration.millis(100.0), KeyValue(radiusProperty, 6, Interpolator.EASE_OUT))
         )
         val scalePressed = Timeline(
-            KeyFrame(Duration.millis(0.0), KeyValue(radiusProperty, 0)),
-            KeyFrame(Duration.millis(60.0), KeyValue(radiusProperty, 1, Interpolator.EASE_IN))
+            KeyFrame(Duration.millis(0.0), KeyValue(radiusProperty, 4)),
+            KeyFrame(Duration.millis(60.0), KeyValue(radiusProperty, 7, Interpolator.EASE_IN))
         )
         val scaleReleased = Timeline(
-            KeyFrame(Duration.millis(0.0), KeyValue(radiusProperty, 0)),
-            KeyFrame(Duration.millis(60.0), KeyValue(radiusProperty, -2, Interpolator.EASE_IN))
+            KeyFrame(Duration.millis(0.0), KeyValue(radiusProperty, 7)),
+            KeyFrame(Duration.millis(60.0), KeyValue(radiusProperty, 4, Interpolator.EASE_IN))
         )
-        this.thumb.addEventFilter(MouseEvent.MOUSE_ENTERED) {
-            scaleMoveIn.play()
-        }
-        this.thumb.addEventFilter(MouseEvent.MOUSE_EXITED) {
-            scaleMoveOut.play()
-        }
-        this.thumb.addEventFilter(MouseEvent.MOUSE_PRESSED) {
-            scalePressed.play()
-        }
-        this.thumb.addEventFilter(MouseEvent.MOUSE_RELEASED) {
-            scaleReleased.play()
-        }
+        thumb.addEventFilter(MouseEvent.MOUSE_ENTERED) { scaleMoveIn.play() }
+        thumb.addEventFilter(MouseEvent.MOUSE_EXITED) { scaleMoveOut.play() }
+        thumb.addEventFilter(MouseEvent.MOUSE_PRESSED) { scalePressed.play() }
+        thumb.addEventFilter(MouseEvent.MOUSE_RELEASED) { scaleReleased.play() }
     }
 }
