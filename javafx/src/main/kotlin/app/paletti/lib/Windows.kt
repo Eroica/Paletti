@@ -4,7 +4,8 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 
 object Windows {
-    external fun subclass(target: String)
+    external fun isdarkmode(): Boolean
+    external fun subclass(target: String, isSetDarkMode: Boolean)
 
     fun isAMDGPU(): Boolean {
         val p = Runtime.getRuntime().exec(arrayOf("wmic", "PATH", "Win32_videocontroller", "GET", "description"))
