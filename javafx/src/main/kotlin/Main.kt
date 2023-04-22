@@ -36,16 +36,21 @@ class Paletti : Application() {
     }
 
     private val cacheDir = File(AppDirsFactory.getInstance().getUserCacheDir(APP_NAME, null, null))
+    private val database by lazy { Database(cacheDir.resolve(DB_NAME), cacheDir) }
 
     override fun init() {
         super.init()
         Paletti.App = this
         cacheDir.mkdirs()
-        setUserAgentStylesheet("/Fluent.css")
+
+        if (Windows.isdarkmode() || database.isAlwaysDarkMode) {
+            setUserAgentStylesheet("/FluentDark.css")
+        } else {
+            setUserAgentStylesheet("/Fluent.css")
+        }
     }
 
     override fun start(primaryStage: Stage) {
-        val database = Database(cacheDir.resolve(DB_NAME), cacheDir)
         val images = SqlImages(database)
 
         var viewModelId = database.monotonicId()
@@ -54,6 +59,7 @@ class Paletti : Application() {
         }
 
         val viewModel = ViewModel(viewModelId, images, cacheDir.resolve(DB_NAME).toString(), cacheDir, Dispatchers.IO)
+        viewModel.setIsAlwaysDarkMode(database.isAlwaysDarkMode)
 
         if (database.isRestoreImage) {
             try {
@@ -111,12 +117,19 @@ class Paletti : Application() {
             database.close()
         }
 
+        if (Windows.isdarkmode() || database.isAlwaysDarkMode) {
+            primaryStage.scene.root.styleClass.add("paletti-is-dark")
+        }
+
         viewModel.isRestoreImageProperty().addListener(InvalidationListener {
             database.isRestoreImage = viewModel.getIsRestoreImage()
+        })
+        viewModel.isAlwaysDarkModeProperty().addListener(InvalidationListener {
+            database.isAlwaysDarkMode = viewModel.getIsAlwaysDarkMode()
         })
 
         primaryStage.title = "Paletti"
         primaryStage.show()
-        Windows.subclass(primaryStage.title)
+        Windows.subclass(primaryStage.title, Windows.isdarkmode() || database.isAlwaysDarkMode)
     }
 }
