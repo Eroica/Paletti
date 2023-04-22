@@ -40,6 +40,10 @@ class Database(path: File, cacheDir: File) : Closeable {
                 """INSERT OR IGNORE INTO environment (name, value)
                 VALUES ("is_restore_image", 0);"""
             )
+            addBatch(
+                """INSERT OR IGNORE INTO environment (name, value)
+                VALUES ("is_always_dark_mode", 0);"""
+            )
             executeBatch()
         }
     }
@@ -58,6 +62,16 @@ class Database(path: File, cacheDir: File) : Closeable {
             .use { it.getBoolean(1) }
         set(value) {
             db.prepareStatement("""UPDATE environment SET `value`=? WHERE name="is_restore_image"""").apply {
+                setBoolean(1, value)
+            }.executeUpdate()
+        }
+
+    var isAlwaysDarkMode: Boolean
+        get() = db.createStatement()
+            .executeQuery("""SELECT `value` FROM environment WHERE name="is_always_dark_mode";""")
+            .use { it.getBoolean(1) }
+        set(value) {
+            db.prepareStatement("""UPDATE environment SET `value`=? WHERE name="is_always_dark_mode"""").apply {
                 setBoolean(1, value)
             }.executeUpdate()
         }

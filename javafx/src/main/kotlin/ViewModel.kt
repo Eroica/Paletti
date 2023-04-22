@@ -59,6 +59,13 @@ class ViewModel(
     }
     fun isRestoreImageProperty() = isRestoreImage
 
+    private val isAlwaysDarkMode = SimpleBooleanProperty(false)
+    fun getIsAlwaysDarkMode() = isAlwaysDarkMode.get()
+    fun setIsAlwaysDarkMode(value: Boolean) {
+        isAlwaysDarkMode.set(value)
+    }
+    fun isAlwaysDarkModeProperty() = isAlwaysDarkMode
+
     private val image = SimpleObjectProperty<PosterizedPix?>(null)
     fun getImage() = image.get()
     fun imageProperty(): ReadOnlyObjectProperty<PosterizedPix?> = image

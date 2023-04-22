@@ -80,11 +80,20 @@ class PalettiActivity(
 
     private val cropImageItem = CheckMenuItem("Crop and zoom image")
     private val restoreImageItem = CheckMenuItem("Restore last opened image")
+    private val alwaysDarkMode = CheckMenuItem("Always use dark mode")
     private val aboutMenuItem = MenuItem("About …").apply {
         setOnAction { AboutDialog(window).show() }
     }
 
-    private val optionsMenu = FluentMenu(cropImageItem, restoreImageItem, SeparatorMenuItem(), aboutMenuItem)
+    private val optionsMenu = FluentMenu(
+        cropImageItem,
+        restoreImageItem,
+        SeparatorMenuItem(),
+        alwaysDarkMode,
+        SeparatorMenuItem(),
+        aboutMenuItem
+    )
+
     private var isScrollTrackpad = false
 
     init {
@@ -99,6 +108,7 @@ class PalettiActivity(
         monoSwitch.selectedProperty().bindBidirectional(viewModel.isBlackWhiteProperty())
         cropImageItem.selectedProperty().bindBidirectional(viewModel.isCropImageProperty())
         restoreImageItem.selectedProperty().bindBidirectional(viewModel.isRestoreImageProperty())
+        alwaysDarkMode.selectedProperty().bindBidirectional(viewModel.isAlwaysDarkModeProperty())
 
         /* Adds the initial number of color tiles in the lower palette */
         while (this.colorPalette.children.size < viewModel.getCount()) {
@@ -190,6 +200,7 @@ class PalettiActivity(
         monoSwitch.selectedProperty().unbindBidirectional(viewModel.isBlackWhiteProperty())
         cropImageItem.selectedProperty().unbindBidirectional(viewModel.isCropImageProperty())
         restoreImageItem.selectedProperty().unbindBidirectional(viewModel.isRestoreImageProperty())
+        alwaysDarkMode.selectedProperty().unbindBidirectional(viewModel.isAlwaysDarkModeProperty())
         fragment.onDestroy()
         context.cancel()
     }

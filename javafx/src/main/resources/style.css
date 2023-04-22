@@ -54,8 +54,14 @@
 .header-bar .toggle-button:selected:hover {
 	-fx-background-color: #1975C5;
 }
+.paletti-is-dark .header-bar .toggle-button:selected:hover {
+	-fx-background-color: #47b1e8;
+}
 .header-bar .toggle-button:selected > .text {
 	-fx-fill: #ffffff;
+}
+.paletti-is-dark .header-bar .toggle-button:selected > .text {
+	-fx-fill: #000000;
 }
 .header-bar > .separator {
 	-fx-padding: 0 8;
