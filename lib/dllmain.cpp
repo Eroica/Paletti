@@ -15,6 +15,36 @@ using std::string;
 using namespace sqlite;
 
 string targetWndName = "Paletti";
+bool isDarkMode = false;
+
+/** 
+ * Adapted from:
+ * dgellow, 2022-01-18
+ * https://stackoverflow.com/a/70753913
+ * CC BY-SA 3.0
+ * https://creativecommons.org/licenses/by-sa/3.0/
+ */
+bool is_light_theme() {
+	auto buffer = std::vector<char>(4);
+	auto cbData = static_cast<DWORD>(buffer.size() * sizeof(char));
+	auto res = RegGetValueW(
+		HKEY_CURRENT_USER,
+		L"Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+		L"AppsUseLightTheme",
+		RRF_RT_REG_DWORD,
+		nullptr,
+		buffer.data(),
+		&cbData
+	);
+
+	if (res != ERROR_SUCCESS) {
+		return true;
+	}
+
+	auto i = int(buffer[3] << 24 | buffer[2] << 16 | buffer[1] << 8 | buffer[0]);
+
+	return i == 1;
+}
 
 const char* DB_STATEMENTS[] = {
 	"SELECT value FROM environment WHERE name=?;",
@@ -28,7 +58,8 @@ Java_app_paletti_lib_Leptonica_posterize2(
 	JNIEnv * env,
 	jobject /* this */,
 	jint image_id,
-	jstring db_path) {
+	jstring db_path
+) {
 	const char* native_db_path = env->GetStringUTFChars(db_path, 0);
 
 	try {
@@ -105,7 +136,8 @@ Java_app_paletti_lib_Leptonica_posterize(
 	jobject /* this */,
 	jint max_count,
 	jboolean is_black_white,
-	jobjectArray file_paths) {
+	jobjectArray file_paths
+) {
 	string native_paths[3];
 	int len = env->GetArrayLength(file_paths);
 	for (int i = 0; i < len; i++) {
@@ -130,10 +162,10 @@ Java_app_paletti_lib_Leptonica_posterize(
 		pixc = pixMedianCutQuantGeneral(tmp2, 0, 8, (int)max_count, 0, 0, 0);
 		pixDestroy(&tmp2);
 		pixDestroy(&tmp);
-	}
-	else {
+	} else {
 		pixc = pixMedianCutQuantGeneral(pixs, 0, 8, (int)max_count, 0, 0, 0);
 	}
+
 	if (pixc == nullptr) {
 		pixDestroy(&pixs);
 		return -1;
@@ -171,10 +203,13 @@ void subclassWindow(HWND hWnd) {
 	if (!SUCCEEDED(ok)) {
 		DwmSetWindowAttribute(hWnd, 1029, &trueValue, sizeof(int));
 	}
+
+	if (isDarkMode) {
+		DwmSetWindowAttribute(hWnd, 20, &trueValue, sizeof(int));
+	}
 }
 
-BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam)
-{
+BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam) {
 	char String[255];
 
 	if (!hWnd || !IsWindowVisible(hWnd) || !SendMessage(hWnd, WM_GETTEXT, sizeof(String), (LPARAM)String)) {
@@ -199,7 +234,11 @@ extern "C" JNIEXPORT void JNICALL
 Java_app_paletti_lib_Windows_subclass(
 	JNIEnv * env,
 	jobject,
-	jstring title) {
+	jstring title,
+	jboolean isSetDarkMode
+) {
+	isDarkMode = (bool)isSetDarkMode;
+
 	jboolean isCopy;
 	const char* convertedValue = (env)->GetStringUTFChars(title, &isCopy);
 	string str = convertedValue;
@@ -210,4 +249,9 @@ Java_app_paletti_lib_Windows_subclass(
 	if (isCopy == JNI_TRUE) {
 		env->ReleaseStringUTFChars(title, convertedValue);
 	}
+}
+
+extern "C" JNIEXPORT bool JNICALL
+Java_app_paletti_lib_Windows_isdarkmode(JNIEnv * env, jobject) {
+	return !is_light_theme();
 }
