@@ -1,11 +1,11 @@
 .root {
 	-fx-base: #fbfbfb;
-	-fx-background: #f3f3f3;
-	-fx-control-inner-background: #f9f9f9;
+	-fx-background: #202020;
+	-fx-control-inner-background: #202020;
 
-	-fx-accent: #0067c0;
+	-fx-accent: #4cc2ff;
 
-	-fx-color: #1a1a1a;
+	-fx-color: #ffffff;
 	-fx-text-base-color: -fx-color;
 	-fx-focus-color: #6d9df77f;
 
@@ -41,24 +41,24 @@
 	-fx-text-fill: -fx-color;
 	-fx-highlight-fill: -fx-accent;
 	-fx-highlight-text-fill: #ffffff;
-	-fx-background-color: #e5e5e5, #fbfbfb;
-	-fx-background-insets: 0, 1;
-	-fx-background-radius: 3, 2;
+	-fx-background-color: #9a9a9a, #303030, #2d2d2d;
+	-fx-background-insets: 0, 0 0 1 0, 1;
+	-fx-background-radius: 3, 3, 2;
 	-fx-cursor: text;
 	-fx-padding: 0;
 }
 .text-input:focus-visible {
-	-fx-background-color: -fx-focus-color, #e5e5e5, #fbfbfb;
-	-fx-background-insets: -2, 0, 1;
-	-fx-background-radius: 5, 3, 2;
+	-fx-background-color: -fx-focus-color, #9a9a9a, #303030, #2d2d2d;
+	-fx-background-insets: -2, 0, 0 0 1 0, 1;
+	-fx-background-radius: 5, 3, 3, 2;
 }
 .text-input:hover {
-	-fx-background-color: #e5e5e5, #f6f6f6;
+	-fx-background-color: #9a9a9a, #303030, #323232;
 }
 .text-input:focus-visible:hover {
-	-fx-background-color: -fx-focus-color, #e5e5e5, #fbfbfb;
-	-fx-background-insets: -2, 0, 1;
-	-fx-background-radius: 5, 3, 2;
+	-fx-background-color: -fx-focus-color, #9a9a9a, #303030, #323232;
+	-fx-background-insets: -2, 0, 0 0 1 0, 1;
+	-fx-background-radius: 5, 3, 3, 2;
 }
 
 .text-area {
@@ -71,7 +71,7 @@
 .text-area .content {
 	-fx-padding: 8;
 	-fx-cursor: text;
-	-fx-background-color: #ffffff;
+	-fx-background-color: #323232;
 	-fx-background-radius: 2;
 }
 
@@ -80,7 +80,7 @@
 	-fx-text-fill: -fx-text-base-color;
 }
 .check-box > .box {
-	-fx-background-color: #858585, #ededed;
+	-fx-background-color: #999999, #1d1d1d;
 	-fx-background-insets: 0, 1;
 	-fx-background-radius: 6, 5;
 	-fx-padding: 0;
@@ -95,78 +95,78 @@
 	-fx-shape: "M0,0H10V2H0Z";
 	-fx-scale-shape: false;
 }
+.check-box:hover .box {
+	-fx-background-color: #9c9c9c, #2a2a2a;
+}
 .check-box:focus-visible .box {
-	-fx-background-color: #6d9df77f, #858585, #ededed;
+	-fx-background-color: #6d9df77f, #999999, #1d1d1d;
 	-fx-background-insets: -2, 0, 1;
 	-fx-background-radius: 6, 4, 3;
 }
-.check-box:hover .box {
-	-fx-background-color: #838383, #e5e5e5;
-}
 .check-box:focus-visible:hover .box {
-	-fx-background-color: #6d9df77f, #838383, #e5e5e5;
+	-fx-background-color: #6d9df77f, #9c9c9c, #2a2a2a;
 	-fx-background-insets: -2, 0, 1;
 	-fx-background-radius: 6, 4, 3;
 }
 .check-box:pressed .box {
-	-fx-background-color: #b6b6b6, #dcdcdc;
+	-fx-background-color: #4a4a4a, #303030;
 }
 .check-box:focus-visible:pressed .box {
-	-fx-background-color: #b6b6b6, #dcdcdc;
+	-fx-background-color: #4a4a4a, #303030;
 	-fx-background-insets: 0, 1;
 	-fx-background-radius: 4, 3;
 }
 .check-box:selected .box,
 .check-box:indeterminate .box {
-	-fx-background-color: #0067c0, #0067c0;
+	-fx-background-color: -fx-accent, -fx-accent;
 }
 .check-box:selected:focus-visible .box,
 .check-box:indeterminate:focus-visible .box {
-	-fx-background-color: #6d9df77f, #0067c0, #0067c0;
+	-fx-background-color: #6d9df77f, -fx-accent, -fx-accent;
 }
 .check-box:selected:hover .box,
 .check-box:indeterminate:hover .box {
-	-fx-background-color: #0e6ec2, #1975c5;
+	-fx-background-color: #49b9f3, #47b1e8;
 }
 .check-box:selected:focus-visible:hover .box,
 .check-box:indeterminate:focus-visible:hover .box {
-	-fx-background-color: #6d9df77f, #0e6ec2, #1975c5;
+	-fx-background-color: #6d9df77f, #49b9f3, #47b1e8;
 }
 .check-box:selected:pressed .box,
 .check-box:indeterminate:pressed .box {
-	-fx-background-color: #1d77c5, #3183ca;
+	-fx-background-color: #46aee4, #42a1d2;
 }
 .check-box:selected:focus-visible:pressed .box,
 .check-box:indeterminate:focus-visible:pressed .box {
-	-fx-background-color: #1d77c5, #3183ca;
+	-fx-background-color: #46aee4, #42a1d2;
 }
 .check-box:selected:pressed .box .mark,
 .check-box:indeterminate:pressed .box .mark {
-	-fx-background-color: #B8D1E4;
+	-fx-background-color: #3683aa;
 }
 .check-box:selected > .box > .mark,
 .check-box:indeterminate  > .box > .mark {
-	-fx-background-color: #ffffff;
+	-fx-background-color: #000000;
 }
 
 .tooltip {
-	-fx-background-color: #fbfbfb;
+	-fx-background-color: #343434;
 	-fx-background-image: url("noise.png");
 	-fx-background-radius: 6;
-	-fx-border-color: rgba(0, 0, 0, 0.1);
+	-fx-border-color: rgba(0, 0, 0, 0.06);
 	-fx-border-radius: 4;
-	-fx-text-fill: -fx-text-base-color;
+	-fx-text-fill: -fx-color;
 	-fx-padding: 6 10 7 10;
 	-fx-font-size: 12;
 	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 8, 0, 0, 2);
 }
 
 .separator:vertical .line {
-	-fx-border-color: transparent transparent transparent #e5e5e5;
+	-fx-border-color: transparent transparent transparent #323232;
 }
 
 .context-menu {
-	-fx-background-color: #f8f8f8;
+	-fx-background-color: #343434;
 	-fx-background-image: url("noise.png");
 	-fx-border-radius: 10;
 	-fx-background-radius: 10;
@@ -175,49 +175,47 @@
 	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0.0, 0.0, 1.0);
 }
 .context-menu .separator:horizontal .line {
-	-fx-border-color: rgba(0, 0, 0, 0.04) transparent transparent transparent;
+	-fx-border-color: #474747 transparent transparent transparent;
 	-fx-border-insets: 1 0 0 0;
 }
 
 .menu-item {
-	-fx-background-color: transparent;
 	-fx-padding: 10 14 10 14;
 }
-.menu-item:focused {
-	-fx-background-color: rgba(0, 0, 0, 0.04);
+.menu-item:hover {
+	-fx-background-color: rgba(255, 255, 255, 0.04);
 	-fx-background-radius: 5;
-	-fx-focused-mark-color: #000000;
+	-fx-focused-mark-color: #ffffff;
 	-fx-background-insets: 4;
 }
-.menu-item:focused .label {
-	-fx-text-fill: #000000;
+.menu-item:focus-visible {
+	-fx-background-color: rgba(0, 0, 0, 0.04);
+	-fx-background-radius: 5;
+	-fx-background-insets: 4;
 }
 .menu-item:pressed {
-	-fx-background-color: rgba(0, 0, 0, 0.02);
-}
-.menu-item:disabled > .label {
-	-fx-text-fill: #9f9f9f;
-}
-.menu-item > .left-container {
-	-fx-padding: 0 16 0 8;
+	-fx-background-color: rgba(255, 255, 255, 0.02);
 }
 .menu-item > .label {
 	-fx-text-fill: -fx-color;
 }
+.menu-item > .left-container {
+	-fx-padding: 0 16 0 8;
+}
 .check-menu-item:checked > .left-container > .check {
-	-fx-background-color: #676767;
+	-fx-background-color: #c5c5c5;
 	-fx-shape: "M4.335,7.037L1.53,4.232L1,4.762L4.335,8.098L11,1.433L10.47,0.902L4.335,7.037Z";
 	-fx-scale-shape: false;
 }
-.check-menu-item:focused:checked > .left-container > .check {
-	-fx-background-color: #323232;
+.check-menu-item:checked:hover > .left-container > .check {
+	-fx-background-color: #f1f1f1;
 }
 
 .slider {
-	slider-track-color: #868686;
+	slider-track-color: #9a9a9a;
 }
 .slider .thumb {
-	-fx-background-color: transparent, #e5e5e5, #ffffff, #0067c0;
+	-fx-background-color: transparent, #454545, #454545, -fx-accent;
 	-fx-background-radius: 12, 10, 9, 1em;
 	-fx-background-insets: -2, 0, 1, 6;
 	-fx-max-width: 22;
@@ -226,7 +224,7 @@
 	-fx-pref-height: 22;
 }
 .slider .thumb:pressed {
-	-fx-background-color: transparent, #e5e5e5, #ffffff, #3385cc;
+	-fx-background-color: transparent, #454545, #454545, #4aa9da;
 }
 .slider .track {
 	-fx-background-color: slider-track-color;
@@ -234,7 +232,7 @@
 	-fx-padding: 2;
 }
 .slider:focus-visible .thumb {
-	-fx-background-color: -fx-focus-color, #e5e5e5, #ffffff, #0067c0;
+	-fx-background-color: -fx-focus-color, #454545, #454545, -fx-accent;
 }
 
 .scroll-bar:horizontal,

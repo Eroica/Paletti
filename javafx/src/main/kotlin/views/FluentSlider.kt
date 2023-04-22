@@ -31,9 +31,9 @@ class FluentSliderSkin(slider: FluentSlider) : SliderSkin(slider) {
         )
 
         track.styleProperty().bind(
-            SimpleStringProperty("-fx-background-color: linear-gradient(to right, #0e6aba ")
+            SimpleStringProperty("-fx-background-color: linear-gradient(to right, -fx-accent ")
                 .concat(skinnable.valueProperty().divide(skinnable.max))
-                .concat(", #868686 ")
+                .concat(", slider-track-color ")
                 .concat(skinnable.valueProperty().divide(skinnable.max))
                 .concat(");")
         )
