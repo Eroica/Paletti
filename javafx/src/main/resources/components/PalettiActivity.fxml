@@ -10,7 +10,7 @@
 <?import javafx.scene.control.ToggleButton?>
 <?import views.FluentTooltip?>
 <?import javafx.scene.control.Separator?>
-<fx:root type="StackPane" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" onDragDropped="#onDragDropped" onDragOver="#onDragOver" onKeyPressed="#onKeyPressed" onScroll="#onScroll" onScrollStarted="#onScrollStarted" onScrollFinished="#onScrollFinished" style="-fx-background-color: transparent">
+<fx:root type="StackPane" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" onDragDropped="#onDragDropped" onDragOver="#onDragOver" onKeyPressed="#onKeyPressed" onScroll="#onScroll" onScrollStarted="#onScrollStarted" onScrollFinished="#onScrollFinished" style="-fx-background-color: transparent">
 	<VBox>
 		<HBox fx:id="headerBar" styleClass="header-bar" alignment="CENTER">
 			<FluentSlider styleClass="color-slider" fx:id="slider" blockIncrement="1.0" max="32.0" min="3.0" value="6.0">

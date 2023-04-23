@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<fx:root alignment="CENTER" onMousePressed="#onPress" onMouseReleased="#onRelease" onMouseClicked="#onClick" prefHeight="48.0" prefWidth="48.0" styleClass="color-tile" type="VBox" HBox.hgrow="ALWAYS" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root alignment="CENTER" onMousePressed="#onPress" onMouseReleased="#onRelease" onMouseClicked="#onClick" prefHeight="48.0" prefWidth="48.0" styleClass="color-tile" type="VBox" HBox.hgrow="ALWAYS" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1">
 	<Label ellipsisString="" text="">
 		<font>
 			<Font name="Segoe Fluent Icons" size="24.0"/>

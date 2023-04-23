@@ -17,15 +17,15 @@ Java Native Access Platform (5.6.0) - LGPL, version 2.1,Apache License v2.0
 Java Native Access Platform
 https://github.com/java-native-access/jna
 
-javafx-base (19) - GPLv2+CE
+javafx-base (20) - GPLv2+CE
 
-javafx-controls (19) - GPLv2+CE
+javafx-controls (20) - GPLv2+CE
 
-javafx-fxml (19) - GPLv2+CE
+javafx-fxml (20) - GPLv2+CE
 
-javafx-graphics (19) - GPLv2+CE
+javafx-graphics (20) - GPLv2+CE
 
-javafx-swing (19) - GPLv2+CE
+javafx-swing (20) - GPLv2+CE
 
 Kotlin Stdlib (1.8.20) - The Apache License, Version 2.0
 Kotlin Standard Library for JVM

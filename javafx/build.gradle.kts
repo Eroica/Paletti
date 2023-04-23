@@ -2,7 +2,7 @@ plugins {
     application
     kotlin("jvm") version "1.8.20"
     id("org.openjfx.javafxplugin") version "0.0.13"
-    id("com.github.johnrengelman.shadow") version "8.1.0"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
     id("org.beryx.runtime") version "1.12.7"
     id("com.github.ben-manes.versions") version "0.46.0"
     id("com.jaredsburrows.license")
@@ -17,7 +17,7 @@ repositories {
 }
 
 javafx {
-    version = "19"
+    version = "20"
     modules("javafx.controls", "javafx.fxml", "javafx.swing")
 }
 

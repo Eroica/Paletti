@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
-<Label alignment="CENTER" styleClass="InfoBar, error" textAlignment="CENTER" xmlns="http://javafx.com/javafx/19">
+<Label alignment="CENTER" styleClass="InfoBar, error" textAlignment="CENTER" xmlns="http://javafx.com/javafx/20">
 </Label>
