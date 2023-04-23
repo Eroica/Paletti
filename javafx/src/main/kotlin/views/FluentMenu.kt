@@ -8,11 +8,15 @@ import javafx.util.Duration
 
 private val FluentInterpolator: Interpolator = Interpolator.SPLINE(0.05, 0.965, 0.005, 0.955)
 
-class FluentMenu(vararg items: MenuItem) : ContextMenu(*items) {
+open class FluentMenu() : ContextMenu() {
     private val slideDown: TranslateTransition by lazy {
         TranslateTransition(Duration.millis(600.0), scene.root).apply {
             interpolator = FluentInterpolator
         }
+    }
+
+    constructor(vararg items: MenuItem) : this() {
+        this.items.addAll(items)
     }
 
     override fun show() {

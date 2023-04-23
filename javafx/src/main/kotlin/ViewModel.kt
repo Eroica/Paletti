@@ -1,5 +1,6 @@
 import app.paletti.lib.Leptonica
 import javafx.beans.InvalidationListener
+import javafx.beans.binding.BooleanBinding
 import javafx.beans.property.ReadOnlyObjectProperty
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleIntegerProperty
@@ -28,8 +29,7 @@ class PosterizedPix(
 class ViewModel(
     private val id: Int,
     private val images: SqlImages,
-    private val databasePath: String,
-    private val cacheDir: File,
+    private val appDir: AppDir,
     dispatcher: CoroutineDispatcher
 ) {
     private val context = CoroutineScope(dispatcher + SupervisorJob())
@@ -52,23 +52,33 @@ class ViewModel(
     fun getIsCropImage() = isCropImage.get()
     fun isCropImageProperty() = isCropImage
 
-    private val isRestoreImage = SimpleBooleanProperty(false)
-    fun getIsRestoreImage() = isRestoreImage.get()
-    fun setIsRestoreImage(value: Boolean) {
-        isRestoreImage.set(value)
+    private val isRestoreImage = object : SimpleBooleanProperty(appDir.database.isRestoreImage) {
+        override fun set(newValue: Boolean) {
+            super.set(newValue)
+            appDir.database.isRestoreImage = newValue
+        }
     }
+
+    fun getIsRestoreImage() = isRestoreImage.get()
     fun isRestoreImageProperty() = isRestoreImage
 
-    private val isAlwaysDarkMode = SimpleBooleanProperty(false)
-    fun getIsAlwaysDarkMode() = isAlwaysDarkMode.get()
-    fun setIsAlwaysDarkMode(value: Boolean) {
-        isAlwaysDarkMode.set(value)
+    private val isAlwaysDarkMode = object : SimpleBooleanProperty(appDir.database.isAlwaysDarkMode) {
+        override fun set(newValue: Boolean) {
+            super.set(newValue)
+            appDir.database.isAlwaysDarkMode = newValue
+        }
     }
+
+    fun getIsAlwaysDarkMode() = isAlwaysDarkMode.get()
     fun isAlwaysDarkModeProperty() = isAlwaysDarkMode
 
     private val image = SimpleObjectProperty<PosterizedPix?>(null)
     fun getImage() = image.get()
     fun imageProperty(): ReadOnlyObjectProperty<PosterizedPix?> = image
+
+    private val isImageLoaded = image.isNotNull
+    fun getIsImageLoaded() = isImageLoaded.get()
+    fun isImageLoadedProperty(): BooleanBinding = isImageLoaded
 
     private var imagePath: String? = null
     private val _posterize = MutableSharedFlow<String?>(0, 1, BufferOverflow.DROP_OLDEST)
@@ -78,6 +88,18 @@ class ViewModel(
     }
 
     init {
+        if (appDir.database.isRestoreImage) {
+            try {
+                setCount(images[id].count)
+                setIsBlackWhite(images[id].isBlackWhite)
+                runBlocking { load(images[id].source) }
+            } catch (e: Exception) {
+                setCount(6)
+                setIsBlackWhite(false)
+                isRestoreImage.set(false)
+            }
+        }
+
         count.addListener(onChangeListener)
         isBlackWhite.addListener(onChangeListener)
         _posterize.filterNotNull()
@@ -92,12 +114,12 @@ class ViewModel(
     }
 
     suspend fun load(image: Image) = coroutineScope {
-        ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", cacheDir.resolve("tmp.png"))
-        load(cacheDir.resolve("tmp.png").toString())
+        ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", appDir.resolve("tmp.png"))
+        load(appDir.resolve("tmp.png").toString())
     }
 
     suspend fun save(destination: File) = coroutineScope {
-        cacheDir.resolve("${images[id].id}.png").copyTo(destination, true)
+        appDir.resolve("${images[id].id}.png").copyTo(destination, true)
         return@coroutineScope
     }
 
@@ -114,7 +136,7 @@ class ViewModel(
         images.delete(id)
         images.add(id, count.get(), isBlackWhite.get(), path)
         images[id].setParameters(count.get(), isBlackWhite.get())
-        if (Leptonica.posterize2(id, databasePath) != Leptonica.OK) throw LeptonicaError
-        PosterizedPix(images[id], cacheDir)
+        if (Leptonica.posterize2(id, appDir.databasePath) != Leptonica.OK) throw LeptonicaError
+        PosterizedPix(images[id], appDir)
     }
 }

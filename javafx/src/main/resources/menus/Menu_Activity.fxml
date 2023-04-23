@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<fx:root type="ContextMenu" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1">
+	<items>
+		<CheckMenuItem fx:id="cropImageItem" text="Crop and zoom image"/>
+		<CheckMenuItem fx:id="restoreImageItem" text="Restore last opened image" disable="${!controller.viewModel.isImageLoaded}"/>
+
+		<SeparatorMenuItem/>
+
+		<CheckMenuItem fx:id="alwaysDarkMode" text="Always use dark mode"/>
+
+		<SeparatorMenuItem/>
+
+		<MenuItem text="About …" onAction="#onAboutClick"/>
+	</items>
+</fx:root>

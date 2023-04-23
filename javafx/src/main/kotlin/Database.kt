@@ -1,4 +1,6 @@
+import app.paletti.lib.Windows
 import javafx.scene.paint.Color
+import net.harawata.appdirs.AppDirsFactory
 import java.io.Closeable
 import java.io.File
 import java.sql.DriverManager
@@ -80,6 +82,17 @@ class Database(path: File, cacheDir: File) : Closeable {
         return db.createStatement().executeQuery("""SELECT max(id) FROM image;""").use {
             it.getInt(1)
         }
+    }
+
+    fun isPrefersDarkMode() = Windows.isdarkmode() || isAlwaysDarkMode
+}
+
+class AppDir : File(AppDirsFactory.getInstance().getUserCacheDir(APP_NAME, null, null)) {
+    val databasePath = resolve(DB_NAME).toString()
+    val database by lazy { Database(resolve(DB_NAME), this) }
+
+    init {
+        mkdirs()
     }
 }
 
