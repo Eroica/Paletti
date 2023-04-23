@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.layout.Pane?>
-<fx:root StackPane.Alignment="CENTER" type="BorderPane" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root StackPane.Alignment="CENTER" type="BorderPane" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1">
 	<top>
 		<Pane prefHeight="8.0" style="-fx-background-color: -fx-control-inner-background"/>
 	</top>
