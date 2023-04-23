@@ -48,7 +48,7 @@ val COMBINATION_COPY_TO_CLIPBOARD = KeyCodeCombination(KeyCode.C, KeyCodeCombina
 val COMBINATION_PASTE_FROM_CLIPBOARD = KeyCodeCombination(KeyCode.V, KeyCodeCombination.SHORTCUT_DOWN)
 
 class PalettiActivity(
-    private val viewModel: ViewModel,
+    val viewModel: ViewModel,
     private val window: IWindow
 ) : StackPane(), ISaveDialog {
     @FXML
@@ -72,33 +72,34 @@ class PalettiActivity(
     @FXML
     private lateinit var colorPalette: HBox
 
+    @FXML
+    private lateinit var cropImageItem: CheckMenuItem
+
+    @FXML
+    private lateinit var restoreImageItem: CheckMenuItem
+
+    @FXML
+    private lateinit var alwaysDarkMode: CheckMenuItem
+
     private val context = CoroutineScope(Dispatchers.IO + SupervisorJob() + CoroutineExceptionHandler { _, throwable ->
         throwable.message?.let {
             Platform.runLater { notification.show(it) }
         }
     })
 
-    private val cropImageItem = CheckMenuItem("Crop and zoom image")
-    private val restoreImageItem = CheckMenuItem("Restore last opened image")
-    private val alwaysDarkMode = CheckMenuItem("Always use dark mode")
-    private val aboutMenuItem = MenuItem("About …").apply {
-        setOnAction { AboutDialog(window).show() }
-    }
-
-    private val optionsMenu = FluentMenu(
-        cropImageItem,
-        restoreImageItem,
-        SeparatorMenuItem(),
-        alwaysDarkMode,
-        SeparatorMenuItem(),
-        aboutMenuItem
-    )
+    private val optionsMenu = FluentMenu()
 
     private var isScrollTrackpad = false
 
     init {
         FXMLLoader(javaClass.getResource("PalettiActivity.fxml")).apply {
             setRoot(this@PalettiActivity)
+            setController(this@PalettiActivity)
+            load()
+        }
+
+        FXMLLoader(javaClass.getResource("/menus/Menu_Activity.fxml")).apply {
+            setRoot(optionsMenu)
             setController(this@PalettiActivity)
             load()
         }
@@ -111,7 +112,7 @@ class PalettiActivity(
         alwaysDarkMode.selectedProperty().bindBidirectional(viewModel.isAlwaysDarkModeProperty())
 
         /* Adds the initial number of color tiles in the lower palette */
-        while (this.colorPalette.children.size < viewModel.getCount()) {
+        while (colorPalette.children.size < viewModel.getCount()) {
             colorPalette.children.add(ColorTile())
         }
 
@@ -135,7 +136,7 @@ class PalettiActivity(
             .take(1)
             .onEach {
                 val image = Image(
-                    it.path, this.fragmentContainer.width, this.fragmentContainer.height, true, true, true
+                    it.path, fragmentContainer.width, fragmentContainer.height, true, true, true
                 )
                 image.progressProperty().addListener(object : ChangeListener<Number> {
                     override fun changed(
@@ -260,7 +261,7 @@ class PalettiActivity(
     }
 
     fun onOptionsClick(event: ActionEvent) {
-        optionsMenu.show(this.optionsButton, Side.BOTTOM, 0.0, 11.0)
+        optionsMenu.show(optionsButton, Side.BOTTOM, 0.0, 0.0)
         event.consume()
     }
 
@@ -311,6 +312,12 @@ class PalettiActivity(
             notification.show(e)
             event.consume()
         }
+    }
+
+    @FXML
+    private fun onAboutClick(event: ActionEvent) {
+        AboutDialog(window).show()
+        event.consume()
     }
 
     private fun setColorPalette(count: Int) {
