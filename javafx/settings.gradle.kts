@@ -8,7 +8,7 @@ pluginManagement {
     resolutionStrategy {
         eachPlugin {
             if (requested.id.id == "com.jaredsburrows.license") {
-                useModule("com.jaredsburrows:gradle-license-plugin:0.9.2")
+                useModule("com.jaredsburrows:gradle-license-plugin:0.9.3")
             }
         }
     }
