@@ -32,13 +32,23 @@ ol {
 	margin-left: 2em;
 }
 
-figure {
+.demo {
+	display: grid;
+	margin-left: -25px;
+	margin-right: -25px;
+	grid-template-columns: repeat(1, 1fr); /* 3 columns with equal width */
+  grid-template-rows: repeat(1, auto);
 	position: relative;
-	margin-top: 1em !important;
 	max-width: 580px;
 
 	img {
 		display: block;
+		grid-column: 1;
+  	grid-row: 1;
+
+  	&:nth-of-type(2) {
+  		display: none;
+  	}
 	}
 
 	& + ol {
@@ -60,24 +70,31 @@ figure {
 		color: #fff;
 
 		&:nth-of-type(1) {
-			left: 36%;
-			top: 17%;
+			left: 32%;
+			top: 15%;
 		}
 		&:nth-of-type(2) {
-			left: 60%;
-			top: 17%;
+			left: 54%;
+			top: 15%;
 		}
 		&:nth-of-type(3) {
-			left: 87%;
-			top: 17%;
+			left: 79%;
+			top: 15%;
 		}
 		&:nth-of-type(4) {
-			left: 85%;
+			left: 70%;
 			top: 30%;
 		}
 		&:nth-of-type(5) {
-			left: 97%;
-			top: 73%;
+			left: 85%;
+			top: 72%;
 		}
 	}
+}
+.-dark .demo .tip {
+	background-color: #ffffff;
+	color: #323346;
+}
+.-dark .demo img:nth-of-type(2) {
+	display: block;
 }
