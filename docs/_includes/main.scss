@@ -1,36 +1,83 @@
-@charset "utf-8";
+{% include css/destyle.css %}
 
-$xs: 0;
-$sm: 544px;
-$md: 768px;
-$lg: 992px;
-$xl: 1200px;
+@import "hypertext/initialize";
 
-$accent-color: #419BF9;
-$blue-hue-1: #419BF9;
-$font-color-dark: #526173;
-$font-color-pale: #8f97a3;
-$text-pale: #8f97a3;
+ul.actions {
+	li {
+		margin-left: .5em;
+	}
+	li::before {
+		content: "";
+	}
+	li ~ li {
+		margin-top: .5em;
+	}
 
-$easing: cubic-bezier(.02,.98,.46,.95);
+	.button, button {
+		width: 100%;
+		display: block;
+	}
 
-@mixin breakpoint($device) {
-	@media screen and (min-width: $device) {
-		@content;
+	@include breakpoint($default-width) {
+		text-align: center;
+
+		li {
+			display: inline-block;
+		}
 	}
 }
 
-{% include css/destyle.css %}
+ol {
+	list-style: decimal;
+	margin-left: 2em;
+}
 
-// This is to disable the custom font on GitHub pages
-{% unless site.github %}
-{% include css/MyFontsWebfontsKit.css %}
-{% endunless %}
+figure {
+	position: relative;
+	margin-top: 1em !important;
+	max-width: 580px;
 
-@import "layouts";
-@import "helpers";
+	img {
+		display: block;
+	}
 
-@import "page";
-@import "typography";
-@import "containers";
-@import "components/buttons";
+	& + ol {
+		font-size: .95rem;
+	}
+
+	.tip {
+		position: absolute;
+		pointer-events: none;
+		top: 0;
+		left: 0;
+		background-color: #292929;
+		border-radius: 50%;
+		width: 24px;
+		height: 24px;
+		text-align: center;
+		line-height: 24px;
+		font-size: 12px;
+		color: #fff;
+
+		&:nth-of-type(1) {
+			left: 36%;
+			top: 17%;
+		}
+		&:nth-of-type(2) {
+			left: 60%;
+			top: 17%;
+		}
+		&:nth-of-type(3) {
+			left: 87%;
+			top: 17%;
+		}
+		&:nth-of-type(4) {
+			left: 85%;
+			top: 30%;
+		}
+		&:nth-of-type(5) {
+			left: 97%;
+			top: 73%;
+		}
+	}
+}
