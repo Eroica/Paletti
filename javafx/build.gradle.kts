@@ -4,13 +4,13 @@ plugins {
     id("org.openjfx.javafxplugin") version "0.1.0"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("org.beryx.runtime") version "1.12.7"
-    id("com.github.ben-manes.versions") version "0.49.0"
+    id("com.github.ben-manes.versions") version "0.50.0"
     id("com.jaredsburrows.license")
-    id("com.github.gmazzo.buildconfig") version "4.1.2"
+    id("com.github.gmazzo.buildconfig") version "4.2.0"
 }
 
 group = "app.paletti.javafx"
-version = "2023.11"
+version = "2023.12"
 
 repositories {
     mavenCentral()
@@ -25,7 +25,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.7.3")
-    implementation("org.xerial:sqlite-jdbc:3.43.2.2")
+    implementation("org.xerial:sqlite-jdbc:3.44.1.0")
     implementation("net.harawata:appdirs:1.2.2")
     implementation("org.slf4j:slf4j-simple:2.0.9")
 }
