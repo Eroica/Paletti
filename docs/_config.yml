@@ -17,6 +17,7 @@ author: Eroica
 permalink: pretty
 
 # Build settings
+theme: jekyll-hypertext-theme
 markdown: kramdown
 sass:
   style: compressed
