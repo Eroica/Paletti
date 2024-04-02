@@ -23,6 +23,11 @@
 					<FluentTooltip text="Toggle black/white and colored mode"/>
 				</tooltip>
 			</CheckBox>
+			<CheckBox styleClass="mono-toggle" fx:id="ditherSwitch" mnemonicParsing="false" text="Dithering">
+				<tooltip>
+					<FluentTooltip text="Enable/disable dithering"/>
+				</tooltip>
+			</CheckBox>
 			<Pane HBox.hgrow="ALWAYS"/>
 			<ToggleButton mnemonicParsing="false" onAction="#onAlwaysOnTop" prefHeight="29.0" prefWidth="46.0" text="" styleClass="top-button">
 				<tooltip>

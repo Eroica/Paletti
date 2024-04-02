@@ -48,6 +48,13 @@ class ViewModel(
     }
     fun isBlackWhiteProperty() = isBlackWhite
 
+    private val isDither = SimpleBooleanProperty(false)
+    fun getIsDither() = isDither.get()
+    fun setIsDither(value: Boolean) {
+        isDither.set(value)
+    }
+    fun isDitherProperty() = isDither
+
     private val isCropImage = SimpleBooleanProperty(true)
     fun getIsCropImage() = isCropImage.get()
     fun isCropImageProperty() = isCropImage
@@ -102,6 +109,7 @@ class ViewModel(
 
         count.addListener(onChangeListener)
         isBlackWhite.addListener(onChangeListener)
+        isDither.addListener(onChangeListener)
         _posterize.filterNotNull()
             .debounce(400)
             .onEach { image.set(posterize(it)) }
@@ -134,8 +142,8 @@ class ViewModel(
 
     private suspend fun posterize(path: String) = coroutineScope {
         images.delete(id)
-        images.add(id, count.get(), isBlackWhite.get(), path)
-        images[id].setParameters(count.get(), isBlackWhite.get())
+        images.add(id, count.get(), isBlackWhite.get(), false, path)
+        images[id].setParameters(count.get(), isBlackWhite.get(), isDither.get())
         if (Leptonica.posterize2(id, appDir.databasePath) != Leptonica.OK) throw LeptonicaError
         PosterizedPix(images[id], appDir)
     }
