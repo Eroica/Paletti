@@ -48,7 +48,7 @@ bool is_light_theme() {
 
 const char* DB_STATEMENTS[] = {
 	"SELECT value FROM environment WHERE name=?;",
-	"SELECT count, is_black_white, source FROM image WHERE id=?;",
+	"SELECT count, is_black_white, is_dither, source FROM image WHERE id=?;",
 	"DELETE FROM color WHERE image_id=?;",
 	"INSERT INTO color (rgb, image_id) VALUES (?, ?);"
 };
@@ -74,11 +74,13 @@ Java_app_paletti_lib_Leptonica_posterize2(
 
 		int max_count;
 		bool is_black_white;
+		bool is_dither;
 		path PixSource;
 		db << DB_STATEMENTS[1] << image_id
-			>> [&](int t_count, bool t_is_black_white, string t_source) {
+			>> [&](int t_count, bool t_is_black_white, bool t_is_dither, string t_source) {
 			max_count = t_count;
 			is_black_white = t_is_black_white;
+			is_dither = t_is_dither;
 			PixSource = path(t_source);
 		};
 
@@ -91,12 +93,12 @@ Java_app_paletti_lib_Leptonica_posterize2(
 		if (is_black_white) {
 			PIX* tmp = pixConvertRGBToLuminance(pixs);
 			PIX* tmp2 = pixConvert8To32(tmp);
-			pixc = pixMedianCutQuantGeneral(tmp2, 0, 8, max_count, 0, 0, 0);
+			pixc = pixMedianCutQuantGeneral(tmp2, is_dither, 8, max_count, 0, 0, 0);
 			pixDestroy(&tmp2);
 			pixDestroy(&tmp);
 		}
 		else {
-			pixc = pixMedianCutQuantGeneral(pixs, 0, 8, max_count, 0, 0, 0);
+			pixc = pixMedianCutQuantGeneral(pixs, is_dither, 8, max_count, 0, 0, 0);
 		}
 		if (pixc == nullptr) {
 			pixDestroy(&pixs);
