@@ -45,6 +45,6 @@ SLF4J Simple Provider (2.0.9) - MIT License
 SLF4J Simple Provider
 http://www.slf4j.org
 
-SQLite JDBC (3.44.1.0) - The Apache Software License, Version 2.0
+SQLite JDBC (3.45.2.0) - The Apache Software License, Version 2.0
 SQLite JDBC library
 https://github.com/xerial/sqlite-jdbc
