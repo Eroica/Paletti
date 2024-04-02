@@ -70,6 +70,9 @@ class PalettiActivity(
     private lateinit var monoSwitch: CheckBox
 
     @FXML
+    private lateinit var ditherSwitch: CheckBox
+
+    @FXML
     private lateinit var colorPalette: HBox
 
     @FXML
@@ -107,6 +110,7 @@ class PalettiActivity(
         slider.valueProperty().bindBidirectional(viewModel.countProperty())
         viewModel.countProperty().addListener { _, _, count -> setColorPalette(count.toInt()) }
         monoSwitch.selectedProperty().bindBidirectional(viewModel.isBlackWhiteProperty())
+        ditherSwitch.selectedProperty().bindBidirectional(viewModel.isDitherProperty())
         cropImageItem.selectedProperty().bindBidirectional(viewModel.isCropImageProperty())
         restoreImageItem.selectedProperty().bindBidirectional(viewModel.isRestoreImageProperty())
         alwaysDarkMode.selectedProperty().bindBidirectional(viewModel.isAlwaysDarkModeProperty())
@@ -199,6 +203,7 @@ class PalettiActivity(
     fun onDestroy() {
         slider.valueProperty().unbindBidirectional(viewModel.countProperty())
         monoSwitch.selectedProperty().unbindBidirectional(viewModel.isBlackWhiteProperty())
+        ditherSwitch.selectedProperty().unbindBidirectional(viewModel.isDitherProperty())
         cropImageItem.selectedProperty().unbindBidirectional(viewModel.isCropImageProperty())
         restoreImageItem.selectedProperty().unbindBidirectional(viewModel.isRestoreImageProperty())
         alwaysDarkMode.selectedProperty().unbindBidirectional(viewModel.isAlwaysDarkModeProperty())
@@ -280,6 +285,11 @@ class PalettiActivity(
 
                 event.code == KeyCode.X -> {
                     monoSwitch.isSelected = !monoSwitch.isSelected
+                    event.consume()
+                }
+
+                event.code == KeyCode.Y -> {
+                    ditherSwitch.isSelected = !ditherSwitch.isSelected
                     event.consume()
                 }
 
