@@ -1,6 +1,6 @@
 build/
-dist/AppDir
-dist/*.AppImage
-dist/build
+builddir/
+dist/
 launch.json
+*.flatpak
 .flatpak-builder
