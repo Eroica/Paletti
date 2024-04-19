@@ -1,9 +1,0 @@
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=Paletti
-Icon=app.paletti.gtk
-Exec=Paletti
-Categories=Graphics;ImageProcessing;
-StartupWMClass=Paletti
-Terminal=false

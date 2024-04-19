@@ -1,96 +1,99 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
+	<requires lib="gtk" version="4.0"/>
+	<requires lib="Adw" version="1.0"/>
+
 	<object class="GtkAdjustment" id="colors_range">
 		<property name="lower">3</property>
 		<property name="upper">32</property>
 		<property name="value">6</property>
 		<property name="step_increment">1</property>
 	</object>
-	<object class="GdkCursor" id="pointer_cursor">
-		<property name="name">pointer</property>
-	</object>
-	<template class="PalettiWindow" parent="GtkApplicationWindow">
-		<property name="width_request">500</property>
-		<property name="height_request">450</property>
+
+	<template class="PalettiWindow" parent="AdwApplicationWindow">
+		<property name="default-width">500</property>
+		<property name="default-height">450</property>
+
 		<child>
 			<object class="GtkEventControllerKey">
-				<signal name="key-released" handler="on_key_released"></signal>
+				<signal name="key_released" handler="on_key_released"/>
 			</object>
 		</child>
-		<child type="titlebar">
-			<object class="GtkHeaderBar" id="header_bar">
-				<child>
-					<object class="GtkScale">
-						<property name="width_request">120</property>
-						<property name="visible">True</property>
-						<property name="can_focus">True</property>
-						<property name="tooltip_text" translatable="yes">Set color palette size</property>
-						<property name="adjustment">colors_range</property>
-						<property name="show_fill_level">True</property>
-						<property name="fill_level">32</property>
-						<property name="round_digits">1</property>
-						<property name="digits">0</property>
-						<property name="draw_value">False</property>
-						<property name="value_pos">left</property>
-					</object>
-				</child>
-				<child>
-					<object class="GtkSwitch" id="mono_switch">
-						<property name="visible">True</property>
-						<property name="can_focus">True</property>
-						<property name="tooltip_text" translatable="yes">Toggle black/white</property>
-					</object>
-				</child>
-			</object>
-		</child>
-		<child>
-			<object class="GtkBox" id="box">
-				<property name="orientation">vertical</property>
-				<child>
-					<object class="GtkOverlay" id="overlay">
-						<property name="vexpand">True</property>
-						<property name="hexpand">True</property>
+
+		<property name="content">
+			<object class="AdwToolbarView">
+				<child type="top">
+					<object class="AdwHeaderBar" id="header_bar">
+						<property name="show_title">False</property>
+
 						<child>
-							<object class="GtkStack" id="stack">
-								<property name="transition-type">crossfade</property>
-								<property name="cursor">pointer_cursor</property>
+							<object class="GtkScale">
+								<property name="width_request">120</property>
+								<property name="visible">True</property>
+								<property name="can_focus">True</property>
+								<property name="tooltip_text" translatable="yes">Set color palette size</property>
+								<property name="adjustment">colors_range</property>
+								<property name="show_fill_level">True</property>
+								<property name="fill_level">32</property>
+								<property name="round_digits">1</property>
+								<property name="digits">0</property>
+								<property name="draw_value">False</property>
+								<property name="value_pos">left</property>
+							</object>
+						</child>
+
+						<child type="end">
+							<object class="GtkMenuButton">
+								<property name="primary">True</property>
+								<property name="icon-name">open-menu-symbolic</property>
+								<property name="tooltip-text" translatable="yes">Menu</property>
+								<property name="menu-model">primary_menu</property>
+							</object>
+						</child>
+
+						<child type="end">
+							<object class="GtkSwitch" id="mono_switch">
+								<property name="visible">True</property>
+								<property name="can_focus">True</property>
+								<property name="tooltip_text" translatable="yes">Toggle black/white</property>
+							</object>
+						</child>
+					</object>
+				</child>
+
+				<property name="content">
+					<object class="GtkBox" id="box">
+						<property name="orientation">vertical</property>
+
+						<child>
+							<object class="GtkOverlay" id="overlay">
 								<child>
-									<object class="GtkGestureClick">
-										<signal name="released" handler="on_droparea_click"></signal>
-									</object>
-								</child>
-								<child>
-									<object class="GtkStackPage">
-										<property name="name">Loading</property>
-										<property name="child">
-											<object class="GtkSpinner">
-												<property name="halign">center</property>
-												<property name="valign">center</property>
-												<property name="spinning">1</property>
+									<object class="GtkStack" id="stack">
+										<child>
+											<object class="GtkGestureClick">
+												<signal name="released" handler="on_droparea_click"/>
 											</object>
-										</property>
+										</child>
 									</object>
 								</child>
 							</object>
 						</child>
 					</object>
-				</child>
-				<child>
-					<object class="GtkScrolledWindow">
-						<property name="height_request">72</property>
-						<property name="child">
-							<object class="GtkListView" id="colors_list">
-								<property name="orientation">horizontal</property>
-								<property name="hexpand">True</property>
-								<property name="single_click_activate">True</property>
-								<style>
-									<class name="palette"/>
-								 </style>
-							</object>
-						</property>
-					</object>
-				</child>
+				</property>
 			</object>
-		</child>
+		</property>
 	</template>
+
+	<menu id="primary_menu">
+		<section>
+			<item>
+				<attribute name="label" translatable="yes">_Keyboard Shortcuts</attribute>
+				<attribute name="action">win.show-help-overlay</attribute>
+			</item>
+			<item>
+				<attribute name="label" translatable="yes">_About Paletti</attribute>
+				<attribute name="action">app.about</attribute>
+			</item>
+		</section>
+	</menu>
 </interface>

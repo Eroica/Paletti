@@ -31,11 +31,11 @@
 	box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
 }
 
-.palette {
+.color-palette {
 	background-color: #fafafa;
 	box-shadow: inset 0 1px 1px #e9e7e6;
 }
 
-.palette-tile {
-	margin: 4px 2px;
+.color-tile {
+	margin: 4px 4px;
 }

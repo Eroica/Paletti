@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+	<template class="GtkListItem">
+		<property name="child">
+			<object class="GtkPicture">
+				<property name="width_request">50</property>
+
+				<binding name="paintable">
+					<lookup name="paint" type="PalettiRGB">
+					<lookup name="item">GtkListItem</lookup>
+					</lookup>
+				</binding>
+
+				<binding name="tooltip_text">
+					<lookup name="hex" type="PalettiRGB">
+					<lookup name="item">GtkListItem</lookup>
+					</lookup>
+				</binding>
+
+				<style>
+					<class name="color-tile"/>
+				</style>
+			</object>
+		</property>
+	</template>
+</interface>
