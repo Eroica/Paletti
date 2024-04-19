@@ -1,3 +1,5 @@
+image::gtk/data/icons/hicolor/256x256/apps/app.paletti.gtk.png[Paletti logo,128,128]
+
 = Paletti
 :imagesdir: docs/images
 
