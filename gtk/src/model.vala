@@ -52,14 +52,14 @@ namespace Paletti {
 		}
 
 		private void debounced_posterize (int count, bool is_black_white) {
-			// Sliding the color slider rapidly will make many calls to this
-			// method. To improve performance, do not call posterize on every
-			// tick. It is only called if at least 100 milliseconds have passed
-			// between each call.
+			/* Sliding the color slider rapidly will make many calls to this
+			 * method. To improve performance, do not call posterize on every
+			 * tick. It is only called if at least 100 milliseconds have passed
+			 * between each call. */
 			time = get_monotonic_time ();
 			Timeout.add (100, () => {
 				var delta = get_monotonic_time ();
-				// Difference in MICROseconds
+				/* Difference in MICROseconds */
 				if (delta - time >= 100000) {
 					posterize.begin (count, is_black_white, (obj, res) => {
 						posterize.end (res);

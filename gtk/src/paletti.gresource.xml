@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
 	<gresource prefix="/app/paletti/gtk">
-		<file>ui/window.ui</file>
-		<file>ui/scene-initial.ui</file>
-		<file>ui/scene-image.ui</file>
-		<file>ui/notification.ui</file>
-		<file>ui/color_tile.ui</file>
-		<file>ui/color_tile_placeholder.ui</file>
-		<file>resources/style.css</file>
-		<file>resources/app.paletti.gtk.png</file>
+		<file preprocess="xml-stripblanks">ui/window.ui</file>
+		<file preprocess="xml-stripblanks">ui/scene-initial.ui</file>
+		<file preprocess="xml-stripblanks">ui/scene-image.ui</file>
+		<file preprocess="xml-stripblanks">ui/views-notification.ui</file>
+		<file preprocess="xml-stripblanks">ui/views-color-palette.ui</file>
+		<file preprocess="xml-stripblanks">ui/color-tile.ui</file>
+		<file preprocess="xml-stripblanks">ui/color-tile-placeholder.ui</file>
+
+		<file alias="style.css">resources/style.css</file>
 		<file>resources/dropzone.svg</file>
 		<file>resources/LICENSE</file>
-	</gresource>
-	<gresource prefix="/app/paletti/gtk/gtk">
-		<file alias="help-overlay.ui">ui/help-overlay.ui</file>
+
+		<file preprocess="xml-stripblanks">gtk/help-overlay.ui</file>
 	</gresource>
 </gresources>

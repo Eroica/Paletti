@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+	<template class="PalettiColorPalette" parent="AdwBin">
+		<child>
+			<object class="GtkScrolledWindow">
+				<property name="height_request">72</property>
+				<property name="child">
+					<object class="GtkListView" id="colors_list">
+						<property name="orientation">horizontal</property>
+						<property name="hexpand">True</property>
+						<property name="single_click_activate">True</property>
+
+						<style>
+							<class name="color-palette"/>
+						</style>
+					</object>
+				</property>
+			</object>
+		</child>
+	</template>
+</interface>

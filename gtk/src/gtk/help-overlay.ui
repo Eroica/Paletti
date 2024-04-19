@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+	<object class="GtkShortcutsWindow" id="help_overlay">
+		<property name="modal">True</property>
+		<child>
+			<object class="GtkShortcutsSection">
+				<property name="section-name">shortcuts</property>
+				<property name="max-height">10</property>
+				<child>
+					<object class="GtkShortcutsGroup">
+						<property name="title" translatable="yes" context="shortcut window">General</property>
+
+						<child>
+							<object class="GtkShortcutsShortcut">
+								<property name="visible">1</property>
+								<property name="accelerator">Up</property>
+								<property name="title" translatable="yes" context="shortcut window">Increase color palette size</property>
+							</object>
+						</child>
+						<child>
+							<object class="GtkShortcutsShortcut">
+								<property name="visible">1</property>
+								<property name="accelerator">Down</property>
+								<property name="title" translatable="yes" context="shortcut window">Decrease color palette size</property>
+							</object>
+						</child>
+						<child>
+							<object class="GtkShortcutsShortcut">
+								<property name="visible">1</property>
+								<property name="accelerator">x</property>
+								<property name="title" translatable="yes" context="shortcut window">Toggle between black/white and colored image</property>
+							</object>
+						</child>
+
+						<child>
+							<object class="GtkShortcutsShortcut">
+								<property name="visible">1</property>
+								<property name="accelerator">&lt;Primary&gt;o</property>
+								<property name="title" translatable="yes" context="shortcut window">Open an image</property>
+							</object>
+						</child>
+						<child>
+							<object class="GtkShortcutsShortcut">
+								<property name="visible">1</property>
+								<property name="accelerator">&lt;Primary&gt;s</property>
+								<property name="title" translatable="yes" context="shortcut window">Save current image</property>
+							</object>
+						</child>
+
+						<child>
+							<object class="GtkShortcutsShortcut">
+								<property name="title" translatable="yes" context="shortcut window">Show Shortcuts</property>
+								<property name="action-name">win.show-help-overlay</property>
+							</object>
+						</child>
+						<child>
+							<object class="GtkShortcutsShortcut">
+								<property name="title" translatable="yes" context="shortcut window">Quit</property>
+								<property name="action-name">app.quit</property>
+							</object>
+						</child>
+					</object>
+				</child>
+			</object>
+		</child>
+	</object>
+</interface>

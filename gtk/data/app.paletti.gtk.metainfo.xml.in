@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+    <id>app.paletti.gtk</id>
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>LicenseRef-RECEX</project_license>
+    <name translatable="no">Paletti</name>
+    <summary>Color quantization and color palettes</summary>
+    <description>
+        <p>Paletti posterizes an image into a smaller amount of colors. This can be used to extract primary colors, or simplify an image visually.</p>
+    </description>
+    <provides>
+        <binary>Paletti</binary>
+    </provides>
+    <developer_name translatable="no">Eroica</developer_name>
+    <url type="homepage">https://paletti.app</url>
+    <launchable type="desktop-id">app.paletti.gtk.desktop</launchable>
+</component>

@@ -1,0 +1,6 @@
+data/app.paletti.gtk.desktop.in
+data/app.paletti.gtk.metainfo.xml.in
+data/app.paletti.gtk.gschema.xml
+src/main.vala
+src/window.vala
+src/window.ui

@@ -10,6 +10,7 @@
 		<property name="hexpand">True</property>
 		<property name="vexpand">True</property>
 		<property name="orientation">vertical</property>
+
 		<child>
 			<object class="GtkImage">
 				<property name="visible">True</property>
@@ -19,6 +20,7 @@
 				<property name="resource">/app/paletti/gtk/resources/dropzone.svg</property>
 			</object>
 		</child>
+
 		<child>
 			<object class="GtkLabel">
 				<property name="visible">True</property>
@@ -29,6 +31,7 @@
 				<property name="label" translatable="yes">Drop a file into this area.</property>
 			</object>
 		</child>
+
 		<style>
 			<class name="droparea"/>
 		</style>
