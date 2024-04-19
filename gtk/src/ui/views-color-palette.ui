@@ -15,6 +15,10 @@
 						</style>
 					</object>
 				</property>
+
+				<style>
+					<class name="undershoot-end"/>
+				</style>
 			</object>
 		</child>
 	</template>

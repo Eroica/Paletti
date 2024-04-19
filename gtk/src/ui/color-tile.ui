@@ -7,13 +7,13 @@
 
 				<binding name="paintable">
 					<lookup name="paint" type="PalettiRGB">
-					<lookup name="item">GtkListItem</lookup>
+						<lookup name="item">GtkListItem</lookup>
 					</lookup>
 				</binding>
 
 				<binding name="tooltip_text">
 					<lookup name="hex" type="PalettiRGB">
-					<lookup name="item">GtkListItem</lookup>
+						<lookup name="item">GtkListItem</lookup>
 					</lookup>
 				</binding>
 

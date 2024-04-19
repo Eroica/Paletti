@@ -7,7 +7,7 @@
 
 				<binding name="paintable">
 					<lookup name="paint" type="PalettiRGB">
-					<lookup name="item">GtkListItem</lookup>
+						<lookup name="item">GtkListItem</lookup>
 					</lookup>
 				</binding>
 

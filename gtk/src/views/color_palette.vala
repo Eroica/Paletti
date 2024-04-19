@@ -30,7 +30,11 @@ namespace Paletti {
 			});
 
 			for (short i = 0; i < DEFAULT_COLORS; i++) {
-				this.store.append (new RGB (255, 255, 255));
+				if (Adw.StyleManager.get_default ().dark) {
+					this.store.append (new RGB (50, 50, 50));
+				} else {
+					this.store.append (new RGB (255, 255, 255));
+				}
 			}
 			this.view_model.notify["count"].connect (on_change_count);
 		}
@@ -42,7 +46,11 @@ namespace Paletti {
 		private void on_change_count () {
 			store.remove_all ();
 			for (short i = 0; i < view_model.count; i++) {
-				store.append (new RGB (255, 255, 255));
+				if (Adw.StyleManager.get_default ().dark) {
+					this.store.append (new RGB (50, 50, 50));
+				} else {
+					this.store.append (new RGB (255, 255, 255));
+				}
 			}
 		}
 	}

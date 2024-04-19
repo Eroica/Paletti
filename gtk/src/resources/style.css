@@ -1,8 +1,8 @@
 .droparea {
 	border-radius: 5px;
-	border: 2px dashed #D6D8DB;
-	background-color: #ffffff;
-	color: rgba(146, 149, 149, .75);
+	border: 2px dashed @borders;
+	background-color: @view_bg_color;
+  color: @window_fg_color;
 	transition: border 200ms, color 200ms;
 }
 .droparea:hover {
@@ -32,8 +32,8 @@
 }
 
 .color-palette {
-	background-color: #fafafa;
-	box-shadow: inset 0 1px 1px #e9e7e6;
+	background-color: @view_bg_color;
+	box-shadow: inset 0 1px 1px @secondary_sidebar_border_color;
 }
 
 .color-tile {
