@@ -35,6 +35,26 @@ Paletti
 └───lib      ; Simple C++ wrapper used by the javafx and android version
 ....
 
+=== Vala/GTK/Flatpak version
+
+The `Makefile` in `gtk/` creates a Paletti.flatpak image:
+
+```bash
+cd gtk
+make
+# Paletti.flatpak is located in dist/
+# To install it locally:
+flatpak install dist/Paletti.flatpak
+```
+
+If you just want to build Paletti locally and execute it:
+
+```bash
+# Inside gtk/
+flatpak-builder --user --install build app.paletti.gtk.json --force-clean
+flatpak run app.paletti.gtk
+```
+
 == License
 
 Please see the `LICENSE` file in this repository.
