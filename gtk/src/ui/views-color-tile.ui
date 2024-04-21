@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+	<template class="PalettiColorTile" parent="GtkBox">
+		<property name="height_request">72</property>
+
+		<child>
+			<object class="GtkLabel">
+				<property name="label"></property>
+
+				<style>
+			<class name="color-tile"/>
+		</style>
+			</object>
+		</child>
+
+		<style>
+			<class name="color-tile"/>
+		</style>
+	</template>
+</interface>

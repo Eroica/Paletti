@@ -37,5 +37,6 @@
 }
 
 .color-tile {
-	margin: 4px 4px;
+	border: 1px solid red;
+	background-color: @view_bg_color;
 }

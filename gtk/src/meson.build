@@ -4,6 +4,7 @@ paletti_sources = [
   'views/scene.vala',
   'views/notification.vala',
   'views/color_palette.vala',
+  'views/color_tile.vala',
   'window.vala',
   'color.vala',
   'leptonica.vala',
@@ -12,7 +13,6 @@ paletti_sources = [
 
 paletti_deps = [
   dependency('gtk4'),
-  dependency('libadwaita-1', version: '>= 1.4'),
   dependency('lept'),
 ]
 

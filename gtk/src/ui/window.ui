@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
 	<requires lib="gtk" version="4.0"/>
-	<requires lib="Adw" version="1.0"/>
 
 	<object class="GtkAdjustment" id="colors_range">
 		<property name="lower">3</property>
@@ -10,7 +9,7 @@
 		<property name="step_increment">1</property>
 	</object>
 
-	<template class="PalettiWindow" parent="AdwApplicationWindow">
+	<template class="PalettiWindow" parent="GtkApplicationWindow">
 		<property name="default-width">500</property>
 		<property name="default-height">450</property>
 
@@ -20,12 +19,12 @@
 			</object>
 		</child>
 
-		<property name="content">
-			<object class="AdwToolbarView">
-				<child type="top">
-					<object class="AdwHeaderBar" id="header_bar">
-						<property name="show_title">False</property>
+		<child>
+			<object class="GtkBox">
+				<property name="orientation">vertical</property>
 
+				<child>
+					<object class="GtkHeaderBar" id="header_bar">
 						<child>
 							<object class="GtkScale">
 								<property name="width_request">120</property>
@@ -61,7 +60,7 @@
 					</object>
 				</child>
 
-				<property name="content">
+				<child>
 					<object class="GtkBox" id="box">
 						<property name="orientation">vertical</property>
 
@@ -79,9 +78,9 @@
 							</object>
 						</child>
 					</object>
-				</property>
+				</child>
 			</object>
-		</property>
+		</child>
 	</template>
 
 	<menu id="primary_menu">

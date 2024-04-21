@@ -10,7 +10,7 @@ namespace Paletti {
 	}
 
 	[GtkTemplate (ui = "/app/paletti/gtk/ui/window.ui")]
-	public class Window : Adw.ApplicationWindow, IControl {
+	public class Window : ApplicationWindow, IControl {
 		[GtkChild]
 		private unowned Adjustment colors_range;
 

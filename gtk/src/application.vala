@@ -1,5 +1,5 @@
 namespace Paletti {
-	public class Application : Adw.Application {
+	public class Application : Gtk.Application {
 		public Application () {
 			Object (application_id: "app.paletti.gtk", flags: ApplicationFlags.DEFAULT_FLAGS);
 		}
@@ -14,20 +14,23 @@ namespace Paletti {
 		}
 
 		private void on_about_action () {
-			var about = new Adw.AboutWindow () {
-				transient_for = this.active_window,
-				application_name = "Paletti",
-				application_icon = "app.paletti.gtk",
-				developer_name = "Eroica",
-				version = "v2024.04a",
-				developers = { "Eroica" },
-				copyright = "© 2020-2024 Eroica",
-				issue_url = "https://github.com/Eroica/Paletti/issues",
-				license_type = Gtk.License.CUSTOM,
-				website = "https://paletti.app"
-			};
+			string[] authors = { "Eroica" };
+			var license = (string) resources_lookup_data (
+				"/app/paletti/gtk/resources/LICENSE",
+				ResourceLookupFlags.NONE
+			).get_data ();
 
-			about.present ();
+			Gtk.show_about_dialog (
+				this.active_window,
+				program_name: "Paletti",
+				logo_icon_name: "app.paletti.gtk",
+                version: "v2024.04b",
+                copyright: "© 2020-2024 Eroica",
+                authors: authors,
+                website: "https://paletti.app",
+                license: license,
+                license_type: Gtk.License.CUSTOM
+			);
 		}
 	}
 }

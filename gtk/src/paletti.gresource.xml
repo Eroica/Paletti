@@ -6,6 +6,7 @@
 		<file preprocess="xml-stripblanks">ui/scene-image.ui</file>
 		<file preprocess="xml-stripblanks">ui/views-notification.ui</file>
 		<file preprocess="xml-stripblanks">ui/views-color-palette.ui</file>
+		<file preprocess="xml-stripblanks">ui/views-color-tile.ui</file>
 		<file preprocess="xml-stripblanks">ui/color-tile.ui</file>
 		<file preprocess="xml-stripblanks">ui/color-tile-placeholder.ui</file>
 
