@@ -21,3 +21,7 @@ theme: jekyll-hypertext-theme
 markdown: kramdown
 sass:
   style: compressed
+
+exclude:
+  - package-lock.json
+  - package.json
