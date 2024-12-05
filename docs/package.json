@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "jekyll-hypertext-theme": "github:Eroica/jekyll-hypertext-theme"
+  }
+}
