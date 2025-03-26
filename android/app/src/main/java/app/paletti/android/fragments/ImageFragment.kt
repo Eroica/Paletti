@@ -1,4 +1,4 @@
-package app.paletti.android
+package app.paletti.android.fragments
 
 import android.content.ContentValues
 import android.content.Intent
@@ -18,6 +18,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.work.WorkInfo
+import app.paletti.android.FilePaths
+import app.paletti.android.ImageViewModel
+import app.paletti.android.ProviderData
+import app.paletti.android.R
 import app.paletti.android.databinding.FragmentImageBinding
 import org.kodein.di.conf.DIGlobalAware
 import org.kodein.di.instance
@@ -81,7 +85,7 @@ class ImageFragment : Fragment(), DIGlobalAware {
     private fun shareImage(image: File) {
         val contentUri = FileProvider.getUriForFile(requireContext(), ProviderData.provider, image)
         startActivity(Intent.createChooser(Intent().apply {
-            action = Intent.ACTION_SEND
+            setAction(Intent.ACTION_SEND)
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             setDataAndType(contentUri, context?.contentResolver?.getType(contentUri))
             putExtra(Intent.EXTRA_STREAM, contentUri)

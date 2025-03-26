@@ -9,7 +9,7 @@
 			alias="State"/>
 		<variable
 			name="fragment"
-			type="app.paletti.android.InitialFragment"/>
+			type="app.paletti.android.fragments.InitialFragment"/>
 		<variable
 			name="viewModel"
 			type="app.paletti.android.ImageViewModel"/>

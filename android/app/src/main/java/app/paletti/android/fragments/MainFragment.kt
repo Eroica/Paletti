@@ -1,4 +1,4 @@
-package app.paletti.android
+package app.paletti.android.fragments
 
 import android.net.Uri
 import android.os.Bundle
@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.transition.TransitionInflater
 import androidx.work.WorkInfo
+import app.paletti.android.ImageViewModel
+import app.paletti.android.R
 import app.paletti.android.databinding.FragmentMainBinding
 import com.google.android.material.transition.MaterialFadeThrough
 

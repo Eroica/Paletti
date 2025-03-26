@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.commit
 import androidx.work.WorkManager
+import app.paletti.android.fragments.MainFragment
+import app.paletti.android.fragments.ParentAboutFragment
 
 class MainActivity : AppCompatActivity() {
     private val viewModel: ImageViewModel by viewModels()

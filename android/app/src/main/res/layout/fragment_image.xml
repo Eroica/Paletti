@@ -6,7 +6,7 @@
 	<data>
 		<variable
 			name="fragment"
-			type="app.paletti.android.ImageFragment"/>
+			type="app.paletti.android.fragments.ImageFragment"/>
 		<variable
 			name="viewModel"
 			type="app.paletti.android.ImageViewModel"/>

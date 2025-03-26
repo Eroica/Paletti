@@ -3,7 +3,7 @@
 
 	<data>
 		<import type="androidx.work.WorkInfo.State" alias="State"/>
-		<variable name="fragment" type="app.paletti.android.InitialFragment"/>
+		<variable name="fragment" type="app.paletti.android.fragments.InitialFragment"/>
 		<variable name="viewModel" type="app.paletti.android.ImageViewModel"/>
 	</data>
 

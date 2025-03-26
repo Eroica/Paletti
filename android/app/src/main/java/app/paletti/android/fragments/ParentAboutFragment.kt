@@ -1,8 +1,9 @@
-package app.paletti.android
+package app.paletti.android.fragments
 
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import app.paletti.android.R
 import app.paletti.android.databinding.FragmentAboutBinding
 import com.google.android.material.transition.MaterialFadeThrough
 
