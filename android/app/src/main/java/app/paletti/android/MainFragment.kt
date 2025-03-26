@@ -14,9 +14,7 @@ import androidx.transition.TransitionInflater
 import androidx.work.WorkInfo
 import app.paletti.android.databinding.FragmentMainBinding
 import com.google.android.material.transition.MaterialFadeThrough
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class MainFragment : Fragment(R.layout.fragment_main) {
     private lateinit var binding: FragmentMainBinding
     private val viewModel: ImageViewModel by activityViewModels()
@@ -31,6 +29,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         enterTransition = TransitionInflater.from(requireContext()).inflateTransition(R.transition.fragment_main_enter)
         exitTransition = MaterialFadeThrough()
     }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.fragment_main, menu)

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
-			 package="app.paletti.android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
 	<application
 		android:name="app.paletti.android.App"
@@ -20,13 +19,8 @@
 				android:resource="@xml/filepaths"/>
 		</provider>
 
-		<provider
-			android:name="androidx.startup.InitializationProvider"
-			android:authorities="${applicationId}.androidx-startup"
-			tools:node="remove">
-		</provider>
-
-		<activity android:name="app.paletti.android.MainActivity">
+		<activity android:name="app.paletti.android.MainActivity"
+			android:exported="true">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER"/>

@@ -19,19 +19,19 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.work.WorkInfo
 import app.paletti.android.databinding.FragmentImageBinding
-import dagger.hilt.android.AndroidEntryPoint
+import org.kodein.di.conf.DIGlobalAware
+import org.kodein.di.instance
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import javax.inject.Inject
 
-@AndroidEntryPoint
-class ImageFragment : Fragment() {
+class ImageFragment : Fragment(), DIGlobalAware {
+    private val Paths: FilePaths by instance()
+
     private lateinit var binding: FragmentImageBinding
     private val viewModel: ImageViewModel by activityViewModels()
-    @Inject lateinit var filePaths: FilePaths
 
-    // This field is being called from the XML directly.
+    /* This field is being called from the XML directly */
     val selectImageResult = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let { viewModel.new(it) }
     }
@@ -50,7 +50,7 @@ class ImageFragment : Fragment() {
         viewModel.imageId.set(binding.image.id)
         viewModel.workState.observe(viewLifecycleOwner) {
             if (it == WorkInfo.State.SUCCEEDED) {
-                binding.image.setImageBitmap(BitmapFactory.decodeFile(filePaths.outImage.toString()))
+                binding.image.setImageBitmap(BitmapFactory.decodeFile(Paths.outImage.toString()))
             }
         }
         binding.executePendingBindings()
@@ -70,7 +70,7 @@ class ImageFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_export_image -> shareImage(filePaths.outImage)
+            R.id.action_export_image -> shareImage(Paths.outImage)
             R.id.action_export_palette -> sharePalette()
             R.id.action_save_image -> saveImage()
             else -> return super.onOptionsItemSelected(item)
@@ -98,14 +98,14 @@ class ImageFragment : Fragment() {
         }
 
         try {
-            val stream = FileOutputStream(filePaths.palette)
+            val stream = FileOutputStream(Paths.palette)
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
             stream.close()
         } catch (e: IOException) {
             e.printStackTrace()
         }
 
-        shareImage(filePaths.palette)
+        shareImage(Paths.palette)
     }
 
     private fun saveImage() {
@@ -117,7 +117,7 @@ class ImageFragment : Fragment() {
                 resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, this)?.let {
                     resolver.openOutputStream(it).use {
                         it?.let {
-                            filePaths.outImage.inputStream().copyTo(it)
+                            Paths.outImage.inputStream().copyTo(it)
                         }
                     }
                 }

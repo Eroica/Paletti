@@ -1,4 +1,5 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.4.1)
+PROJECT(paletti)
 
 ADD_LIBRARY(paletti SHARED paletti.cpp)
 

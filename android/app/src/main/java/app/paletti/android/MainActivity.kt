@@ -12,9 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.commit
 import androidx.work.WorkManager
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val viewModel: ImageViewModel by viewModels()
 

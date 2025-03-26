@@ -3,12 +3,11 @@ package app.paletti.android
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.hilt.work.HiltWorker
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import app.paletti.lib.Leptonica
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
+import org.kodein.di.conf.DIGlobalAware
+import org.kodein.di.instance
 import java.io.File
 import java.io.IOException
 
@@ -18,22 +17,22 @@ private fun duplicateToBmp(source: File, destination: File) {
     bitmap.recycle()
 }
 
-@HiltWorker
-class CopyWorker @AssistedInject constructor(
-    @Assisted context: Context,
-    @Assisted params: WorkerParameters,
-    val filePaths: FilePaths
-) : Worker(context, params) {
+class CopyWorker(
+    context: Context,
+    params: WorkerParameters
+) : Worker(context, params), DIGlobalAware {
     companion object {
         const val URI = "URI"
     }
 
+    private val Paths: FilePaths by instance()
+
     override fun doWork(): Result {
         return try {
             applicationContext.contentResolver.openInputStream(Uri.parse(inputData.getString(URI))).use {
-                it?.copyTo(filePaths.copiedImage.outputStream())
+                it?.copyTo(Paths.copiedImage.outputStream())
             }
-            duplicateToBmp(filePaths.copiedImage, filePaths.tmpImage)
+            duplicateToBmp(Paths.copiedImage, Paths.tmpImage)
             Result.success()
         } catch (e: IOException) {
             Result.failure()
@@ -41,17 +40,17 @@ class CopyWorker @AssistedInject constructor(
     }
 }
 
-@HiltWorker
-class PosterizeWorker @AssistedInject constructor(
-    @Assisted context: Context,
-    @Assisted params: WorkerParameters,
-    val filePaths: FilePaths
-) : Worker(context, params) {
+class PosterizeWorker(
+    context: Context,
+    params: WorkerParameters
+) : Worker(context, params), DIGlobalAware {
     companion object {
         const val WORK_NAME = "posterize"
         const val COUNT = "COUNT"
         const val IS_BLACK_WHITE = "IS_BLACK_WHITE"
     }
+
+    private val Paths: FilePaths by instance()
 
     override fun doWork(): Result {
         val count = inputData.getInt(COUNT, 6)
@@ -59,7 +58,7 @@ class PosterizeWorker @AssistedInject constructor(
         val ok = Leptonica.posterize(
             count,
             isBlackWhite,
-            arrayOf(filePaths.tmpImage.toString(), filePaths.outImage.toString(), filePaths.colors.toString())
+            arrayOf(Paths.tmpImage.toString(), Paths.outImage.toString(), Paths.colors.toString())
         )
         return if (ok == 0) Result.success() else Result.failure()
     }

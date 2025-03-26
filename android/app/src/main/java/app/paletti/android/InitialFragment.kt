@@ -12,9 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.work.WorkInfo
 import app.paletti.android.databinding.FragmentInitialBinding
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class InitialFragment : Fragment() {
     private lateinit var binding: FragmentInitialBinding
     private val viewModel: ImageViewModel by activityViewModels()

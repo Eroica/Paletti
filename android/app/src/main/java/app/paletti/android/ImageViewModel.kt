@@ -10,16 +10,15 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.*
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.kodein.di.conf.DIGlobalAware
+import org.kodein.di.instance
 
-@HiltViewModel
-class ImageViewModel @Inject constructor(
-    private val filePaths: FilePaths,
-    private val workManager: WorkManager
-) : ViewModel() {
+class ImageViewModel : ViewModel(), DIGlobalAware {
+    private val Paths: FilePaths by instance()
+    private val WorkManager: WorkManager by instance()
+
     val count = ObservableFloat(6f)
     val colors = ObservableArrayList<Int>()
     val isBlackWhite = ObservableBoolean(false)
@@ -29,7 +28,7 @@ class ImageViewModel @Inject constructor(
     private var time: Long = 0
 
     init {
-        workState.addSource(workManager.getWorkInfosForUniqueWorkLiveData(PosterizeWorker.WORK_NAME)) { workStates ->
+        workState.addSource(WorkManager.getWorkInfosForUniqueWorkLiveData(PosterizeWorker.WORK_NAME)) { workStates ->
             if (!workStates.isNullOrEmpty()) {
                 when {
                     workStates.all { it.state == WorkInfo.State.SUCCEEDED } -> {
@@ -59,7 +58,7 @@ class ImageViewModel @Inject constructor(
         val posterize = OneTimeWorkRequestBuilder<PosterizeWorker>()
             .setInputData(data)
             .build()
-        workManager.beginUniqueWork(PosterizeWorker.WORK_NAME, ExistingWorkPolicy.REPLACE, copy)
+        WorkManager.beginUniqueWork(PosterizeWorker.WORK_NAME, ExistingWorkPolicy.REPLACE, copy)
             .then(posterize)
             .enqueue()
     }
@@ -73,13 +72,13 @@ class ImageViewModel @Inject constructor(
         viewModelScope.launch {
             delay(100)
             val delta = System.nanoTime()
-            // Difference in NANOseconds
+            /* Difference in NANOseconds */
             if (delta - time >= 100000000) {
                 val builder = Data.Builder()
                 builder.putInt(PosterizeWorker.COUNT, count)
                 builder.putBoolean(PosterizeWorker.IS_BLACK_WHITE, isBlackWhite)
                 val data = builder.build()
-                workManager.enqueueUniqueWork(
+                WorkManager.enqueueUniqueWork(
                     PosterizeWorker.WORK_NAME,
                     ExistingWorkPolicy.REPLACE,
                     OneTimeWorkRequestBuilder<PosterizeWorker>().setInputData(data).build()
@@ -89,9 +88,8 @@ class ImageViewModel @Inject constructor(
     }
 
     private fun readColors() {
-        val currentCount = colors.size
         var i = 0
-        filePaths.colors.forEachLine {
+        Paths.colors.forEachLine {
             val rgb = it.split(",").map { it.toInt() }
             try {
                 colors[i] = Color.rgb(rgb[0], rgb[1], rgb[2])
@@ -101,6 +99,8 @@ class ImageViewModel @Inject constructor(
                 i++
             }
         }
-        (i until currentCount).forEach { _ -> colors.removeLast() }
+        while (colors.size > i) {
+            colors.removeAt(colors.lastIndex)
+        }
     }
 }
