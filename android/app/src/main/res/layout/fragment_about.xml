@@ -20,7 +20,8 @@
 			android:orientation="vertical"
 			android:paddingStart="16dp"
 			android:paddingEnd="16dp"
-			android:paddingTop="64dp">
+			android:paddingTop="64dp"
+			android:paddingBottom="64dp">
 			<TextView
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
@@ -51,6 +52,63 @@
 				android:textSize="12sp"
 				android:fontFamily="monospace"
 				android:text="@{Html.fromHtml(@string/leptonica_license)}"/>
+
+			<com.google.android.material.card.MaterialCardView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="16dp"
+				app:strokeWidth="1dp"
+				app:strokeColor="#3E4245"
+				app:cardBackgroundColor="?android:attr/colorBackground">
+
+				<TextView
+					android:textAppearance="?textAppearanceBody2"
+					android:id="@+id/licenseReportText"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:padding="16dp"
+					android:textSize="12sp"
+					android:fontFamily="monospace"
+					tools:text="Lorem ipsum dolor sit amet" />
+			</com.google.android.material.card.MaterialCardView>
+
+			<com.google.android.material.card.MaterialCardView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="16dp"
+				app:strokeWidth="1dp"
+				app:strokeColor="#3E4245"
+				app:cardBackgroundColor="?android:attr/colorBackground">
+
+				<TextView
+					android:textAppearance="?textAppearanceBody2"
+					android:id="@+id/licenseApache"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:padding="16dp"
+					android:textSize="12sp"
+					android:fontFamily="monospace"
+					tools:text="Lorem ipsum dolor sit amet" />
+			</com.google.android.material.card.MaterialCardView>
+
+			<com.google.android.material.card.MaterialCardView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="16dp"
+				app:strokeWidth="1dp"
+				app:strokeColor="#3E4245"
+				app:cardBackgroundColor="?android:attr/colorBackground">
+
+				<TextView
+					android:textAppearance="?textAppearanceBody2"
+					android:id="@+id/licenseKodein"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:padding="16dp"
+					android:textSize="12sp"
+					android:fontFamily="monospace"
+					tools:text="Lorem ipsum dolor sit amet" />
+			</com.google.android.material.card.MaterialCardView>
 		</LinearLayout>
 	</ScrollView>
 </layout>

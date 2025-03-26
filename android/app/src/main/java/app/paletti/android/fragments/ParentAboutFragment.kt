@@ -15,6 +15,16 @@ class ParentAboutFragment : Fragment(R.layout.fragment_about) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        FragmentAboutBinding.bind(view)
+        FragmentAboutBinding.bind(view).apply {
+            licenseReportText.text = resources.openRawResource(R.raw.report)
+                .bufferedReader()
+                .use { it.readText() }
+            licenseApache.text = resources.openRawResource(R.raw.apache)
+                .bufferedReader()
+                .use { it.readText() }
+            licenseKodein.text = resources.openRawResource(R.raw.license_kodein)
+                .bufferedReader()
+                .use { it.readText() }
+        }
     }
 }
