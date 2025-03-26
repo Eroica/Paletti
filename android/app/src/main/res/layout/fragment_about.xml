@@ -29,7 +29,7 @@
 				android:gravity="center"
 				android:drawablePadding="4dp"
 				android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-				app:drawableTopCompat="@drawable/ic_baseline_image_48"/>
+				app:drawableTopCompat="@mipmap/app_logo"/>
 
 			<TextView
 				android:layout_width="match_parent"
