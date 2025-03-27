@@ -18,6 +18,9 @@
 		<item name="android:statusBarColor">#000000</item>
 		<item name="android:colorBackground">#1D2124</item>
 
+		<item name="android:textColorLink">#4EA7FC</item>
+		<item name="elevationOverlayEnabled">false</item>
+
 		<item name="sliderStyle">@style/Widget.App.Slider</item>
 		<item name="switchStyle">@style/Widget.App.Switch</item>
 	</style>
@@ -41,7 +44,11 @@
 		<item name="thumbTint">#ffffff</item>
 	</style>
 
-	<style name="ToolbarPopup" parent="ThemeOverlay.MaterialComponents.Dark">
-<!--		<item name="colorSurface">#27282C</item>-->
+	<style name="CardContainer">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="strokeWidth">1dp</item>
+		<item name="strokeColor">#3E4245</item>
+		<item name="cardBackgroundColor">?android:attr/colorBackground</item>
 	</style>
 </resources>

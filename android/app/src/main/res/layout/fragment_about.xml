@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools">
 
 	<data>
-		<import
-			type="android.text.Html"/>
-		<import
-			type="app.paletti.android.BuildConfig"/>
+
+		<import type="android.text.Html" />
+
+		<import type="app.paletti.android.BuildConfig" />
 	</data>
 
 	<ScrollView
@@ -22,6 +22,7 @@
 			android:paddingEnd="16dp"
 			android:paddingTop="64dp"
 			android:paddingBottom="64dp">
+
 			<TextView
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
@@ -29,7 +30,7 @@
 				android:gravity="center"
 				android:drawablePadding="4dp"
 				android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-				app:drawableTopCompat="@mipmap/app_logo"/>
+				app:drawableTopCompat="@mipmap/app_logo" />
 
 			<TextView
 				android:layout_width="match_parent"
@@ -37,13 +38,13 @@
 				android:gravity="center"
 				android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
 				android:text="@{`Version ` + BuildConfig.VERSION_NAME}"
-				tools:text="Version 1.0"/>
+				tools:text="Version 1.0" />
 
 			<TextView
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="32dp"
-				android:text="@string/leptonica_attribution"/>
+				android:text="@string/leptonica_attribution" />
 
 			<TextView
 				android:layout_width="match_parent"
@@ -51,15 +52,11 @@
 				android:layout_marginTop="16dp"
 				android:textSize="12sp"
 				android:fontFamily="monospace"
-				android:text="@{Html.fromHtml(@string/leptonica_license)}"/>
+				android:text="@{Html.fromHtml(@string/leptonica_license)}" />
 
 			<com.google.android.material.card.MaterialCardView
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="16dp"
-				app:strokeWidth="1dp"
-				app:strokeColor="#3E4245"
-				app:cardBackgroundColor="?android:attr/colorBackground">
+				style="@style/CardContainer"
+				android:layout_marginTop="16dp">
 
 				<TextView
 					android:textAppearance="?textAppearanceBody2"
@@ -73,12 +70,8 @@
 			</com.google.android.material.card.MaterialCardView>
 
 			<com.google.android.material.card.MaterialCardView
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="16dp"
-				app:strokeWidth="1dp"
-				app:strokeColor="#3E4245"
-				app:cardBackgroundColor="?android:attr/colorBackground">
+				style="@style/CardContainer"
+				android:layout_marginTop="16dp">
 
 				<TextView
 					android:textAppearance="?textAppearanceBody2"
@@ -92,12 +85,8 @@
 			</com.google.android.material.card.MaterialCardView>
 
 			<com.google.android.material.card.MaterialCardView
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="16dp"
-				app:strokeWidth="1dp"
-				app:strokeColor="#3E4245"
-				app:cardBackgroundColor="?android:attr/colorBackground">
+				style="@style/CardContainer"
+				android:layout_marginTop="16dp">
 
 				<TextView
 					android:textAppearance="?textAppearanceBody2"
