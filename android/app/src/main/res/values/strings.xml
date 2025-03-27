@@ -3,6 +3,13 @@
 	<string name="label_initial_touch_here">Touch here to select an image.</string>
 	<string name="hint_posterized_image">Posterized image</string>
 
+	<string name="label_about_website">Website</string>
+	<string name="label_about_author">Author</string>
+	<string name="label_about_copyright">Copyright</string>
+	<string name="label_about_copyright_value">© 2021–2025, All rights reserved</string>
+	<string name="paletti_link"><a href="https://paletti.app">https://paletti.app</a></string>
+	<string name="author_link"><a href="https://groundctrl.earth">Eroica</a></string>
+
 	<string name="leptonica_license">&lt;p&gt;Copyright (C) 2001 Leptonica. All rights reserved.&lt;/p&gt;
 
 		&lt;p&gt;Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:&lt;/p&gt;

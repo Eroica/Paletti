@@ -7,6 +7,8 @@
 
 		<import type="android.text.Html" />
 
+		<import type="android.text.method.LinkMovementMethod" />
+
 		<import type="app.paletti.android.BuildConfig" />
 	</data>
 
@@ -23,22 +25,119 @@
 			android:paddingTop="64dp"
 			android:paddingBottom="64dp">
 
+			<ImageView
+				android:layout_width="128dp"
+				android:layout_height="128dp"
+				android:layout_gravity="center"
+				app:srcCompat="@mipmap/app_logo" />
+
 			<TextView
+				android:textAppearance="?textAppearanceHeadline6"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:text="@string/app_name"
 				android:gravity="center"
-				android:drawablePadding="4dp"
-				android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-				app:drawableTopCompat="@mipmap/app_logo" />
+				android:drawablePadding="4dp" />
 
 			<TextView
+				android:textAppearance="?textAppearanceSubtitle2"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:gravity="center"
-				android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-				android:text="@{`Version ` + BuildConfig.VERSION_NAME}"
-				tools:text="Version 1.0" />
+				android:text="@{BuildConfig.VERSION_NAME}"
+				tools:text="v2024.09" />
+
+			<com.google.android.material.card.MaterialCardView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="32dp"
+				app:cardCornerRadius="8dp"
+				app:cardElevation="8dp">
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="vertical">
+
+					<LinearLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:padding="16dp">
+
+						<TextView
+							android:textAppearance="?textAppearanceBody2"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/label_about_website" />
+
+						<TextView
+							android:textAppearance="?textAppearanceBody2"
+							android:layout_width="0dp"
+							android:layout_height="wrap_content"
+							android:layout_marginStart="8dp"
+							android:layout_weight="1"
+							android:gravity="end"
+							android:autoLink="web"
+							android:linksClickable="true"
+							android:text="@string/paletti_link" />
+					</LinearLayout>
+
+					<com.google.android.material.divider.MaterialDivider
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content" />
+
+					<LinearLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:padding="16dp">
+
+						<TextView
+							android:textAppearance="?textAppearanceBody2"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/label_about_author" />
+
+						<TextView
+							android:id="@+id/authorLink"
+							android:textAppearance="?textAppearanceBody2"
+							android:layout_width="0dp"
+							android:layout_height="wrap_content"
+							android:layout_marginStart="8dp"
+							android:layout_weight="1"
+							android:gravity="end"
+							app:movementMethod="@{LinkMovementMethod.getInstance()}"
+							android:text="@string/author_link"
+							tools:text="Eroica" />
+					</LinearLayout>
+
+					<com.google.android.material.divider.MaterialDivider
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content" />
+
+					<LinearLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:padding="16dp">
+
+						<TextView
+							android:textAppearance="?textAppearanceBody2"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/label_about_copyright" />
+
+						<TextView
+							android:textAppearance="?textAppearanceBody2"
+							android:layout_width="0dp"
+							android:layout_height="wrap_content"
+							android:layout_marginStart="8dp"
+							android:layout_weight="1"
+							android:gravity="end"
+							android:autoLink="web"
+							android:linksClickable="true"
+							android:text="@string/label_about_copyright_value" />
+					</LinearLayout>
+				</LinearLayout>
+			</com.google.android.material.card.MaterialCardView>
 
 			<TextView
 				android:layout_width="match_parent"
