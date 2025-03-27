@@ -14,9 +14,12 @@ import android.view.*
 import android.view.animation.AnimationUtils
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.work.WorkInfo
 import app.paletti.android.FilePaths
 import app.paletti.android.ImageViewModel
@@ -42,8 +45,8 @@ class ImageFragment : Fragment(), DIGlobalAware {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-        enterTransition = TransitionInflater.from(context).inflateTransition(R.transition.fragment_image_palette_enter)
+        enterTransition = TransitionInflater.from(context)
+            .inflateTransition(R.transition.fragment_image_palette_enter)
         postponeEnterTransition()
     }
 
@@ -65,21 +68,22 @@ class ImageFragment : Fragment(), DIGlobalAware {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         startPostponedEnterTransition()
-    }
+        (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.fragment_image, menu)
+            }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.fragment_image, menu)
-    }
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                when (menuItem.itemId) {
+                    R.id.action_export_image -> shareImage(Paths.outImage)
+                    R.id.action_export_palette -> sharePalette()
+                    R.id.action_save_image -> saveImage()
+                    else -> return false
+                }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_export_image -> shareImage(Paths.outImage)
-            R.id.action_export_palette -> sharePalette()
-            R.id.action_save_image -> saveImage()
-            else -> return super.onOptionsItemSelected(item)
-        }
-        return true
+                return true
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private fun shareImage(image: File) {

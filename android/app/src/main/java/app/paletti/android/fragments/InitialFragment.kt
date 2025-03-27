@@ -19,7 +19,7 @@ class InitialFragment : Fragment() {
     private lateinit var binding: FragmentInitialBinding
     private val viewModel: ImageViewModel by activityViewModels()
 
-    // This field is being called from the XML directly.
+    /* This field is being called from the XML directly */
     val selectImageResult = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let { viewModel.new(it) }
     }
