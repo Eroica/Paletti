@@ -35,7 +35,8 @@ import java.io.IOException
 class ImageFragment : Fragment(), DIGlobalAware {
     private val Paths: FilePaths by instance()
 
-    private lateinit var binding: FragmentImageBinding
+    private var _binding: FragmentImageBinding? = null
+    private val binding get() = _binding!!
     private val viewModel: ImageViewModel by activityViewModels()
 
     /* This field is being called from the XML directly */
@@ -51,7 +52,7 @@ class ImageFragment : Fragment(), DIGlobalAware {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_image, container, false)
+        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_image, container, false)
         binding.fragment = this
         binding.viewModel = viewModel
         viewModel.imageId.set(binding.image.id)
@@ -84,6 +85,13 @@ class ImageFragment : Fragment(), DIGlobalAware {
                 return true
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    override fun onDestroyView() {
+        binding.fragment = null
+        binding.viewModel = null
+        _binding = null
+        super.onDestroyView()
     }
 
     private fun shareImage(image: File) {

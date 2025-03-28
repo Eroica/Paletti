@@ -21,7 +21,8 @@ import app.paletti.android.databinding.FragmentMainBinding
 import com.google.android.material.transition.MaterialFadeThrough
 
 class MainFragment : Fragment(R.layout.fragment_main) {
-    private lateinit var binding: FragmentMainBinding
+    private var _binding: FragmentMainBinding? = null
+    private val binding get() = _binding!!
     private val viewModel: ImageViewModel by activityViewModels()
 
     private val selectImageResult = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
@@ -30,15 +31,16 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enterTransition = TransitionInflater.from(requireContext()).inflateTransition(R.transition.fragment_main_enter)
+        enterTransition = TransitionInflater.from(requireContext())
+            .inflateTransition(R.transition.fragment_main_enter)
         exitTransition = MaterialFadeThrough()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentMainBinding.bind(view)
-        binding.executePendingBindings()
+        _binding = FragmentMainBinding.bind(view)
         binding.viewModel = viewModel
+        binding.executePendingBindings()
         (activity as AppCompatActivity).apply {
             setSupportActionBar(binding.toolbar)
             supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -75,5 +77,11 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 return true
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    override fun onDestroyView() {
+        binding.viewModel = null
+        _binding = null
+        super.onDestroyView()
     }
 }

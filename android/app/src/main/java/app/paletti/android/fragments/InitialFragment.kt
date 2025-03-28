@@ -16,7 +16,8 @@ import app.paletti.android.R
 import app.paletti.android.databinding.FragmentInitialBinding
 
 class InitialFragment : Fragment() {
-    private lateinit var binding: FragmentInitialBinding
+    private var _binding: FragmentInitialBinding? = null
+    private val binding get() = _binding!!
     private val viewModel: ImageViewModel by activityViewModels()
 
     /* This field is being called from the XML directly */
@@ -25,7 +26,7 @@ class InitialFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_initial, container, false)
+        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_initial, container, false)
         binding.lifecycleOwner = this
         binding.fragment = this
         binding.viewModel = viewModel
@@ -40,5 +41,12 @@ class InitialFragment : Fragment() {
                 Toast.makeText(context, getString(R.string.toast_error_load), Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    override fun onDestroyView() {
+        binding.fragment = null
+        binding.viewModel = null
+        _binding = null
+        super.onDestroyView()
     }
 }
