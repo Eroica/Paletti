@@ -3,7 +3,5 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.StackPane?>
 <fx:root type="StackPane" StackPane.Alignment="CENTER" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1">
-	<children>
-		<ImageView fx:id="imageView" preserveRatio="true" StackPane.alignment="CENTER"/>
-	</children>
+	<ImageView fx:id="imageView" preserveRatio="true" StackPane.alignment="CENTER" />
 </fx:root>

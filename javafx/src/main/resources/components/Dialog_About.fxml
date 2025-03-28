@@ -16,37 +16,31 @@
 	<scene>
 		<Scene>
 			<HBox spacing="16.0" minWidth="750.0" minHeight="500.0">
-				<children>
-					<VBox alignment="TOP_CENTER" spacing="4.0">
-						<children>
-							<ImageView preserveRatio="true" fitWidth="128.0" fitHeight="128.0">
-								<image>
-									<Image url="@/icons/256.png"/>
-								</image>
-							</ImageView>
-							<Label text="$APP_NAME">
-								<font>
-									<Font name="Segoe UI Semibold" size="18.0" />
-								</font>
-								<VBox.margin>
-									<Insets top="16.0" />
-								</VBox.margin>
-							</Label>
-							<Label text="${'Version ' + APP_VERSION}">
-								<font>
-									<Font size="14.0" />
-								</font>
-							</Label>
-							<Hyperlink text="https://paletti.app" onAction="#onWebsiteClick" />
-							<Pane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-							<Label text="$APP_COPYRIGHT" />
-						</children>
-					</VBox>
-					<TextArea editable="false" text="$LICENSE_REPORT" wrapText="true" HBox.hgrow="ALWAYS" />
-				</children>
 				<padding>
 					<Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
 				</padding>
+				<VBox alignment="TOP_CENTER" spacing="4.0">
+					<ImageView preserveRatio="true" fitWidth="128.0" fitHeight="128.0">
+						<Image url="@/icons/256.png" />
+					</ImageView>
+					<Label text="$APP_NAME">
+						<font>
+							<Font name="Segoe UI Semibold" size="18.0" />
+						</font>
+						<VBox.margin>
+							<Insets top="16.0" />
+						</VBox.margin>
+					</Label>
+					<Label text="${'Version ' + APP_VERSION}">
+						<font>
+							<Font size="14.0" />
+						</font>
+					</Label>
+					<Hyperlink text="https://paletti.app" onAction="#onWebsiteClick" />
+					<Pane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+					<Label text="$APP_COPYRIGHT" />
+				</VBox>
+				<TextArea editable="false" text="$LICENSE_REPORT" wrapText="true" HBox.hgrow="ALWAYS" />
 			</HBox>
 		</Scene>
 	</scene>
