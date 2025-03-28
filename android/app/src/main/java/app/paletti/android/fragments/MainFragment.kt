@@ -76,7 +76,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
                 return true
             }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+        }, viewLifecycleOwner)
     }
 
     override fun onDestroyView() {

@@ -84,7 +84,7 @@ class ImageFragment : Fragment(), DIGlobalAware {
 
                 return true
             }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+        }, viewLifecycleOwner)
     }
 
     override fun onDestroyView() {
