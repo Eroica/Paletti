@@ -8,8 +8,14 @@ object Windows {
     external fun subclass(target: String, isSetDarkMode: Boolean)
 
     fun isAMDGPU(): Boolean {
-        val p = Runtime.getRuntime().exec(arrayOf("wmic", "PATH", "Win32_videocontroller", "GET", "description"))
-        val output = BufferedReader(InputStreamReader(p.inputStream)).use { it.readText() }
+        val process = Runtime.getRuntime().exec(
+            arrayOf(
+                "powershell",
+                "-command",
+                """"(Get-WmiObject -class Win32_VideoController -Property Description).Description""""
+            )
+        )
+        val output = BufferedReader(InputStreamReader(process.inputStream)).use { it.readText() }
         return "AMD" in output.uppercase()
     }
 }
