@@ -1,6 +1,5 @@
 package views
 
-import javafx.animation.Interpolator
 import javafx.animation.ScaleTransition
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
@@ -11,8 +10,7 @@ import javafx.scene.input.MouseEvent
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import javafx.util.Duration
-
-private val EASING = Interpolator.SPLINE(.02, .98, .46, .95)
+import ui.EASING
 
 class ColorTile(private var color: String? = null) : VBox() {
     init {

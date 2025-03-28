@@ -6,9 +6,8 @@ import javafx.fxml.FXMLLoader
 import javafx.scene.control.Label
 import javafx.scene.layout.StackPane
 import javafx.util.Duration
-
-private val ANIM_DURATION = Duration.millis(800.0)
-private val EASING = Interpolator.SPLINE(.02, .98, .46, .95)
+import ui.ANIM_DURATION
+import ui.EASING
 
 interface INotification {
     fun show(message: IMessage)

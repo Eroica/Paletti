@@ -15,6 +15,9 @@ import javafx.scene.input.ClipboardContent
 import javafx.scene.input.KeyEvent
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.StackPane
+import ui.COMBINATION_COPY_TO_CLIPBOARD
+import ui.COMBINATION_EXPORT_PALETTE
+import ui.COMBINATION_SAVE
 import views.INotification
 
 interface IFragment {
