@@ -12,7 +12,7 @@ class Database(path: File, cacheDir: File) : Closeable {
 
     init {
         /* I didn't introduce database versions before, so the first migration is applied iff the
-         * database file already exists.  */
+           database file already exists. */
         val isFirstRun = db.createStatement().executeQuery("""SELECT name FROM sqlite_master WHERE type='table' AND name='image';""")
             .use { it.getString(1) == null }
 

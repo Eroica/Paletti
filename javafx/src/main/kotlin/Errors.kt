@@ -1,6 +1,4 @@
-interface IMessage {
-    override fun toString(): String
-}
+sealed interface IMessage
 
 open class PalettiError(override val message: String) : Exception(message), IMessage {
     override fun toString() = message

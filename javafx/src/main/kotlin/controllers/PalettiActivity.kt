@@ -25,6 +25,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.javafx.asFlow
+import ui.COMBINATION_CLOSE
+import ui.COMBINATION_OPEN
+import ui.COMBINATION_PASTE_FROM_CLIPBOARD
 import views.ColorTile
 import views.FluentMenu
 import views.Notification
@@ -41,13 +44,6 @@ interface ISaveDialog {
     fun saveImage()
     fun savePalette()
 }
-
-val COMBINATION_OPEN = KeyCodeCombination(KeyCode.O, KeyCodeCombination.SHORTCUT_DOWN)
-val COMBINATION_CLOSE = KeyCodeCombination(KeyCode.W, KeyCodeCombination.SHORTCUT_DOWN)
-val COMBINATION_SAVE = KeyCodeCombination(KeyCode.S, KeyCodeCombination.SHORTCUT_DOWN)
-val COMBINATION_EXPORT_PALETTE = KeyCodeCombination(KeyCode.E, KeyCodeCombination.SHORTCUT_DOWN)
-val COMBINATION_COPY_TO_CLIPBOARD = KeyCodeCombination(KeyCode.C, KeyCodeCombination.SHORTCUT_DOWN)
-val COMBINATION_PASTE_FROM_CLIPBOARD = KeyCodeCombination(KeyCode.V, KeyCodeCombination.SHORTCUT_DOWN)
 
 class PalettiActivity(
     val viewModel: ViewModel,

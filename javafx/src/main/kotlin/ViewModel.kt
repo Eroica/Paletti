@@ -131,7 +131,9 @@ class ViewModel(
         images.delete(id)
         images.add(id, count.get(), isBlackWhite.get(), false, path)
         images[id].setParameters(count.get(), isBlackWhite.get(), isDither.get())
-        if (Leptonica.posterize2(id, appDir.databasePath) != Leptonica.OK) throw LeptonicaError
+        if (Leptonica.posterize2(id, appDir.databasePath) != Leptonica.OK) {
+            throw LeptonicaError
+        }
         PosterizedPix(images[id], appDir)
     }
 }
