@@ -1,15 +1,15 @@
 Notice for packages
 
 
-Java AppDirs (1.2.2) - The Apache License, Version 2.0
+Java AppDirs (1.4.0) - The Apache License, Version 2.0
 Returns paths to platform dependent special directories.
 https://github.com/harawata/appdirs
 
-Java Native Access (5.13.0) - LGPL-2.1-or-later,Apache-2.0
+Java Native Access (5.16.0) - LGPL-2.1-or-later,Apache-2.0
 Java Native Access
 https://github.com/java-native-access/jna
 
-Java Native Access Platform (5.13.0) - LGPL-2.1-or-later,Apache-2.0
+Java Native Access Platform (5.16.0) - LGPL-2.1-or-later,Apache-2.0
 Java Native Access Platform
 https://github.com/java-native-access/jna
 
@@ -17,23 +17,15 @@ JetBrains Java Annotations (23.0.0) - The Apache Software License, Version 2.0
 A set of annotations used for code inspection support and code documentation.
 https://github.com/JetBrains/java-annotations
 
-Kotlin Stdlib (1.9.20) - The Apache License, Version 2.0
+Kotlin Stdlib (2.1.20) - The Apache License, Version 2.0
 Kotlin Standard Library
 https://kotlinlang.org/
 
-Kotlin Stdlib Jdk7 (1.8.20) - The Apache License, Version 2.0
-Kotlin Standard Library JDK 7 extension
-https://kotlinlang.org/
-
-Kotlin Stdlib Jdk8 (1.8.20) - The Apache License, Version 2.0
-Kotlin Standard Library JDK 8 extension
-https://kotlinlang.org/
-
-kotlinx-coroutines-core (1.7.3) - The Apache Software License, Version 2.0
+kotlinx-coroutines-core (1.10.1) - The Apache Software License, Version 2.0
 Coroutines support libraries for Kotlin
 https://github.com/Kotlin/kotlinx.coroutines
 
-kotlinx-coroutines-javafx (1.7.3) - The Apache Software License, Version 2.0
+kotlinx-coroutines-javafx (1.10.1) - The Apache Software License, Version 2.0
 Coroutines support libraries for Kotlin
 https://github.com/Kotlin/kotlinx.coroutines
 
@@ -45,6 +37,6 @@ SLF4J Simple Provider (2.0.9) - MIT License
 SLF4J Simple Provider
 http://www.slf4j.org
 
-SQLite JDBC (3.45.2.0) - The Apache Software License, Version 2.0
+SQLite JDBC (3.49.1.0) - The Apache Software License, Version 2.0
 SQLite JDBC library
 https://github.com/xerial/sqlite-jdbc
