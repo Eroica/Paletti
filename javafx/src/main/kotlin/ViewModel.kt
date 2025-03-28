@@ -7,24 +7,11 @@ import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.image.Image
-import javafx.scene.paint.Color
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 import java.io.File
 import javax.imageio.ImageIO
-
-interface IPosterizedImage {
-    val source: String
-    val colors: List<Color>
-}
-
-class PosterizedPix(
-    private val sqlImage: SqlImage,
-    cacheDir: File,
-) : IPosterizedImage by sqlImage {
-    val path: String = cacheDir.resolve("${sqlImage.id}.png").toURI().toString()
-}
 
 class ViewModel(
     private val id: Int,

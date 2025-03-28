@@ -1,4 +1,4 @@
-package components
+package controllers
 
 import APP_WEBSITE
 import Paletti
@@ -58,7 +58,7 @@ $licenseBuilder"""
 
     @FXML
     private fun onWebsiteClick(event: ActionEvent) {
-        Paletti.App.hostServices.showDocument(APP_WEBSITE)
+        Paletti.AppModule.hostServices.showDocument(APP_WEBSITE)
         event.consume()
     }
 }

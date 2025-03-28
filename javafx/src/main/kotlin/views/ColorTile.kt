@@ -1,4 +1,4 @@
-package components
+package views
 
 import javafx.animation.Interpolator
 import javafx.animation.ScaleTransition

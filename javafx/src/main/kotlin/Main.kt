@@ -1,6 +1,6 @@
 import app.paletti.lib.Windows
-import components.IWindow
-import components.PalettiActivity
+import controllers.IWindow
+import controllers.PalettiActivity
 import javafx.application.Application
 import javafx.scene.Scene
 import javafx.scene.image.Image
@@ -8,10 +8,6 @@ import javafx.scene.paint.Color
 import javafx.stage.Stage
 import javafx.stage.StageStyle
 import kotlinx.coroutines.Dispatchers
-
-const val APP_NAME = "Paletti"
-const val DB_NAME = "Paletti.db"
-const val APP_WEBSITE = "https://paletti.app"
 
 fun main(args: Array<String>) {
     System.loadLibrary("Paletti")
@@ -27,16 +23,13 @@ fun main(args: Array<String>) {
 
 class Paletti : Application() {
     companion object {
-        lateinit var App: Application
+        lateinit var AppModule: AppModule
     }
-
-    private val appDir: AppDir by lazy { AppDir() }
 
     override fun init() {
         super.init()
-        Paletti.App = this
-
-        if (appDir.database.isPrefersDarkMode()) {
+        AppModule = AppModule(this)
+        if (AppModule.appDir.database.isPrefersDarkMode()) {
             setUserAgentStylesheet("/FluentDark.css")
         } else {
             setUserAgentStylesheet("/Fluent.css")
@@ -44,12 +37,14 @@ class Paletti : Application() {
     }
 
     override fun start(primaryStage: Stage) {
-        var viewModelId = appDir.database.monotonicId()
-        if (!appDir.database.isRestoreImage) {
+        var viewModelId = AppModule.appDir.database.monotonicId()
+        if (!AppModule.appDir.database.isRestoreImage) {
             viewModelId++
         }
 
-        val viewModel = ViewModel(viewModelId, SqlImages(appDir.database), appDir, Dispatchers.IO)
+        val viewModel = ViewModel(
+            viewModelId, SqlImages(AppModule.appDir.database), AppModule.appDir, Dispatchers.IO
+        )
         val activity = PalettiActivity(viewModel, object : IWindow {
             override fun close() {
                 primaryStage.close()
@@ -72,15 +67,15 @@ class Paletti : Application() {
         primaryStage.setOnCloseRequest {
             activity.onDestroy()
             viewModel.onCleared()
-            appDir.database.close()
+            AppModule.appDir.database.close()
         }
 
-        if (appDir.database.isPrefersDarkMode()) {
+        if (AppModule.appDir.database.isPrefersDarkMode()) {
             primaryStage.scene.root.styleClass.add("paletti-is-dark")
         }
 
         primaryStage.title = APP_NAME
         primaryStage.show()
-        Windows.subclass(primaryStage.title, appDir.database.isPrefersDarkMode())
+        Windows.subclass(primaryStage.title, AppModule.appDir.database.isPrefersDarkMode())
     }
 }

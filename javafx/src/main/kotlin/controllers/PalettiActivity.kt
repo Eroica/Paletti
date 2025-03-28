@@ -1,4 +1,4 @@
-package components
+package controllers
 
 import Uninitialized
 import ViewModel
@@ -25,7 +25,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.javafx.asFlow
+import views.ColorTile
 import views.FluentMenu
+import views.Notification
 import java.io.IOException
 import java.nio.file.Paths
 import javax.imageio.ImageIO

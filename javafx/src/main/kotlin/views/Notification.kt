@@ -1,4 +1,4 @@
-package components
+package views
 
 import IMessage
 import javafx.animation.*

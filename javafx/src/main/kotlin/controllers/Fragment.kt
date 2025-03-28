@@ -1,4 +1,4 @@
-package components
+package controllers
 
 import Uninitialized
 import ViewModel
@@ -15,6 +15,7 @@ import javafx.scene.input.ClipboardContent
 import javafx.scene.input.KeyEvent
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.StackPane
+import views.INotification
 
 interface IFragment {
     fun onShortcut(event: KeyEvent)
