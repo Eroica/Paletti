@@ -80,6 +80,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     }
 
     override fun onDestroyView() {
+        (activity as AppCompatActivity).setSupportActionBar(null)
         binding.viewModel = null
         _binding = null
         super.onDestroyView()
