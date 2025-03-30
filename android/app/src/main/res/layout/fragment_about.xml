@@ -140,6 +140,7 @@
 			</com.google.android.material.card.MaterialCardView>
 
 			<TextView
+				android:textAppearance="?textAppearanceBody2"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="32dp"
@@ -151,7 +152,8 @@
 				android:layout_marginTop="16dp"
 				android:textSize="12sp"
 				android:fontFamily="monospace"
-				android:text="@{Html.fromHtml(@string/leptonica_license)}" />
+				android:text="@{Html.fromHtml(@string/leptonica_license)}"
+				tools:text="Leptonica license"/>
 
 			<com.google.android.material.card.MaterialCardView
 				style="@style/CardContainer"
