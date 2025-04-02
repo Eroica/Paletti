@@ -26,7 +26,7 @@ Java_app_paletti_lib_Leptonica_posterize(
 	for (int i = 0; i < len; i++) {
 		jstring jstr = (jstring)(env->GetObjectArrayElement(file_paths, i));
 		if (!jstr) {
-		    continue;
+			continue;
 		}
 
 		const char* charBuffer = env->GetStringUTFChars(jstr, nullptr);
@@ -81,7 +81,9 @@ Java_app_paletti_lib_Leptonica_posterize(
 		for (int i = 0; i < count; i++) {
 			int r, g, b;
 			pixcmapGetColor(colormap, i, &r, &g, &b);
-			if (is_black_white && (r != g || r != b)) continue;
+			if (is_black_white && (r != g || r != b)) {
+				continue;
+			}
 			colors << r << "," << g << "," << b << std::endl;
 		}
 		colors.close();
