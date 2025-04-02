@@ -3,9 +3,9 @@ plugins {
     kotlin("jvm") version "2.1.20"
     id("org.openjfx.javafxplugin") version "0.1.0"
     id("com.dua3.gradle.runtime") version "1.13.1-patch-1"
-    id("com.github.ben-manes.versions") version "0.51.0"
+    id("com.github.ben-manes.versions") version "0.52.0"
     id("com.jaredsburrows.license")
-    id("com.github.gmazzo.buildconfig") version "5.3.5"
+    id("com.github.gmazzo.buildconfig") version "5.6.2"
 }
 
 group = "app.paletti.javafx"
@@ -21,7 +21,7 @@ javafx {
 }
 
 kotlin {
-    jvmToolchain(22)
+    jvmToolchain(23)
 }
 
 dependencies {
