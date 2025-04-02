@@ -62,29 +62,14 @@ class ImageFragment : Fragment(), DIGlobalAware {
             }
         }
         binding.executePendingBindings()
-        binding.image.startAnimation(AnimationUtils.loadAnimation(context, R.anim.image_enter))
+        setupMenu()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         startPostponedEnterTransition()
-        (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.fragment_image, menu)
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                when (menuItem.itemId) {
-                    R.id.action_export_image -> shareImage(Paths.outImage)
-                    R.id.action_export_palette -> sharePalette()
-                    R.id.action_save_image -> saveImage()
-                    else -> return false
-                }
-
-                return true
-            }
-        }, viewLifecycleOwner)
+        binding.image.startAnimation(AnimationUtils.loadAnimation(context, R.anim.image_enter))
     }
 
     override fun onDestroyView() {
@@ -140,5 +125,24 @@ class ImageFragment : Fragment(), DIGlobalAware {
                 }
             }
         }
+    }
+
+    private fun setupMenu() {
+        (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.fragment_image, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                when (menuItem.itemId) {
+                    R.id.action_export_image -> shareImage(Paths.outImage)
+                    R.id.action_export_palette -> sharePalette()
+                    R.id.action_save_image -> saveImage()
+                    else -> return false
+                }
+
+                return true
+            }
+        }, viewLifecycleOwner)
     }
 }
