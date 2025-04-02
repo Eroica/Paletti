@@ -2,10 +2,12 @@ package app.paletti.android.fragments
 
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuHost
@@ -35,15 +37,13 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         exitTransition = MaterialFadeThrough()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentMainBinding.bind(view)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        _binding = FragmentMainBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.executePendingBindings()
-        (activity as AppCompatActivity).apply {
-            setSupportActionBar(binding.toolbar)
-            supportActionBar?.setDisplayShowTitleEnabled(false)
-        }
+
+        setupToolbar()
+        setupMenu()
 
         if (savedInstanceState == null && childFragmentManager.findFragmentById(binding.container.id) == null) {
             childFragmentManager.beginTransaction()
@@ -62,6 +62,24 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             }
         }
 
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        (activity as AppCompatActivity).setSupportActionBar(null)
+        binding.viewModel = null
+        _binding = null
+        super.onDestroyView()
+    }
+
+    private fun setupToolbar() {
+        (activity as AppCompatActivity).apply {
+            setSupportActionBar(binding.toolbar)
+            supportActionBar?.setDisplayShowTitleEnabled(false)
+        }
+    }
+
+    private fun setupMenu() {
         (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.fragment_main, menu)
@@ -76,12 +94,5 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 return true
             }
         }, viewLifecycleOwner)
-    }
-
-    override fun onDestroyView() {
-        (activity as AppCompatActivity).setSupportActionBar(null)
-        binding.viewModel = null
-        _binding = null
-        super.onDestroyView()
     }
 }
