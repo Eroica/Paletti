@@ -114,14 +114,15 @@ class ImageFragment : Fragment(), DIGlobalAware {
         }
 
         try {
-            val stream = FileOutputStream(Paths.palette)
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-            stream.close()
+            FileOutputStream(Paths.palette).use {
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
+                shareImage(Paths.palette)
+            }
         } catch (e: IOException) {
             e.printStackTrace()
+        } finally {
+            bitmap.recycle()
         }
-
-        shareImage(Paths.palette)
     }
 
     private fun saveImage() {
