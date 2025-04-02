@@ -2,6 +2,7 @@
 	<string name="app_name">Paletti</string>
 	<string name="label_initial_touch_here">Touch here to select an image.</string>
 	<string name="hint_posterized_image">Posterized image</string>
+	<string name="toast_saved_image">Saved image to %1$s</string>
 
 	<string name="label_about_website">Website</string>
 	<string name="label_about_author">Author</string>

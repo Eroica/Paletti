@@ -12,6 +12,7 @@ import android.provider.MediaStore
 import android.transition.TransitionInflater
 import android.view.*
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.core.view.MenuHost
@@ -113,14 +114,18 @@ class ImageFragment : Fragment(), DIGlobalAware {
     private fun saveImage() {
         context?.contentResolver?.let { resolver ->
             ContentValues().apply {
-                put(MediaStore.MediaColumns.DISPLAY_NAME, System.currentTimeMillis().toString() + ".bmp")
+                val name = System.currentTimeMillis().toString() + ".bmp"
+                val directory = "Pictures" + File.separator + "Paletti"
+                val path = directory + File.separator + name
+                put(MediaStore.MediaColumns.DISPLAY_NAME, name)
                 put(MediaStore.MediaColumns.MIME_TYPE, "image/bmp")
-                put(MediaStore.MediaColumns.RELATIVE_PATH, "Pictures" + File.separator + "Paletti")
+                put(MediaStore.MediaColumns.RELATIVE_PATH, directory)
                 resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, this)?.let {
-                    resolver.openOutputStream(it).use {
-                        it?.let {
-                            Paths.outImage.inputStream().copyTo(it)
-                        }
+                    resolver.openOutputStream(it)?.use {
+                        Paths.outImage.inputStream().copyTo(it)
+                        Toast.makeText(
+                            context, getString(R.string.toast_saved_image, path), Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }
