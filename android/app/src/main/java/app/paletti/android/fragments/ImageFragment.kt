@@ -56,14 +56,21 @@ class ImageFragment : Fragment(), DIGlobalAware {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_image, container, false)
         binding.fragment = this
         binding.viewModel = viewModel
+        binding.executePendingBindings()
         viewModel.imageId.set(binding.image.id)
         viewModel.workState.observe(viewLifecycleOwner) {
             if (it == WorkInfo.State.SUCCEEDED) {
                 binding.image.setImageBitmap(BitmapFactory.decodeFile(Paths.outImage.toString()))
             }
         }
-        binding.executePendingBindings()
+
+        if (savedInstanceState != null) {
+            binding.image.setImageBitmap(BitmapFactory.decodeFile(Paths.outImage.toString()))
+            viewModel.readColors()
+        }
+
         setupMenu()
+
         return binding.root
     }
 

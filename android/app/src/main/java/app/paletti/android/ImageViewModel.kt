@@ -87,8 +87,9 @@ class ImageViewModel : ViewModel(), DIGlobalAware {
         }
     }
 
-    private fun readColors() {
+    fun readColors() {
         var i = 0
+
         Paths.colors.forEachLine {
             val rgb = it.split(",").map { it.toInt() }
             try {
@@ -99,6 +100,7 @@ class ImageViewModel : ViewModel(), DIGlobalAware {
                 i++
             }
         }
+
         while (colors.size > i) {
             colors.removeAt(colors.lastIndex)
         }
