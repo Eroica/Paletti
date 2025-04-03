@@ -1,25 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-		xmlns:app="http://schemas.android.com/apk/res-auto">
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<item
+		android:id="@+id/action_crop_image"
+		android:checkable="true"
+		android:checked="true"
+		android:title="@string/menu_crop_image"
+		app:actionViewClass="android.widget.CheckBox"
+		app:showAsAction="never" />
 
 	<item
 		android:id="@+id/action_export_image"
 		android:title="@string/menu_share_image"
 		android:icon="@drawable/ic_baseline_share_24"
 		android:orderInCategory="5000"
-		app:showAsAction="ifRoom"/>
+		app:showAsAction="ifRoom" />
 
 	<item
 		android:id="@+id/action_export_palette"
 		android:title="@string/menu_share_palette"
 		android:icon="@drawable/ic_baseline_palette_24"
 		android:orderInCategory="6000"
-		app:showAsAction="ifRoom"/>
+		app:showAsAction="ifRoom" />
 
 	<item
 		android:id="@+id/action_save_image"
 		android:title="@string/menu_save_image"
 		android:icon="@drawable/save_24px"
 		android:orderInCategory="7000"
-		app:showAsAction="ifRoom"/>
+		app:showAsAction="ifRoom" />
 </menu>
