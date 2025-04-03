@@ -12,7 +12,6 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
 import androidx.transition.TransitionInflater
 import androidx.work.WorkInfo
 import app.paletti.android.ImageViewModel
@@ -76,7 +75,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
                 return true
             }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+        }, viewLifecycleOwner)
     }
 
     override fun onDestroyView() {
