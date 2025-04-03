@@ -12,6 +12,7 @@ import android.provider.MediaStore
 import android.transition.TransitionInflater
 import android.view.*
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
@@ -20,7 +21,6 @@ import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
 import androidx.work.WorkInfo
 import app.paletti.android.FilePaths
 import app.paletti.android.ImageViewModel
@@ -34,6 +34,10 @@ import java.io.FileOutputStream
 import java.io.IOException
 
 class ImageFragment : Fragment(), DIGlobalAware {
+    companion object {
+        const val IS_CENTER_CROP = "IS_CENTER_CROP"
+    }
+
     private val Paths: FilePaths by instance()
 
     private var _binding: FragmentImageBinding? = null
@@ -69,7 +73,7 @@ class ImageFragment : Fragment(), DIGlobalAware {
             viewModel.readColors()
         }
 
-        setupMenu()
+        setupMenu(savedInstanceState)
 
         return binding.root
     }
@@ -78,6 +82,11 @@ class ImageFragment : Fragment(), DIGlobalAware {
         super.onViewCreated(view, savedInstanceState)
         startPostponedEnterTransition()
         binding.image.startAnimation(AnimationUtils.loadAnimation(context, R.anim.image_enter))
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putBoolean(IS_CENTER_CROP, binding.image.scaleType == ImageView.ScaleType.CENTER_CROP)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onDestroyView() {
@@ -139,14 +148,23 @@ class ImageFragment : Fragment(), DIGlobalAware {
         }
     }
 
-    private fun setupMenu() {
+    private fun setupMenu(savedInstanceState: Bundle?) {
         (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.fragment_image, menu)
+
+                if (savedInstanceState?.getBoolean(IS_CENTER_CROP) == false) {
+                    menu.findItem(R.id.action_crop_image).isChecked = false
+                    toggleImageCrop()
+                }
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 when (menuItem.itemId) {
+                    R.id.action_crop_image -> {
+                        toggleImageCrop()
+                        menuItem.isChecked = !menuItem.isChecked
+                    }
                     R.id.action_export_image -> shareImage(Paths.outImage)
                     R.id.action_export_palette -> sharePalette()
                     R.id.action_save_image -> saveImage()
@@ -156,5 +174,12 @@ class ImageFragment : Fragment(), DIGlobalAware {
                 return true
             }
         }, viewLifecycleOwner)
+    }
+
+    private fun toggleImageCrop() {
+        when (binding.image.scaleType) {
+            ImageView.ScaleType.CENTER_CROP -> binding.image.scaleType = ImageView.ScaleType.CENTER_INSIDE
+            else -> binding.image.scaleType = ImageView.ScaleType.CENTER_CROP
+        }
     }
 }

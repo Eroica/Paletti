@@ -28,6 +28,7 @@
 	<string name="intent_pick_image">Pick Image</string>
 	<string name="intent_share_to_application">Choose application</string>
 	<string name="menu_about">About</string>
+	<string name="menu_crop_image">Crop image</string>
 	<string name="menu_share_image">Share image</string>
 	<string name="menu_share_palette">Share palette</string>
 	<string name="menu_save_image">Save image</string>
