@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuCompat
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.commit
 import androidx.work.WorkManager
@@ -34,8 +35,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.activity_main, menu)
+        MenuCompat.setGroupDividerEnabled(menu, true)
         return super.onCreateOptionsMenu(menu)
     }
 
