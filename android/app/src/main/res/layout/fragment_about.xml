@@ -144,12 +144,16 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="32dp"
+				android:layout_marginStart="8dp"
+				android:layout_marginEnd="8dp"
 				android:text="@string/leptonica_attribution" />
 
 			<TextView
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="16dp"
+				android:layout_marginStart="8dp"
+				android:layout_marginEnd="8dp"
 				android:textSize="12sp"
 				android:fontFamily="monospace"
 				android:text="@{Html.fromHtml(@string/leptonica_license)}"
