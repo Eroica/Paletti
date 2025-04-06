@@ -15,13 +15,16 @@ import androidx.fragment.app.commit
 import androidx.work.WorkManager
 import app.paletti.android.fragments.MainFragment
 import app.paletti.android.fragments.ParentAboutFragment
+import org.kodein.di.conf.DIGlobalAware
+import org.kodein.di.instance
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), DIGlobalAware {
+    private val WorkManager: WorkManager by instance()
     private val viewModel: ImageViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WorkManager.getInstance(this).pruneWork()
+        WorkManager.pruneWork()
         if (savedInstanceState == null) {
             findViewById<ViewGroup>(android.R.id.content).doOnPreDraw {
                 supportFragmentManager.commit {
