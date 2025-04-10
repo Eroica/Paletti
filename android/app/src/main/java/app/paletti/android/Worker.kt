@@ -28,13 +28,18 @@ class CopyWorker(
     private val Paths: FilePaths by instance()
 
     override fun doWork(): Result {
+        val uriString = inputData.getString(URI) ?: return Result.failure()
+
         return try {
-            applicationContext.contentResolver.openInputStream(Uri.parse(inputData.getString(URI))).use {
-                it?.copyTo(Paths.copiedImage.outputStream())
-            }
+            val uri = Uri.parse(uriString)
+            applicationContext.contentResolver.openInputStream(uri)?.use { input ->
+                Paths.copiedImage.outputStream().use { output ->
+                    input.copyTo(output)
+                }
+            } ?: return Result.failure()
             duplicateToBmp(Paths.copiedImage, Paths.tmpImage)
             Result.success()
-        } catch (e: IOException) {
+        } catch (_: IOException) {
             Result.failure()
         }
     }
