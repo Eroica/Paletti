@@ -29,7 +29,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.10.1")
     implementation("org.xerial:sqlite-jdbc:3.49.1.0")
     implementation("net.harawata:appdirs:1.4.0")
-    implementation("org.slf4j:slf4j-simple:2.0.9")
+    implementation("org.slf4j:slf4j-simple:2.0.17")
 }
 
 tasks {
@@ -42,6 +42,13 @@ tasks.register<Copy>("copyDlls") {
     from(".")
     include("*.dll")
     into(file(layout.buildDirectory.dir("jpackage/Paletti")))
+}
+
+tasks.named("dependencyUpdates", com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask::class).configure {
+    val immaturityLevels = listOf("rc", "cr", "m", "beta", "alpha", "preview")
+    val immaturityRegexes = immaturityLevels.map { ".*[.\\-]$it[.\\-\\d]*".toRegex(RegexOption.IGNORE_CASE) }
+    fun immaturityLevel(version: String): Int = immaturityRegexes.indexOfLast { version.matches(it) }
+    rejectVersionIf { immaturityLevel(candidate.version) > immaturityLevel(currentVersion) }
 }
 
 buildConfig {
