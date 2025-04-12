@@ -7,7 +7,9 @@
 		android:top="3dp">
 
 		<shape android:shape="oval">
-			<size android:width="20dp" android:height="20dp"/>
+			<size
+				android:width="20dp"
+				android:height="20dp" />
 		</shape>
 	</item>
 </layer-list>

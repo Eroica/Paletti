@@ -12,6 +12,10 @@ import androidx.databinding.*
 import app.paletti.android.databinding.ListItemColorTileBinding
 import com.google.android.material.slider.Slider
 
+fun interface OnValueChanged {
+    fun onValueChanged(slider: Slider, value: Float, fromUser: Boolean)
+}
+
 @BindingAdapter("tooltipText")
 fun setTooltipText(view: View, stringId: Int) {
     TooltipCompat.setTooltipText(view, view.context.getString(stringId))
@@ -62,8 +66,4 @@ fun setSliderListeners(slider: Slider, valueChanged: OnValueChanged, attrChange:
         valueChanged.onValueChanged(v, value, fromUser)
         attrChange.onChange()
     }
-}
-
-fun interface OnValueChanged {
-    fun onValueChanged(slider: Slider, value: Float, fromUser: Boolean)
 }
