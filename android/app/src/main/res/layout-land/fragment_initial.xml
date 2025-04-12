@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
 
 	<data>
-		<import type="androidx.work.WorkInfo.State" alias="State"/>
-		<variable name="fragment" type="app.paletti.android.fragments.InitialFragment"/>
-		<variable name="viewModel" type="app.paletti.android.ImageViewModel"/>
+
+		<import
+			type="androidx.work.WorkInfo.State"
+			alias="State" />
+
+		<variable
+			name="fragment"
+			type="app.paletti.android.fragments.InitialFragment" />
+
+		<variable
+			name="viewModel"
+			type="app.paletti.android.ImageViewModel" />
 	</data>
 
 	<ViewAnimator
@@ -37,12 +47,12 @@
 				android:text="@string/label_initial_touch_here"
 				android:textSize="16sp"
 				android:foregroundGravity="center"
-				android:background="?android:attr/selectableItemBackgroundBorderless"/>
+				android:background="?android:attr/selectableItemBackgroundBorderless" />
 		</FrameLayout>
 
 		<ProgressBar
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_gravity="center"/>
+			android:layout_gravity="center" />
 	</ViewAnimator>
 </layout>
