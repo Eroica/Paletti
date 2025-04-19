@@ -6,7 +6,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.transition.TransitionInflater
@@ -14,7 +13,6 @@ import android.view.*
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -43,11 +41,6 @@ class ImageFragment : Fragment(), DIGlobalAware {
     private var _binding: FragmentImageBinding? = null
     private val binding get() = _binding!!
     private val viewModel: ImageViewModel by activityViewModels()
-
-    /* This field is being called from the XML directly */
-    val selectImageResult = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        uri?.let { viewModel.new(it) }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

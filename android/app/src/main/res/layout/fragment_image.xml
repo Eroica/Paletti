@@ -29,7 +29,6 @@
 			android:adjustViewBounds="true"
 			android:scaleType="centerCrop"
 			android:foreground="?attr/selectableItemBackground"
-			android:onClick='@{() -> fragment.selectImageResult.launch("image/*")}'
 			android:contentDescription="@string/hint_posterized_image" />
 
 		<LinearLayout
