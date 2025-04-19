@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.transition.TransitionInflater
 import android.view.*
@@ -125,7 +126,7 @@ class ImageFragment : Fragment(), DIGlobalAware {
         context?.contentResolver?.let { resolver ->
             ContentValues().apply {
                 val name = System.currentTimeMillis().toString() + ".bmp"
-                val directory = "Pictures" + File.separator + "Paletti"
+                val directory = Environment.DIRECTORY_PICTURES + File.separator + "Paletti"
                 val path = directory + File.separator + name
                 put(MediaStore.MediaColumns.DISPLAY_NAME, name)
                 put(MediaStore.MediaColumns.MIME_TYPE, "image/bmp")
