@@ -30,6 +30,7 @@ import org.kodein.di.instance
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import androidx.core.graphics.createBitmap
 
 class ImageFragment : Fragment(), DIGlobalAware {
     companion object {
@@ -100,7 +101,7 @@ class ImageFragment : Fragment(), DIGlobalAware {
     }
 
     private fun sharePalette() {
-        val bitmap = Bitmap.createBitmap(viewModel.count.get().toInt() * 48, 96, Bitmap.Config.ARGB_8888)
+        val bitmap = createBitmap(viewModel.count.get().toInt() * 48, 96)
         val canvas = Canvas(bitmap)
         val paint = Paint()
         viewModel.colors.forEachIndexed { i, color ->
