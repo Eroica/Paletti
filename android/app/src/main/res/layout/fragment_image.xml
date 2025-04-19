@@ -4,6 +4,8 @@
 
 	<data>
 
+		<import type="android.widget.ImageView.ScaleType" />
+
 		<variable
 			name="fragment"
 			type="app.paletti.android.fragments.ImageFragment" />
@@ -27,7 +29,7 @@
 			android:layout_height="0dp"
 			android:layout_weight="1"
 			android:adjustViewBounds="true"
-			android:scaleType="centerCrop"
+			android:scaleType="@{viewModel.isImageZoom ? ScaleType.CENTER_CROP : ScaleType.CENTER_INSIDE}"
 			android:foreground="?attr/selectableItemBackground"
 			android:contentDescription="@string/hint_posterized_image" />
 

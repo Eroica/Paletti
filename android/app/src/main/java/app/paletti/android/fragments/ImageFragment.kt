@@ -150,15 +150,15 @@ class ImageFragment : Fragment(), DIGlobalAware {
 
                 if (savedInstanceState?.getBoolean(IS_CENTER_CROP) == false) {
                     menu.findItem(R.id.action_crop_image).isChecked = false
-                    toggleImageCrop()
+                    viewModel.isImageZoom.set(false)
                 }
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 when (menuItem.itemId) {
                     R.id.action_crop_image -> {
-                        toggleImageCrop()
                         menuItem.isChecked = !menuItem.isChecked
+                        viewModel.isImageZoom.set(!viewModel.isImageZoom.get())
                     }
                     R.id.action_export_image -> shareImage(Paths.outImage)
                     R.id.action_export_palette -> sharePalette()
@@ -169,12 +169,5 @@ class ImageFragment : Fragment(), DIGlobalAware {
                 return true
             }
         }, viewLifecycleOwner)
-    }
-
-    private fun toggleImageCrop() {
-        when (binding.image.scaleType) {
-            ImageView.ScaleType.CENTER_CROP -> binding.image.scaleType = ImageView.ScaleType.CENTER_INSIDE
-            else -> binding.image.scaleType = ImageView.ScaleType.CENTER_CROP
-        }
     }
 }

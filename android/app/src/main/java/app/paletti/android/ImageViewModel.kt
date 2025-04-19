@@ -22,6 +22,7 @@ class ImageViewModel : ViewModel(), DIGlobalAware {
     val count = ObservableFloat(6f)
     val colors = ObservableArrayList<Int>()
     val isBlackWhite = ObservableBoolean(false)
+    val isImageZoom = ObservableBoolean(true)
     val imageId = ObservableInt(-1)
     val workState = MediatorLiveData<WorkInfo.State>()
 
