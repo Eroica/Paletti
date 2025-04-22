@@ -34,4 +34,5 @@
 	<string name="menu_save_image">Save image</string>
 	<string name="menu_open_image">Open image</string>
 	<string name="toast_error_load">Paletti could not read this image</string>
+	<string name="shortcut_open">Open image</string>
 </resources>

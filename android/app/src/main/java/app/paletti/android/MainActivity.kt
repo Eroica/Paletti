@@ -7,6 +7,7 @@ import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuCompat
@@ -22,6 +23,10 @@ class MainActivity : AppCompatActivity(), DIGlobalAware {
     private val WorkManager: WorkManager by instance()
     private val viewModel: ImageViewModel by viewModels()
 
+    private val selectImageResult = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri?.let { viewModel.new(it) }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WorkManager.pruneWork()
@@ -35,6 +40,8 @@ class MainActivity : AppCompatActivity(), DIGlobalAware {
         }
         if (intent?.action == Intent.ACTION_SEND && intent.type?.startsWith("image/") == true) {
             (intent.getParcelableExtra<Parcelable>(Intent.EXTRA_STREAM) as? Uri)?.let { viewModel.new(it) }
+        } else if (intent?.action == Intent.ACTION_CREATE_DOCUMENT) {
+            selectImageResult.launch("image/*")
         }
     }
 

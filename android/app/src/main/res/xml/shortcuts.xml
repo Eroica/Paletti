@@ -1,0 +1,12 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+	<shortcut
+		android:shortcutId="openImage"
+		android:enabled="true"
+		android:icon="@drawable/ic_baseline_image_48"
+		android:shortcutShortLabel="@string/shortcut_open">
+		<intent
+			android:action="android.intent.action.CREATE_DOCUMENT"
+			android:targetPackage="app.paletti.android"
+			android:targetClass="app.paletti.android.MainActivity" />
+	</shortcut>
+</shortcuts>
