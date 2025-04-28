@@ -6,28 +6,31 @@ title: Home
 <section data-vbox>
 	<h1>Paletti</h1>
 
-	<p>Paletti is a small tool to quantize the colors of an image. This can be used to simplify the image visually or to extract certain key colors.</p>
+	<p>Paletti is a lightweight tool that quantizes an image’s colors, making it easier to simplify the image visually or extract key colors.</p>
 
 	<ul class="actions">
 		<li><a href="{{ site.data.urls.javafx }}" class="button -with-icon default">{% include icons/windows-brands.svg %} Download for Windows (.exe)</a></li>
-		<li><a href="{{ site.data.urls.gtk }}" class="button -with-icon">{% include icons/Gnomelogo-footprint.svg %} Download ELF binary (.AppImage)</a></li>
-		<li><a href="{{ site.data.urls.android }}" class="button -with-icon android">{% include icons/android-brands.svg %} Download for Android &beta; (.apk)</a></li>
+		<li><a href="{{ site.data.urls.android }}" class="button -with-icon android">{% include icons/android-brands.svg %} Download for Android (.apk)</a></li>
 	</ul>
 
 	<ul class="colored-links">
 		<li><a href="https://github.com/Eroica/Paletti">GitHub</a></li>
 		<li><a href="https://github.com/Eroica/Paletti/wiki/Shortcuts">Shortcuts</a></li>
 	</ul>
+	
+	<div class="gallery">
+		<div class="demo tips-overlay">
+			<img src="{{ '/images/2023-08-Paletti.png' | relative_url }}" alt="Screenshot of Paletti 2022.10, Kotlin/JavaFX version" width="640">
+			<img src="{{ '/images/2023-12-PalettiDark.png' | relative_url }}" alt="Screenshot of Paletti 2023.12, Kotlin/JavaFX version with dark mode" width="640">
 
-	<div class="demo tips-overlay">
-		<img src="{{ '/images/2023-08-Paletti.png' | relative_url }}" alt="Screenshot of Paletti 2022.10, Kotlin/JavaFX version" width="640">
-		<img src="{{ '/images/2023-12-PalettiDark.png' | relative_url }}" alt="Screenshot of Paletti 2023.12, Kotlin/JavaFX version with dark mode" width="640">
+			<span class="tip">1</span>
+			<span class="tip">2</span>
+			<span class="tip">3</span>
+			<span class="tip">4</span>
+			<span class="tip">5</span>
+		</div>
 
-		<span class="tip">1</span>
-		<span class="tip">2</span>
-		<span class="tip">3</span>
-		<span class="tip">4</span>
-		<span class="tip">5</span>
+		<img src="{{ '/images/Screenshot_20250328_111234.png' | relative_url }}" alt="Screenshot of Paletti for Android, v2025.05" width="320">
 	</div>
 
 	<ol class="colored-links">
@@ -37,6 +40,8 @@ title: Home
 		<li>The <em>posterized</em> image.</li>
 		<li>Click on a color to copy its hex value into the clipboard.</li>
 	</ol>
+
+	<p class="underlined-links colored-links text-small">(Android screenshot) Image artist: <a href="https://www.artstation.com/klangoda">https://www.artstation.com/klangoda</a></p>
 </section>
 
 <section id="About" class="colored-links" data-vbox>
@@ -44,11 +49,11 @@ title: Home
 
 	<h1>About</h1>
 
-	<p>Paletti is written in Kotlin and JavaFX for Windows. There is also an older version available which is written in Vala (using GTK), and a beta version for Android. The image processing is done using <a href="http://leptonica.org">Leptonica</a>.</p>
+	<p>I wrote Paletti to have a quick way of checking the shape and values of an image. It processes images using <a href="http://leptonica.org">Leptonica</a>. Paletti is primarily written in Kotlin (with JavaFX on Windows), along with a small C++ wrapper for Leptonica. There is also an older version in Vala (using GTK), but I’m currently not using any GNU/Linux distribution. The Windows 11-styled theme is my <a href="https://github.com/Eroica/javafx-fluent-theme">javafx-fluent-theme</a>.</p>
 
 	<p>The quantization process (Modified median cut quantization) usually extracts colors that are visually close to the original image, but it is not guaranteed to be exact. You can read more about that here: <a href="https://en.wikipedia.org/wiki/Color_quantization">Color quantization</a></p>
 
-	<p>Paletti’s icon is a 3D rendering of a <em>katori buta</em>, a Japanese figure usually made of ceramics. You can attach incense to a hook inside the body which is supposed to help repelling mosquitos.</p>
+	<p>Paletti’s icon is a 3D rendering of a <em>katori buta</em>—a Japanese figure usually made of ceramics. You can attach incense to a hook inside the body which is supposed to help repel mosquitos.</p>
 
 	<p>If you like Paletti, you can also take a look at my other projects at <a href="https://groundctrl.earth">GROUNDCTRL</a>.</p>
 </section>

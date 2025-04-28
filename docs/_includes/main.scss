@@ -30,23 +30,33 @@ ol {
 	margin-left: 2em;
 }
 
-.demo {
-	display: grid;
+.gallery {
+	display: flex;
 	margin-left: -25px;
 	margin-right: -25px;
+	overflow-x: auto;
+
+	@media screen and (min-width: calc(100px + 50rem)) {
+		margin-left: -50px;
+		margin-right: -50px;
+	}
+}
+
+.demo {
+	display: grid;
 	grid-template-columns: repeat(1, 1fr); /* 3 columns with equal width */
-  grid-template-rows: repeat(1, auto);
+	grid-template-rows: repeat(1, auto);
 	position: relative;
-	max-width: 580px;
+	min-width: 580px;
 
 	img {
 		display: block;
 		grid-column: 1;
-  	grid-row: 1;
+		grid-row: 1;
 
-  	&:nth-of-type(2) {
-  		display: none;
-  	}
+		&:nth-of-type(2) {
+			display: none;
+		}
 	}
 
 	& + ol {
