@@ -1,20 +1,24 @@
 package app.paletti.android
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.view.LayoutInflater
+import android.content.res.Resources
+import android.util.TypedValue
 import android.view.View
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.appcompat.widget.TooltipCompat
-import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.view.children
 import androidx.databinding.*
-import app.paletti.android.databinding.ListItemColorTileBinding
+import app.paletti.android.views.ColorTile
 import com.google.android.material.slider.Slider
 
 fun interface OnValueChanged {
     fun onValueChanged(slider: Slider, value: Float, fromUser: Boolean)
 }
+
+fun Int.dpToPx(): Int = TypedValue.applyDimension(
+    TypedValue.COMPLEX_UNIT_DIP,
+    this.toFloat(),
+    Resources.getSystem().displayMetrics
+).toInt()
 
 @BindingAdapter("tooltipText")
 fun setTooltipText(view: View, stringId: Int) {
@@ -24,30 +28,22 @@ fun setTooltipText(view: View, stringId: Int) {
 @BindingAdapter("colors")
 fun setColors(view: LinearLayout, colors: ObservableArrayList<Int>) {
     val currentCount = view.childCount
-    val inflater = LayoutInflater.from(view.context)
     if (currentCount > colors.size) {
         view.removeViews(colors.size, currentCount - colors.size)
     } else if (currentCount < colors.size) {
         (currentCount until colors.size).forEach { _ ->
-            val binding = DataBindingUtil.inflate<ListItemColorTileBinding>(
-                inflater,
-                R.layout.list_item_color_tile,
-                view,
-                true
-            )
-            binding.root.setOnClickListener { view ->
-                getSystemService(view.context, ClipboardManager::class.java)
-                    ?.setPrimaryClip(ClipData.newPlainText("Color", "#%06X".format(0xFFFFFF and view.tag as Int)))
-                Toast.makeText(view.context, "#%06X".format(0xFFFFFF and view.tag as Int), Toast.LENGTH_SHORT).show()
-            }
+            view.addView(ColorTile(view.context).apply {
+                val params = LinearLayout.LayoutParams(0, 64.dpToPx()).apply {
+                    weight = 1f
+                }
+                layoutParams = params
+            })
         }
     }
-    colors.forEachIndexed { i, color ->
-        view.getChildAt(i).apply {
-            tag = color
-            setBackgroundColor(color)
+    view.children.filterIsInstance<ColorTile>()
+        .forEachIndexed { i, colorTile ->
+            colorTile.color = colors[i]
         }
-    }
 }
 
 @BindingAdapter("value")
