@@ -1,14 +1,8 @@
 package app.paletti.android.fragments
 
-import android.content.ContentValues
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.Paint
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
 import android.transition.TransitionInflater
 import android.view.*
 import android.view.animation.AnimationUtils
@@ -21,7 +15,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.work.WorkInfo
-import app.paletti.android.FilePaths
 import app.paletti.android.ImageViewModel
 import app.paletti.android.ProviderData
 import app.paletti.android.R
@@ -29,9 +22,10 @@ import app.paletti.android.databinding.FragmentImageBinding
 import org.kodein.di.conf.DIGlobalAware
 import org.kodein.di.instance
 import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
 import androidx.core.graphics.createBitmap
+import app.paletti.android.ColorPalette
+import app.paletti.android.FilePaths
+import app.paletti.android.PalettiImage
 
 class ImageFragment : Fragment(), DIGlobalAware {
     companion object {
@@ -103,20 +97,10 @@ class ImageFragment : Fragment(), DIGlobalAware {
 
     private fun sharePalette() {
         val bitmap = createBitmap(viewModel.count.get().toInt() * 48, 96)
-        val canvas = Canvas(bitmap)
-        val paint = Paint()
-        viewModel.colors.forEachIndexed { i, color ->
-            paint.color = color
-            canvas.drawRect(i * 48f, 0f, (i + 1) * 48f, 96f, paint)
-        }
-
         try {
-            FileOutputStream(Paths.palette).use {
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
-                shareImage(Paths.palette)
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
+            val colorPalette = ColorPalette(bitmap, viewModel.colors)
+            colorPalette.renderTo(Paths.palette)
+            shareImage(Paths.palette)
         } finally {
             bitmap.recycle()
         }
@@ -124,22 +108,11 @@ class ImageFragment : Fragment(), DIGlobalAware {
 
     private fun saveImage() {
         context?.contentResolver?.let { resolver ->
-            ContentValues().apply {
-                val name = System.currentTimeMillis().toString() + ".bmp"
-                val directory = Environment.DIRECTORY_PICTURES + File.separator + "Paletti"
-                val path = directory + File.separator + name
-                put(MediaStore.MediaColumns.DISPLAY_NAME, name)
-                put(MediaStore.MediaColumns.MIME_TYPE, "image/bmp")
-                put(MediaStore.MediaColumns.RELATIVE_PATH, directory)
-                resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, this)?.let {
-                    resolver.openOutputStream(it)?.use {
-                        Paths.outImage.inputStream().copyTo(it)
-                        Toast.makeText(
-                            context, getString(R.string.toast_saved_image, path), Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            }
+            val image = PalettiImage(Paths.outImage)
+            val outputPath = image.storeWith(resolver)
+            Toast.makeText(
+                context, getString(R.string.toast_saved_image, outputPath), Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -160,6 +133,7 @@ class ImageFragment : Fragment(), DIGlobalAware {
                         menuItem.isChecked = !menuItem.isChecked
                         viewModel.isImageZoom.set(!viewModel.isImageZoom.get())
                     }
+
                     R.id.action_export_image -> shareImage(Paths.outImage)
                     R.id.action_export_palette -> sharePalette()
                     R.id.action_save_image -> saveImage()
