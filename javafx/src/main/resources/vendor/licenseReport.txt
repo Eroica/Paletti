@@ -21,19 +21,19 @@ Kotlin Stdlib (2.1.20) - The Apache License, Version 2.0
 Kotlin Standard Library
 https://kotlinlang.org/
 
-kotlinx-coroutines-core (1.10.1) - The Apache Software License, Version 2.0
+kotlinx-coroutines-core (1.10.2) - Apache-2.0
 Coroutines support libraries for Kotlin
 https://github.com/Kotlin/kotlinx.coroutines
 
-kotlinx-coroutines-javafx (1.10.1) - The Apache Software License, Version 2.0
+kotlinx-coroutines-javafx (1.10.2) - Apache-2.0
 Coroutines support libraries for Kotlin
 https://github.com/Kotlin/kotlinx.coroutines
 
-SLF4J API Module (2.0.9) - MIT License
+SLF4J API Module (2.0.17) - MIT
 The slf4j API
 http://www.slf4j.org
 
-SLF4J Simple Provider (2.0.9) - MIT License
+SLF4J Simple Provider (2.0.17) - MIT
 SLF4J Simple Provider
 http://www.slf4j.org
 

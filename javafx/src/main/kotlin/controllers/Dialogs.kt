@@ -28,11 +28,13 @@ abstract class BaseDialog(window: IWindow) : Stage() {
 class AboutDialog(window: IWindow) : BaseDialog(window) {
     private val licenseBuilder: StringBuilder by lazy {
         val licenseBuilder = StringBuilder()
-        listOf(
+        listOfNotNull(
             javaClass.classLoader.getResourceAsStream("LICENSE"),
-            javaClass.classLoader.getResourceAsStream("leptonica.txt"),
-            javaClass.classLoader.getResourceAsStream("licenseReport.txt"),
-            javaClass.classLoader.getResourceAsStream("apache.txt"),
+            javaClass.classLoader.getResourceAsStream("vendor/leptonica.txt"),
+            javaClass.classLoader.getResourceAsStream("vendor/licenseReport.txt"),
+            javaClass.classLoader.getResourceAsStream("vendor/apache.txt"),
+            javaClass.classLoader.getResourceAsStream("vendor/slf4j.txt"),
+            javaClass.classLoader.getResourceAsStream("vendor/sqlite_modern_cpp.txt")
         ).forEach {
             licenseBuilder.append(it.bufferedReader().use { it.readText() })
             licenseBuilder.append("\n\n")
