@@ -102,7 +102,7 @@ class SqlImages(database: Database) {
 
 class PosterizedPix(
     private val sqlImage: SqlImage,
-    cacheDir: File,
+    cacheDir: File
 ) : IPosterizedImage by sqlImage {
     val path: String = cacheDir.resolve("${sqlImage.id}.png").toURI().toString()
 }

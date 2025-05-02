@@ -25,8 +25,8 @@ kotlin {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.10.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.10.2")
     implementation("org.xerial:sqlite-jdbc:3.49.1.0")
     implementation("net.harawata:appdirs:1.4.0")
     implementation("org.slf4j:slf4j-simple:2.0.17")
