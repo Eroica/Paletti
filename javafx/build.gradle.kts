@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "app.paletti.javafx"
-version = "2025.04"
+version = "2025.05"
 
 repositories {
     mavenCentral()
@@ -66,7 +66,16 @@ application {
 }
 
 runtime {
-    options.set(listOf("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"))
+    options.set(listOf("--strip-debug", "--compress", "zip-9", "--no-header-files", "--no-man-pages"))
+    modules = listOf(
+        "java.sql",
+        "java.desktop",
+        "java.logging",
+        "java.scripting",
+        "java.xml",
+        "jdk.unsupported",
+        "java.datatransfer"
+    )
     launcher {
         noConsole = true
     }
