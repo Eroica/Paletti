@@ -7,7 +7,7 @@
 		android:checkable="true"
 		android:checked="true"
 		android:title="@string/menu_crop_image"
-		app:actionViewClass="android.widget.CheckBox"
+		app:actionViewClass="com.google.android.material.checkbox.MaterialCheckBox"
 		app:showAsAction="never" />
 
 	<item
