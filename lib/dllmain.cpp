@@ -7,7 +7,6 @@
 #include <dwmapi.h>
 #include <jni.h>
 #include <Windows.h>
-#include <windowsx.h>
 
 using std::exception;
 using std::filesystem::path;
@@ -46,7 +45,7 @@ bool is_light_theme() {
 	return i == 1;
 }
 
-const char* DB_STATEMENTS[] = {
+const char *DB_STATEMENTS[] = {
 	"SELECT value FROM environment WHERE name=?;",
 	"SELECT count, is_black_white, is_dither, source FROM image WHERE id=?;",
 	"DELETE FROM color WHERE image_id=?;",
@@ -60,7 +59,7 @@ Java_app_paletti_lib_Leptonica_posterize2(
 	jint image_id,
 	jstring db_path
 ) {
-	const char* native_db_path = env->GetStringUTFChars(db_path, 0);
+	const char *native_db_path = env->GetStringUTFChars(db_path, 0);
 
 	try {
 		database db(native_db_path);
@@ -84,15 +83,15 @@ Java_app_paletti_lib_Leptonica_posterize2(
 			PixSource = path(t_source);
 		};
 
-		PIX* pixs = pixRead(PixSource.generic_string().c_str());
+		PIX *pixs = pixRead(PixSource.generic_string().c_str());
 		if (pixs == nullptr) {
 			return -1;
 		}
 
-		PIX* pixc;
+		PIX *pixc;
 		if (is_black_white) {
-			PIX* tmp = pixConvertRGBToLuminance(pixs);
-			PIX* tmp2 = pixConvert8To32(tmp);
+			PIX *tmp = pixConvertRGBToLuminance(pixs);
+			PIX *tmp2 = pixConvert8To32(tmp);
 			pixc = pixMedianCutQuantGeneral(tmp2, is_dither, 8, max_count, 0, 0, 0);
 			pixDestroy(&tmp2);
 			pixDestroy(&tmp);
@@ -107,7 +106,7 @@ Java_app_paletti_lib_Leptonica_posterize2(
 
 		db << DB_STATEMENTS[2] << image_id;
 
-		PIXCMAP* colormap = pixGetColormap(pixc);
+		PIXCMAP *colormap = pixGetColormap(pixc);
 		const int count = pixcmapGetCount(colormap);
 		for (int i = 0; i < count; i++) {
 			int rgb, g, b;
@@ -145,22 +144,22 @@ Java_app_paletti_lib_Leptonica_posterize(
 	for (int i = 0; i < len; i++) {
 		jstring jstr = (jstring)(env->GetObjectArrayElement(file_paths, i));
 		const jsize strLen = env->GetStringUTFLength(jstr);
-		const char* charBuffer = env->GetStringUTFChars(jstr, (jboolean*)0);
+		const char *charBuffer = env->GetStringUTFChars(jstr, (jboolean*)0);
 		string str(charBuffer, strLen);
 		native_paths[i] = str;
 		env->ReleaseStringUTFChars(jstr, charBuffer);
 		env->DeleteLocalRef(jstr);
 	}
 
-	PIX* pixs = pixRead(native_paths[0].c_str());
+	PIX *pixs = pixRead(native_paths[0].c_str());
 	if (pixs == nullptr) {
 		return -1;
 	}
 
-	PIX* pixc;
+	PIX *pixc;
 	if (is_black_white) {
-		PIX* tmp = pixConvertRGBToLuminance(pixs);
-		PIX* tmp2 = pixConvert8To32(tmp);
+		PIX *tmp = pixConvertRGBToLuminance(pixs);
+		PIX *tmp2 = pixConvert8To32(tmp);
 		pixc = pixMedianCutQuantGeneral(tmp2, 0, 8, (int)max_count, 0, 0, 0);
 		pixDestroy(&tmp2);
 		pixDestroy(&tmp);
@@ -173,7 +172,7 @@ Java_app_paletti_lib_Leptonica_posterize(
 		return -1;
 	}
 
-	PIXCMAP* colormap = pixGetColormap(pixc);
+	PIXCMAP *colormap = pixGetColormap(pixc);
 	int count = pixcmapGetCount(colormap);
 
 	std::ofstream colors;
@@ -242,7 +241,7 @@ Java_app_paletti_lib_Windows_subclass(
 	isDarkMode = (bool)isSetDarkMode;
 
 	jboolean isCopy;
-	const char* convertedValue = (env)->GetStringUTFChars(title, &isCopy);
+	const char *convertedValue = (env)->GetStringUTFChars(title, &isCopy);
 	string str = convertedValue;
 	targetWndName = str;
 
@@ -254,6 +253,6 @@ Java_app_paletti_lib_Windows_subclass(
 }
 
 extern "C" JNIEXPORT bool JNICALL
-Java_app_paletti_lib_Windows_isdarkmode(JNIEnv * env, jobject) {
+Java_app_paletti_lib_Windows_isdarkmode(JNIEnv *env, jobject) {
 	return !is_light_theme();
 }
