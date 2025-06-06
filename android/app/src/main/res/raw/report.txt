@@ -169,7 +169,7 @@ androidx.core:core-viewtree (1.0.0) - The Apache Software License, Version 2.0
 Provides ViewTree extensions packaged for use by other core androidx libraries
 https://developer.android.com/jetpack/androidx/releases/core#1.0.0
 
-androidx.databinding.databinding-common (8.9.2) - The Apache Software License, Version 2.0
+androidx.databinding.databinding-common (8.10.1) - The Apache Software License, Version 2.0
 Shared library between Data Binding runtime lib and compiler
 http://tools.android.com/
 
@@ -177,13 +177,13 @@ Annotation (1.8.1) - The Apache Software License, Version 2.0
 Provides source annotations for tooling and readability.
 https://developer.android.com/jetpack/androidx/releases/annotation#1.8.1
 
-AppCompat (1.7.0) - The Apache Software License, Version 2.0
+AppCompat (1.7.1) - The Apache Software License, Version 2.0
 Provides backwards-compatible implementations of UI-related Android SDK functionality, including dark mode and Material theming.
-https://developer.android.com/jetpack/androidx/releases/appcompat#1.7.0
+https://developer.android.com/jetpack/androidx/releases/appcompat#1.7.1
 
-AppCompat Resources (1.7.0) - The Apache Software License, Version 2.0
+AppCompat Resources (1.7.1) - The Apache Software License, Version 2.0
 Provides backward-compatible implementations of resource-related Android SDKfunctionality, including color state list theming.
-https://developer.android.com/jetpack/androidx/releases/appcompat#1.7.0
+https://developer.android.com/jetpack/androidx/releases/appcompat#1.7.1
 
 collections (1.4.2) - The Apache Software License, Version 2.0
 Standalone efficient collections.
@@ -209,11 +209,11 @@ Core Kotlin Extensions (1.16.0) - The Apache Software License, Version 2.0
 Kotlin extensions for 'core' artifact
 https://developer.android.com/jetpack/androidx/releases/core#1.16.0
 
-databinding-adapters (8.9.2) - The Apache Software License, Version 2.0
+databinding-adapters (8.10.1) - The Apache Software License, Version 2.0
 
-databinding-ktx (8.9.2) - The Apache Software License, Version 2.0
+databinding-ktx (8.10.1) - The Apache Software License, Version 2.0
 
-databinding-runtime (8.9.2) - The Apache Software License, Version 2.0
+databinding-runtime (8.10.1) - The Apache Software License, Version 2.0
 
 error-prone annotations (2.15.0) - Apache 2.0
 
@@ -221,13 +221,13 @@ Experimental annotation (1.4.1) - The Apache Software License, Version 2.0
 Java annotation for use on unstable Android API surfaces. When used in conjunction with the Experimental annotation lint checks, this annotation provides functional parity with Kotlin's Experimental annotation.
 https://developer.android.com/jetpack/androidx/releases/annotation#1.4.1
 
-fragment (1.8.6) - The Apache Software License, Version 2.0
+fragment (1.8.8) - The Apache Software License, Version 2.0
 The Support Library is a static library that you can add to your Android application in order to use APIs that are either not available for older platform versions or utility APIs that aren't a part of the framework APIs. Compatible on devices running API 14 or later.
-https://developer.android.com/jetpack/androidx/releases/fragment#1.8.6
+https://developer.android.com/jetpack/androidx/releases/fragment#1.8.8
 
-Fragment Kotlin Extensions (1.8.6) - The Apache Software License, Version 2.0
+Fragment Kotlin Extensions (1.8.8) - The Apache Software License, Version 2.0
 Kotlin extensions for 'fragment' artifact
-https://developer.android.com/jetpack/androidx/releases/fragment#1.8.6
+https://developer.android.com/jetpack/androidx/releases/fragment#1.8.8
 
       Guava ListenableFuture only (1.0) - The Apache Software License, Version 2.0
       Contains Guava's com.google.common.util.concurrent.ListenableFuture class,
@@ -264,11 +264,11 @@ Kaverit (2.10.0) - MIT
 Kodein Type System
 http://kodein.org
 
-Kodein (7.25.0) - MIT
+Kodein (7.26.1) - MIT
 Kodein Core
 http://kodein.org
 
-Kodein-JxInject (7.25.0) - MIT
+Kodein-JxInject (7.26.1) - MIT
 Kodein that can be use with JSR-330: Using reflexivity to auto-inject
 http://kodein.org
 
@@ -340,12 +340,12 @@ VersionedParcelable (1.1.1) - The Apache Software License, Version 2.0
 Provides a stable but relatively compact binary serialization format that can be passed across processes or persisted safely.
 http://developer.android.com/tools/extras/support-library.html
 
-viewbinding (8.9.2) - The Apache Software License, Version 2.0
+viewbinding (8.10.1) - The Apache Software License, Version 2.0
 
-WorkManager Kotlin Extensions (2.10.0) - The Apache Software License, Version 2.0
+WorkManager Kotlin Extensions (2.10.1) - The Apache Software License, Version 2.0
 Android WorkManager Kotlin Extensions
-https://developer.android.com/jetpack/androidx/releases/work#2.10.0
+https://developer.android.com/jetpack/androidx/releases/work#2.10.1
 
-WorkManager Runtime (2.10.0) - The Apache Software License, Version 2.0
+WorkManager Runtime (2.10.1) - The Apache Software License, Version 2.0
 Android WorkManager runtime library
-https://developer.android.com/jetpack/androidx/releases/work#2.10.0
+https://developer.android.com/jetpack/androidx/releases/work#2.10.1
