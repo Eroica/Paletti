@@ -15,8 +15,8 @@ android {
         applicationId = "app.paletti.android"
         minSdk = 29
         targetSdk = 34
-        versionCode = 1
-        versionName = "v2025.05"
+        versionCode = 2
+        versionName = "v2025.06"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
