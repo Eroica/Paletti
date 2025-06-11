@@ -1,22 +1,29 @@
 <resources>
-	<!-- Base application theme. -->
 	<style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
-		<!-- Customize your theme here. -->
+		<!-- MDC 2 colors -->
 		<item name="colorPrimary">#4EA7FC</item>
-		<item name="colorSecondary">#2161DC</item>
-		<item name="colorSurface">#25292C</item>
+		<!--		<item name="colorPrimaryVariant"></item>-->
 		<item name="colorOnPrimary">#FFFFFF</item>
+		<item name="colorSecondary">#2161DC</item>
+		<!--		<item name="colorSecondaryVariant"></item>-->
 		<item name="colorOnSecondary">#FFFFFF</item>
+		<item name="colorSurface">#25292C</item>
 		<item name="colorOnSurface">#FFFFFF</item>
+		<item name="android:colorBackground">#1D2124</item>
+		<!--		<item name="colorOnBackground"></item>-->
+		<!--		<item name="colorError"></item>-->
+		<!--		<item name="colorOnError"></item>-->
+		<item name="android:statusBarColor">#000000</item>
 
+		<!-- These are still used to tint MaterialCheckBox, MaterialRadioButton, SwitchMaterial
+		     and MaterialToolbar icons. -->
 		<item name="colorControlNormal">#F9FAFE</item>
+		<!--		<item name="colorControlHighlight"></item>-->
 		<item name="colorControlActivated">#4EA7FC</item>
 
+		<!-- Overrides -->
 		<item name="android:textColorPrimary">#F7FBFE</item>
 		<item name="android:textColorSecondary">#CED2D5</item>
-
-		<item name="android:statusBarColor">#000000</item>
-		<item name="android:colorBackground">#1D2124</item>
 
 		<item name="android:textColorLink">#4EA7FC</item>
 		<item name="elevationOverlayEnabled">false</item>
