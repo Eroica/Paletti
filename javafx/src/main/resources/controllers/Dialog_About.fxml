@@ -45,6 +45,8 @@
 					<Pane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
 
 					<Label text="$APP_COPYRIGHT" />
+
+					<Label text="All rights reserved" />
 				</VBox>
 
 				<TextArea editable="false" text="$LICENSE_REPORT" wrapText="true" HBox.hgrow="ALWAYS" />

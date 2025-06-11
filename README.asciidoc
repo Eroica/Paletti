@@ -59,7 +59,12 @@ flatpak run app.paletti.gtk
 
 == License
 
-Please see the `LICENSE` file in this repository.
+Paletti's source code is licensed under the zlib license.
+See `LICENSE` file.
+
+Paletti's logo and branding assets included in this repository are NOT licensed under the zlib license.
+These assets are ALL RIGHTS RESERVED, and must be removed from derivate works.
+See `NOTICE` file.
 
 Paletti uses Leptonica for processing images.
 Leptonica's license:

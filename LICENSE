@@ -1,82 +1,17 @@
-        PALETTI SHARED SOURCE LICENSE
-        Version 1.0, 31 July 2022
+Copyright (C) 2022-2025 Eroica
 
-Copyright (c) 2022-2025 Eroica <https://paletti.app>
-Everyone is permitted to copy and distribute verbatim copies of this
-license document, but changing it is not allowed.
+This software is provided 'as-is', without any express or implied
+warranty. In no event will the authors be held liable for any damages
+arising from the use of this software.
 
-        TERMS AND CONDITIONS
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely, subject to the following restrictions:
 
-0. Definitions.
-
-"This license" refers to version 1.0 of Paletti Shared Source License.
-
-"The program", "the source", "the source code", "these files",
-"this file" refers to any copyrightable work licensed under this
-license.
-
-"You" refers to the licensee. The licensee could be a person or an
-organisation.
-
-"Personal use" refers to usage by, only and only, the licensee, and not
-by any other person or organisation related in any way to the licensee.
-
-1. Usage
-
-You are free to download, copy, compile, study, and refer to the source
-code for any personal use of yours.
-
-Usage by you of any work covered by this license should not, directly or
-indirectly, enable its usage by any other individual or organisation.
-
-2. Modifications
-
-You are free to make any modifications to the source covered by this
-license. You are also free to compile the source after modifying it and
-using the compiled product obtained thereafter in compliance with this
-license.
-
-3. Redistribution
-
-You may NOT under any circumstance copy, redistribute and/or republish
-the source or a work based on it (which includes binary or object code
-compiled from it) in part or whole.
-
-4. Non-compliance
-
-You may not copy, modify, sublicense, or distribute the Program except
-as expressly provided under this license. Any attempt otherwise to
-copy, modify, sublicense or distribute the Program is void, and will
-automatically terminate your rights under this license.
-
-5. Acceptance of License
-
-You are not required to accept this license, since you have not signed
-it. However, nothing else grants you permission to modify or use the
-source. These actions are prohibited by law if you do not accept this
-license. Therefore, by modifying or using the source (or any work based
-on the source), you indicate your acceptance of this license to do so,
-and all its terms and conditions for copying, redistributing or
-modifying the source or works based on it.
-
-6. Permissions
-
-If you intend to incorporate the source code, in part or whole, into any
-free or proprietary program, you need to explicitly write to the
-original author(s) to ask for permission.
-
-7. No Warranty
-
-The source code licensed under this license is shared "as is". Since it
-is intended for sharing as reference, there is no warranty, of either
-the source code, or the program compiled from it. The entire risk of
-quality or performance of the program is with you.
-
-THE ORIGINAL AUTHOR OF THE PROGRAM IS NOT LIABLE TO YOU FOR DAMAGES,
-INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES
-ARISING OUT OF THE USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT
-NOT LIMITED TO LOSS OF DATA OR DATA BEING RENDERED INACCURATE OR LOSSES
-SUSTAINED BY YOU OR THIRD PARTIES OR A FAILURE OF THE PROGRAM TO
-OPERATE WITH ANY OTHER PROGRAMS).
-
-        END OF TERMS AND CONDITIONS
+1. The origin of this software must not be misrepresented; you must not
+   claim that you wrote the original software. If you use this software
+   in a product, an acknowledgment in the product documentation would be
+   appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be
+   misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.

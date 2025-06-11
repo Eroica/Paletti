@@ -29,7 +29,6 @@ class AboutDialog(window: IWindow) : BaseDialog(window) {
     private val licenseBuilder: StringBuilder by lazy {
         val licenseBuilder = StringBuilder()
         listOfNotNull(
-            javaClass.classLoader.getResourceAsStream("LICENSE"),
             javaClass.classLoader.getResourceAsStream("vendor/leptonica.txt"),
             javaClass.classLoader.getResourceAsStream("vendor/licenseReport.txt"),
             javaClass.classLoader.getResourceAsStream("vendor/apache.txt"),
@@ -50,6 +49,8 @@ class AboutDialog(window: IWindow) : BaseDialog(window) {
             namespace["APP_VERSION"] = BuildConfig.APP_VERSION
             namespace["APP_COPYRIGHT"] = BuildConfig.APP_COPYRIGHT
             namespace["LICENSE_REPORT"] = """${BuildConfig.APP_LICENSE}
+
+Paletti uses Leptonica to read and process images. Leptonica’s license:
 
 $licenseBuilder"""
             load()
