@@ -1,43 +1,35 @@
-image::gtk/data/icons/hicolor/256x256/apps/app.paletti.gtk.png[Paletti logo,128,128]
+![Paletti's logo](gtk/data/icons/hicolor/256x256/apps/app.paletti.gtk.png)
 
-= Paletti
-:imagesdir: docs/images
+# Paletti
 
-Paletti is a small tool to _quantize_ the colors of an image.
-This can be used to simplify the image visually or to extract certain key colors.
+Paletti is a small tool to _quantize_ the colors of an image. This can be used to simplify the image visually or to extract certain key colors.
 
-The quantization process usually extracts colors that are visually close to the original image, but it is not guaranteed to be exact.
-It is based on a https://en.wikipedia.org/wiki/Median_cut[_Modified median cut quantization_] implemented by http://leptonica.org/[Leptonica].
+The quantization process usually extracts colors that are visually close to the original image, but it is not guaranteed to be exact. It is based on a [_Modified median cut quantization_](https://en.wikipedia.org/wiki/Median_cut) implemented by [Leptonica](http://leptonica.org/).
 
-image::Paletti.gif[Screenshot of using Paletti]
+![Screenshot of using Paletti](docs/images/Paletti.gif)
 
-You can increase/decrease the amount of colors by scrolling up/down or using the slider (the size is currently restricted to 3 to 32 colors).
-The switch converts the image to grayscale.
+You can increase/decrease the amount of colors by scrolling up/down or using the slider (the size is currently restricted to 3 to 32 colors). The switch converts the image to grayscale.
 
-Click on a color in the palette to copy its Hex code into the clipboard.
-You can also export the simplified version or a screenshot of the color palette.
+Click on a color in the palette to copy its Hex code into the clipboard. You can also export the simplified version or a screenshot of the color palette.
 
-A link:https://github.com/Eroica/Paletti/wiki/Shortcuts[list of available shortcuts] is in the Wiki area, where you can also find some stuff about Paletti's development!
+A [list of available shortcuts](https://github.com/Eroica/Paletti/wiki/Shortcuts) is in the Wiki area, where you can also find some stuff about Paletti's development!
 
-== Development
+## Development
 
-Paletti is written in Kotlin using JavaFX.
-I also have an old GTK version (written in Vala) and a WIP Android version available in this repository.
-However, I mostly work as a 2D/3D artist on Windows these days, so that's why the JavaFX version gets the most development time.
+Paletti is written in Kotlin using JavaFX. I also have an old GTK version (written in Vala) and a WIP Android version available in this repository. However, I mostly work as a 2D/3D artist on Windows these days, so that's why the JavaFX version gets the most development time.
 
-While I probably mostly use Paletti for myself, I develop it publicly in the hope that it is helpful for other people as well.
-You are welcome to raise bugs and feature requests here.
+While I probably mostly use Paletti for myself, I develop it publicly in the hope that it is helpful for other people as well. You are welcome to raise bugs and feature requests here.
 
-....
+```
 Paletti
 ├───android  ; Android version
 ├───docs     ; Website
 ├───gtk      ; GTK 4 version written in Vala
 ├───javafx   ; JavaFX version written in Kotlin for Windows
 └───lib      ; Simple C++ wrapper used by the javafx and android version
-....
+```
 
-=== Vala/GTK/Flatpak version
+### Vala/GTK/Flatpak version
 
 The `Makefile` in `gtk/` creates a Paletti.flatpak image:
 
@@ -57,19 +49,16 @@ flatpak-builder --user --install build app.paletti.gtk.json --force-clean
 flatpak run app.paletti.gtk
 ```
 
-== License
+## License
 
-Paletti's source code is licensed under the zlib license.
-See `LICENSE` file.
+Paletti's source code is licensed under the zlib license. See `LICENSE` file.
 
-Paletti's logo and branding assets included in this repository are NOT licensed under the zlib license.
-These assets are ALL RIGHTS RESERVED, and must be removed from derivate works.
+Paletti's logo and branding assets included in this repository are NOT licensed under the zlib license. These assets are ALL RIGHTS RESERVED, and must be removed from derivate works.
 See `NOTICE` file.
 
-Paletti uses Leptonica for processing images.
-Leptonica's license:
+Paletti uses Leptonica for processing images. Leptonica's license:
 
-....
+```
 /*====================================================================*
  -  Copyright (C) 2001 Leptonica.  All rights reserved.
  -
@@ -95,4 +84,4 @@ Leptonica's license:
  -  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  -  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *====================================================================*/
-....
+```
